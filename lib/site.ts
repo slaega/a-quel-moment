@@ -2,9 +2,10 @@ export const site = {
   nom: "À quel moment",
   auteur: "Slaega",
   editeurUrl: "https://slaega.com",
-  // Remplace par le domaine final avant le déploiement : il sert de base
-  // aux URLs absolues des balises Open Graph.
-  url: "https://a-quel-moment.vercel.app",
+  // Domaine de production. Il sert de base aux URLs absolues des balises
+  // Open Graph, du canonical et du sitemap : une valeur erronée ne casse pas
+  // le site, elle casse silencieusement tous les aperçus au partage.
+  url: "https://a-quel-moment.slaega.com",
   description:
     "Une série de textes courts qui partent d'un fait réel et posent toujours la même question : à quel moment avons-nous trouvé ça normal ?",
   signature: "À quel moment avons-nous trouvé ça normal ?",

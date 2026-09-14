@@ -88,10 +88,15 @@ Le gabarit se trouve dans la fonction `affiche()` du script — mêmes couleurs,
 polices que le site. La taille du titre descend par paliers quand il s'allonge,
 pour qu'une accroche longue reste dans le cadre.
 
-## Avant de déployer
+## Déploiement
 
-Renseigner le domaine final dans `lib/site.ts` (`site.url`) : il sert de base aux
-URLs absolues des balises Open Graph, du canonical et du sitemap.
+Le site est en ligne sur **https://a-quel-moment.slaega.com**, déclaré dans
+`lib/site.ts` (`site.url`).
+
+Cette valeur sert de base aux URLs absolues des balises Open Graph, du canonical
+et du sitemap. Une erreur ici ne casse pas le site : elle casse silencieusement
+tous les aperçus au partage, ce qui ne se voit qu'en collant un lien quelque
+part. À vérifier si le domaine change.
 
 Le build produit `out/`, un dossier de fichiers statiques — déployable tel quel
 sur Vercel, Netlify, GitHub Pages ou n'importe quel hébergeur.
