@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import BasculeTheme from "@/components/BasculeTheme";
 import LogoSlaega from "@/components/LogoSlaega";
+import type { Logo } from "@/lib/logo";
 import { nav, site } from "@/lib/site";
 
-export default function Entete() {
+export default function Entete({ logo }: { logo: Logo | null }) {
   const chemin = usePathname();
 
   return (
@@ -29,7 +30,7 @@ export default function Entete() {
             rel="noreferrer"
             className="text-discret transition-colors hover:text-encre"
           >
-            <LogoSlaega className="h-[11px] w-auto" />
+            <LogoSlaega logo={logo} hauteur={12} />
           </a>
         </div>
 

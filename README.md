@@ -153,18 +153,32 @@ figées, elles portent l'identité de la série.
 
 ### Le logo Slaega
 
-Le logotype actuel est **provisoire** : le vrai logo n'a pas pu être récupéré
-depuis slaega.com pendant la construction du site.
+Le logotype affiché aujourd'hui est **provisoire** — un simple mot « SLAEGA »
+composé dans la police du site. Le vrai logo n'a pas pu être récupéré depuis
+slaega.com pendant la construction.
 
-Pour le mettre en place, remplacer le contenu du `<svg>` de
-`components/LogoSlaega.tsx` par celui du logo officiel, en gardant
-`fill="currentColor"` — c'est ce qui le fait suivre le thème sans avoir à
-fournir deux fichiers. L'en-tête et le pied de page passent tous les deux par
-ce composant, il n'y a rien d'autre à changer.
+**Pour le poser :** déposer le fichier dans `public/slaega-mark.png`. C'est
+tout. L'en-tête, le pied de page et les affiches de partage le reprennent au
+build suivant, chacun à sa taille.
 
-Les affiches de partage ont leur propre marque, dans `scripts/generer-og.mjs` :
-satori ne peut pas lire un composant React. Elle s'y remplace par une `<img>` en
-data URI, largeur et hauteur fournies.
+Deux réglages selon la nature de la marque :
+
+**Si elle est monochrome** (une seule couleur sur fond transparent), passer
+`LOGO_MONOCHROME` à `true` dans `lib/logo.ts`. La marque est alors teintée par
+masque CSS et suit le thème. Sans ça, un logo noir devient invisible en thème
+sombre — et un logo blanc, invisible en clair.
+
+**Si elle est en couleurs**, laisser `false` : elle s'affiche telle quelle, un
+masque la détruirait.
+
+**Les affiches de partage sont un cas à part.** Elles sont toujours sombres, et
+satori ne sait pas appliquer de masque. Une marque foncée y disparaîtrait : pour
+ce cas, déposer une variante claire dans `public/slaega-mark-clair.png`, que le
+générateur préférera. Sans elle, il utilise `slaega-mark.png`.
+
+Le fichier est lu au build, ses dimensions relues dans son en-tête PNG : aucune
+taille à saisir à la main, le ratio est respecté partout. En l'absence de
+fichier, tout retombe sur le logotype provisoire et `npm run og` le signale.
 
 ## Structure
 

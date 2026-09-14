@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
 import Entete from "@/components/Entete";
 import PiedDePage from "@/components/PiedDePage";
+import { getLogo } from "@/lib/logo";
 import { site } from "@/lib/site";
 import { SCRIPT_THEME } from "@/lib/theme";
 import "./globals.css";
@@ -43,6 +44,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const logo = getLogo();
+
   return (
     <html lang="fr" className={`${inter.variable} ${lora.variable}`} suppressHydrationWarning>
       <head>
@@ -55,11 +58,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Aller au contenu
         </a>
-        <Entete />
+        <Entete logo={logo} />
         <main id="contenu" className="flex-1">
           {children}
         </main>
-        <PiedDePage />
+        <PiedDePage logo={logo} />
       </body>
     </html>
   );

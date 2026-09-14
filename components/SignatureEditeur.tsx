@@ -1,8 +1,15 @@
 import LogoSlaega from "@/components/LogoSlaega";
+import type { Logo } from "@/lib/logo";
 import { site } from "@/lib/site";
 
 /** « Une série signée Slaega » — la marque de l'éditeur, pas celle du site. */
-export default function SignatureEditeur({ prefixe }: { prefixe: string }) {
+export default function SignatureEditeur({
+  prefixe,
+  logo,
+}: {
+  prefixe: string;
+  logo: Logo | null;
+}) {
   return (
     <a
       href={site.editeurUrl}
@@ -11,7 +18,7 @@ export default function SignatureEditeur({ prefixe }: { prefixe: string }) {
       className="group inline-flex items-center gap-2.5 text-discret transition-colors hover:text-encre"
     >
       <span>{prefixe}</span>
-      <LogoSlaega className="h-[13px] w-auto" />
+      <LogoSlaega logo={logo} hauteur={13} />
     </a>
   );
 }

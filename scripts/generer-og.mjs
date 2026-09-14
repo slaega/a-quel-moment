@@ -28,6 +28,35 @@ const ROUGE = "#C8362B";
 const CENDRE = "#86837E";
 const ESTOMPE = "#B9B6B1";
 
+/**
+ * Le logo Slaega, s'il a été déposé dans public/.
+ *
+ * Les affiches sont toujours sombres : une marque foncée y disparaîtrait. On
+ * préfère donc slaega-mark-clair.png quand il existe, et on retombe sinon sur
+ * le fichier principal. Sur le site, ce problème est réglé autrement — voir
+ * LOGO_MONOCHROME dans lib/logo.ts.
+ */
+function chargerLogo() {
+  const candidats = ["slaega-mark-clair.png", "slaega-mark.png"];
+  const chemin = candidats
+    .map((f) => path.join(RACINE, "public", f))
+    .find((c) => fs.existsSync(c));
+  if (!chemin) return null;
+
+  const donnees = fs.readFileSync(chemin);
+  const SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  if (donnees.length < 24 || !donnees.subarray(0, 8).equals(SIGNATURE)) return null;
+  if (donnees.subarray(12, 16).toString("latin1") !== "IHDR") return null;
+
+  return {
+    uri: `data:image/png;base64,${donnees.toString("base64")}`,
+    largeur: donnees.readUInt32BE(16),
+    hauteur: donnees.readUInt32BE(20),
+  };
+}
+
+const LOGO = chargerLogo();
+
 const polices = [
   {
     name: "Inter",
@@ -170,16 +199,32 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
               },
               signature,
             ),
-            // Marque de l'éditeur. À remplacer par le vrai logo le jour venu :
-            // satori accepte une <img> en data URI, largeur et hauteur fournies.
-            marque
-              ? texte({ fontSize: 17, fontWeight: 600, color: CENDRE, letterSpacing: 3 }, "SLAEGA")
-              : null,
+            marque ? marqueEditeur() : null,
           ]),
         ],
       ),
     ],
   );
+}
+
+/** La signature de l'éditeur, en bas à droite de l'affiche. */
+function marqueEditeur() {
+  if (!LOGO) {
+    return texte({ fontSize: 17, fontWeight: 600, color: CENDRE, letterSpacing: 3 }, "SLAEGA");
+  }
+
+  const hauteur = 26;
+  const largeur = Math.round((LOGO.largeur / LOGO.hauteur) * hauteur);
+
+  return {
+    type: "img",
+    props: {
+      src: LOGO.uri,
+      width: largeur,
+      height: hauteur,
+      style: { width: largeur, height: hauteur, opacity: 0.7 },
+    },
+  };
 }
 
 async function enPng(element) {
@@ -231,7 +276,10 @@ async function main() {
   );
   fs.writeFileSync(path.join(SORTIE, "defaut.png"), defaut);
 
-  console.log(`Affiches générées : ${fichiers.length + 1} → public/og/`);
+  console.log(
+    `Affiches générées : ${fichiers.length + 1} → public/og/` +
+      (LOGO ? "" : " (logotype provisoire — public/slaega-mark.png absent)"),
+  );
 }
 
 await main();

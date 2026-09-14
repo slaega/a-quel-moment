@@ -1,21 +1,70 @@
+import type { Logo } from "@/lib/logo";
+
 /**
- * Logotype Slaega — PROVISOIRE.
+ * La marque Slaega.
  *
- * Le vrai logo n'a pas pu être récupéré depuis slaega.com (domaine bloqué
- * pendant la construction du site). Pour le mettre en place, remplacer le
- * contenu du <svg> ci-dessous par celui du logo officiel, en gardant
- * `fill="currentColor"` : c'est ce qui le fait suivre le thème clair ou sombre
- * sans avoir à fournir deux fichiers.
+ * Trois cas, dans cet ordre :
  *
- * L'en-tête et le pied de page passent tous les deux par ici. Les affiches de
- * partage ont leur propre marque, dans scripts/generer-og.mjs — satori ne peut
- * pas lire un composant React.
+ * 1. public/slaega-mark.png existe et la marque est monochrome — elle est
+ *    teintée en `currentColor` par masque CSS, donc elle suit le thème.
+ * 2. Le fichier existe et la marque est en couleurs — elle s'affiche telle
+ *    quelle.
+ * 3. Aucun fichier — logotype typographique provisoire.
+ *
+ * Voir lib/logo.ts pour poser le fichier et régler LOGO_MONOCHROME.
  */
-export default function LogoSlaega({ className = "" }: { className?: string }) {
+export default function LogoSlaega({
+  logo,
+  hauteur,
+}: {
+  logo: Logo | null;
+  /** Hauteur de rendu en pixels ; la largeur suit le ratio du fichier. */
+  hauteur: number;
+}) {
+  if (logo) {
+    const largeur = Math.round((logo.largeur / logo.hauteur) * hauteur);
+
+    if (logo.monochrome) {
+      return (
+        <span
+          role="img"
+          aria-label="Slaega"
+          style={{
+            width: largeur,
+            height: hauteur,
+            backgroundColor: "currentColor",
+            maskImage: `url(${logo.src})`,
+            WebkitMaskImage: `url(${logo.src})`,
+            maskSize: "contain",
+            WebkitMaskSize: "contain",
+            maskRepeat: "no-repeat",
+            WebkitMaskRepeat: "no-repeat",
+            maskPosition: "center",
+            WebkitMaskPosition: "center",
+            display: "inline-block",
+          }}
+        />
+      );
+    }
+
+    /* eslint-disable-next-line @next/next/no-img-element -- export statique :
+       l'optimiseur d'images de Next n'y tourne pas. */
+    return (
+      <img
+        src={logo.src}
+        alt="Slaega"
+        width={largeur}
+        height={hauteur}
+        style={{ height: hauteur, width: largeur }}
+      />
+    );
+  }
+
+  // Provisoire, tant que le fichier n'est pas déposé.
   return (
     <svg
       viewBox="0 0 108 22"
-      className={className}
+      style={{ height: hauteur, width: "auto" }}
       role="img"
       aria-label="Slaega"
       fill="currentColor"
