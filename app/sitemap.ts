@@ -12,8 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const cas = getTousLesCas().map((c) => ({
     url: `${site.url}/cas/${c.slug}/`,
-    lastModified: c.date,
     changeFrequency: "yearly" as const,
+    ...(c.date ? { lastModified: c.date } : {}),
   }));
 
   return [...fixes, ...cas];

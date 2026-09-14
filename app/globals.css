@@ -1,14 +1,58 @@
 @import "tailwindcss";
 
-@theme {
-  /* Palette — sobre, trois valeurs et un accent. */
-  --color-encre: #0b0b0c;
-  --color-voile: #131315;
-  --color-trait: #232326;
-  --color-cendre: #86837e;
-  --color-craie: #f2f0ec;
-  --color-rouge: #c8362b;
-  --color-rouge-vif: #e0574b;
+/*
+ * Deux thèmes, un seul jeu de rôles. Les noms disent la fonction (fond, encre,
+ * trait…), jamais la teinte : basculer de thème ne change que ces valeurs.
+ *
+ * rouge      — le rouge de marque : bandes, filets, grands numéros (hors texte courant)
+ * rouge-vif  — le rouge lisible : liens, survols, petites mentions
+ */
+:root {
+  --r-fond: #f7f5f1;
+  --r-voile: #fffefc;
+  --r-trait: #e0dcd3;
+  --r-discret: #6a6660;
+  --r-encre: #16130f;
+  --r-rouge: #b7291e;
+  --r-rouge-vif: #a8241a;
+}
+
+/* Sans choix explicite, on suit le système. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --r-fond: #0b0b0c;
+    --r-voile: #131315;
+    --r-trait: #232326;
+    --r-discret: #86837e;
+    --r-encre: #f2f0ec;
+    --r-rouge: #c8362b;
+    --r-rouge-vif: #ee6a5e;
+  }
+}
+
+/* Le choix de la personne l'emporte, dans les deux sens. */
+:root[data-theme="dark"] {
+  --r-fond: #0b0b0c;
+  --r-voile: #131315;
+  --r-trait: #232326;
+  --r-discret: #86837e;
+  --r-encre: #f2f0ec;
+  --r-rouge: #c8362b;
+  --r-rouge-vif: #ee6a5e;
+}
+
+/*
+ * « inline » est indispensable ici : les utilitaires reçoivent la var() plutôt
+ * qu'une couleur figée au build, ce qui permet la bascule au runtime.
+ */
+@theme inline {
+  --color-fond: var(--r-fond);
+  --color-voile: var(--r-voile);
+  --color-trait: var(--r-trait);
+  --color-discret: var(--r-discret);
+  --color-encre: var(--r-encre);
+  --color-rouge: var(--r-rouge);
+  --color-rouge-vif: var(--r-rouge-vif);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-lora), Georgia, "Times New Roman", serif;
@@ -22,11 +66,23 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* Les contrôles natifs (barres de défilement, champs) suivent le thème. */
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+    }
   }
 
   body {
-    background-color: var(--color-encre);
-    color: var(--color-craie);
+    background-color: var(--color-fond);
+    color: var(--color-encre);
     font-family: var(--font-sans);
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
@@ -35,7 +91,7 @@
 
   ::selection {
     background-color: var(--color-rouge);
-    color: var(--color-craie);
+    color: var(--color-voile);
   }
 
   :focus-visible {
@@ -74,7 +130,7 @@
 @utility prose-cas {
   font-size: 1.125rem;
   line-height: 1.75;
-  color: color-mix(in srgb, var(--color-craie) 88%, transparent);
+  color: color-mix(in srgb, var(--color-encre) 88%, transparent);
   text-wrap: pretty;
 
   /* Marges remises à plat, puis un seul rythme vertical entre blocs.
@@ -88,7 +144,7 @@
   }
 
   & strong {
-    color: var(--color-craie);
+    color: var(--color-encre);
     font-weight: 600;
   }
 
@@ -98,7 +154,7 @@
   }
 
   & a {
-    color: var(--color-craie);
+    color: var(--color-encre);
     text-decoration: underline;
     text-decoration-color: var(--color-rouge);
     text-underline-offset: 0.25em;
@@ -114,14 +170,14 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.25;
-    color: var(--color-craie);
+    color: var(--color-encre);
     margin-top: 2.5em;
   }
 
   & h3 {
     font-size: 1.0625rem;
     font-weight: 600;
-    color: var(--color-craie);
+    color: var(--color-encre);
     margin-top: 2em;
   }
 
@@ -131,7 +187,7 @@
     font-family: var(--font-serif);
     font-style: italic;
     font-size: 1.1875rem;
-    color: var(--color-craie);
+    color: var(--color-encre);
   }
 
   & ul,
@@ -173,5 +229,32 @@
   @media (width >= 48rem) {
     font-size: 1.1875rem;
     line-height: 1.8;
+  }
+}
+
+/*
+ * Icônes de la bascule de thème. Piloter leur visibilité en CSS — et non en
+ * JavaScript — évite à la fois le clignotement au chargement et tout écart
+ * d'hydratation : le serveur ne sait pas quel thème la personne utilise.
+ */
+.si-sombre {
+  display: none;
+}
+
+:root[data-theme="dark"] .si-sombre {
+  display: block;
+}
+
+:root[data-theme="dark"] .si-clair {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .si-sombre {
+    display: block;
+  }
+
+  :root:not([data-theme="light"]) .si-clair {
+    display: none;
   }
 }

@@ -6,10 +6,10 @@ import { useMemo, useState } from "react";
 export interface EntreeCas {
   slug: string;
   titre: string;
-  categorie: string;
-  extrait: string;
-  dateIso: string;
-  dateLisible: string;
+  categorie: string | null;
+  extrait: string | null;
+  dateIso: string | null;
+  dateLisible: string | null;
 }
 
 export default function ArchiveCas({
@@ -50,22 +50,26 @@ export default function ArchiveCas({
               href={`/cas/${e.slug}/`}
               className="group flex flex-col gap-3 py-7 transition-colors md:flex-row md:items-baseline md:gap-8"
             >
-              <span className="shrink-0 font-semibold tabular-nums text-rouge md:w-20">
+              <span className="shrink-0 font-semibold tabular-nums text-rouge-vif md:w-20">
                 {e.slug}
               </span>
 
               <span className="flex-1">
-                <span className="block text-xl font-medium tracking-tight text-craie transition-colors group-hover:text-rouge-vif md:text-2xl">
+                <span className="block text-xl font-medium tracking-tight text-encre transition-colors group-hover:text-rouge-vif md:text-2xl">
                   {e.titre}
                 </span>
-                <span className="mt-2 block max-w-lecture text-base leading-relaxed text-cendre">
-                  {e.extrait}
-                </span>
+                {e.extrait && (
+                  <span className="mt-2 block max-w-lecture text-base leading-relaxed text-discret">
+                    {e.extrait}
+                  </span>
+                )}
               </span>
 
-              <span className="flex shrink-0 items-baseline gap-4 text-sm text-cendre md:flex-col md:items-end md:gap-1.5">
-                <span className="surtitre">{e.categorie}</span>
-                <time dateTime={e.dateIso}>{e.dateLisible}</time>
+              <span className="flex shrink-0 items-baseline gap-4 text-sm text-discret md:flex-col md:items-end md:gap-1.5">
+                {e.categorie && <span className="surtitre">{e.categorie}</span>}
+                {e.dateIso && e.dateLisible && (
+                  <time dateTime={e.dateIso}>{e.dateLisible}</time>
+                )}
               </span>
             </Link>
           </li>
@@ -73,7 +77,7 @@ export default function ArchiveCas({
       </ul>
 
       {visibles.length === 0 && (
-        <p className="py-16 text-center text-cendre">Aucun CAS dans cette catégorie.</p>
+        <p className="py-16 text-center text-discret">Aucun CAS dans cette catégorie.</p>
       )}
     </>
   );
@@ -97,7 +101,7 @@ function Chip({
         "border px-3.5 py-1.5 text-sm transition-colors " +
         (actif
           ? "border-rouge text-rouge-vif"
-          : "border-trait text-cendre hover:border-cendre hover:text-craie")
+          : "border-trait text-discret hover:border-discret hover:text-encre")
       }
     >
       {children}

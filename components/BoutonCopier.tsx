@@ -33,14 +33,14 @@ export default function BoutonCopier({ texte }: { texte: string }) {
     <button
       type="button"
       onClick={copier}
-      className="group inline-flex items-center gap-2.5 border border-trait px-4 py-2.5 text-sm text-craie transition-colors hover:border-rouge hover:text-rouge-vif"
+      className="group inline-flex items-center gap-2.5 border border-trait px-4 py-2.5 text-sm text-encre transition-colors hover:border-rouge hover:text-rouge-vif"
     >
       <span
         aria-hidden="true"
         className={
           etat === "copie"
             ? "size-1.5 rounded-full bg-rouge-vif"
-            : "size-1.5 rounded-full bg-cendre transition-colors group-hover:bg-rouge"
+            : "size-1.5 rounded-full bg-discret transition-colors group-hover:bg-rouge"
         }
       />
       {libelle}

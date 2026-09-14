@@ -67,9 +67,40 @@ function texte(style, contenu) {
 
 /** Un titre long doit rester dans l'affiche : on réduit le corps par paliers. */
 function tailleDuTitre(titre) {
+  if (titre.length > 90) return 44;
   if (titre.length > 64) return 52;
   if (titre.length > 40) return 62;
   return 74;
+}
+
+/** Certains CAS reformulent la question de clôture, parfois longuement. */
+function tailleDeLaSignature(signature) {
+  if (signature.length > 90) return 25;
+  if (signature.length > 60) return 29;
+  return 34;
+}
+
+const SIGNATURE_MOTIF = /^à\s+quel\s+moment\b.*\?\s*$/i;
+
+/** Même découpage que lib/cas.ts : la question de clôture vit à part. */
+function separerSignature(corps) {
+  const lignes = corps.trimEnd().split("\n");
+  for (let i = lignes.length - 1; i >= 0; i -= 1) {
+    const ligne = lignes[i].trim();
+    if (ligne === "") continue;
+    if (!SIGNATURE_MOTIF.test(ligne)) break;
+    return { texte: lignes.slice(0, i).join("\n").trimEnd(), signature: ligne };
+  }
+  return { texte: corps.trimEnd(), signature: null };
+}
+
+function premiereLigne(texte) {
+  return (
+    texte
+      .split("\n")
+      .map((l) => l.trim())
+      .find((l) => l !== "" && !l.startsWith("#") && !l.startsWith(">")) ?? ""
+  );
 }
 
 function affiche({ numero, categorie, titre, extrait, signature, marque = true }) {
@@ -129,7 +160,14 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
 
           e("div", { display: "flex", alignItems: "flex-end", justifyContent: "space-between" }, [
             texte(
-              { fontSize: 34, fontFamily: "Lora", fontStyle: "italic", color: CRAIE, maxWidth: 780 },
+              {
+                fontSize: tailleDeLaSignature(signature),
+                fontFamily: "Lora",
+                fontStyle: "italic",
+                color: CRAIE,
+                lineHeight: 1.35,
+                maxWidth: 820,
+              },
               signature,
             ),
             marque ? texte({ fontSize: 19, color: CENDRE, letterSpacing: 1.2 }, "slaega") : null,
@@ -148,6 +186,9 @@ async function enPng(element) {
 const SIGNATURE = "À quel moment avons-nous trouvé ça normal ?";
 
 async function main() {
+  // On repart d'un dossier vide : un CAS supprimé ne doit pas laisser son
+  // affiche derrière lui.
+  fs.rmSync(SORTIE, { recursive: true, force: true });
   fs.mkdirSync(SORTIE, { recursive: true });
 
   const fichiers = fs
@@ -155,16 +196,18 @@ async function main() {
     .filter((f) => f.endsWith(".md") && !f.startsWith("_"));
 
   for (const fichier of fichiers) {
-    const { data } = matter(fs.readFileSync(path.join(SOURCE, fichier), "utf8"));
+    const { data, content } = matter(fs.readFileSync(path.join(SOURCE, fichier), "utf8"));
     const slug = String(Number(data.numero)).padStart(3, "0");
+    const { texte, signature } = separerSignature(content);
 
     const png = await enPng(
       affiche({
         numero: `CAS ${slug}`,
-        categorie: data.categorie,
-        titre: data.titre,
-        extrait: data.extrait,
-        signature: SIGNATURE,
+        categorie: data.categorie ?? null,
+        // Ces textes sont des statuts : à défaut de titre, la première ligne.
+        titre: data.titre || premiereLigne(texte),
+        extrait: data.extrait ?? null,
+        signature: signature ?? SIGNATURE,
       }),
     );
 

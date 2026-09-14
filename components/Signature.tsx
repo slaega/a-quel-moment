@@ -12,8 +12,8 @@ export default function Signature({
     <p
       className={
         taille === "grande"
-          ? "font-serif text-2xl leading-snug text-craie italic md:text-[1.75rem]"
-          : "font-serif text-xl leading-snug text-craie italic md:text-[1.375rem]"
+          ? "font-serif text-2xl leading-snug text-encre italic md:text-[1.75rem]"
+          : "font-serif text-xl leading-snug text-encre italic md:text-[1.375rem]"
       }
     >
       {texte}

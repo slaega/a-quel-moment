@@ -11,7 +11,7 @@ export default function NumeroCas({
       className={
         taille === "grande"
           ? "font-semibold tracking-tight text-rouge tabular-nums text-3xl md:text-4xl"
-          : "font-semibold tracking-tight text-rouge tabular-nums text-base"
+          : "font-semibold tracking-tight text-rouge-vif tabular-nums text-base"
       }
     >
       <span className="opacity-60">CAS </span>

@@ -93,17 +93,43 @@ sur Vercel, Netlify, GitHub Pages ou n'importe quel hébergeur.
 
 ## Direction artistique
 
-| Rôle | Valeur |
-| --- | --- |
-| Fond | `#0B0B0C` |
-| Texte | `#F2F0EC` |
-| Accent | `#C8362B` — numéro du CAS, phrase qui retourne le texte, liens actifs |
-| Texte secondaire | `#86837E` |
-| Filets | `#232326` |
+Les couleurs sont nommées par **rôle**, jamais par teinte : un seul jeu de noms
+sert les deux thèmes.
 
-Corps et titres en **Inter**, signature en **Lora** italique. Les jetons sont
-définis en un seul endroit, le bloc `@theme` de `app/globals.css` : y changer une
-valeur suffit à la propager partout.
+| Rôle | Clair | Sombre |
+| --- | --- | --- |
+| `fond` | `#F7F5F1` | `#0B0B0C` |
+| `encre` (texte) | `#16130F` | `#F2F0EC` |
+| `discret` (texte secondaire) | `#6A6660` | `#86837E` |
+| `trait` (filets) | `#E0DCD3` | `#232326` |
+| `rouge` (bandes, grands numéros) | `#B7291E` | `#C8362B` |
+| `rouge-vif` (liens, survols, petites mentions) | `#A8241A` | `#EE6A5E` |
+
+Deux rouges, parce qu'un seul ne peut pas tenir les deux emplois : celui des
+bandes et des grands numéros peut être sombre et dense, celui des petits textes
+doit rester lisible sur son fond. Tout est déclaré dans `app/globals.css`.
+
+Corps et titres en **Inter**, signature en **Lora** italique.
+
+### Clair et sombre
+
+Par défaut le site suit la préférence système. La bascule dans l'en-tête impose
+un choix, retenu dans `localStorage` (`aqm-theme`).
+
+Deux détails valent d'être connus avant de toucher à ce mécanisme :
+
+- Un script minuscule dans `<head>` (`lib/theme.ts`) applique le thème **avant
+  le premier rendu**. Sans lui, qui a choisi le clair voit le site s'afficher en
+  sombre le temps que React s'hydrate.
+- L'icône de la bascule (lune ou soleil) est pilotée en CSS, pas en JavaScript.
+  Le serveur ne peut pas savoir quel thème la personne utilise : décider en JS
+  provoquerait un écart d'hydratation et un clignotement.
+
+Le bloc `@theme` est en mode `inline` — sans ça, Tailwind figerait les couleurs
+au build et la bascule n'aurait aucun effet.
+
+Les affiches de partage restent sombres dans les deux cas : ce sont des images
+figées, elles portent l'identité de la série.
 
 ## Structure
 

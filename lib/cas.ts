@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 
@@ -12,16 +13,21 @@ export interface Cas {
   numero: number;
   /** Numéro sur 3 chiffres — sert de segment d'URL : /cas/014/ */
   slug: string;
+  /**
+   * Titre affiché. Ces textes sont des statuts : la plupart n'en ont pas.
+   * À défaut de frontmatter « titre », c'est la première ligne du texte.
+   */
   titre: string;
-  /** Date ISO (YYYY-MM-DD) */
-  date: string;
-  categorie: string;
-  extrait: string;
+  /** Date ISO (YYYY-MM-DD), ou null pour un CAS non daté. */
+  date: string | null;
+  categorie: string | null;
+  /** Phrase mise en avant dans l'archive et au partage. */
+  extrait: string | null;
   /** true tant que le texte publié n'a pas remplacé le brouillon. */
   brouillon: boolean;
   /** Corps du texte en HTML, signature finale retirée. */
   corps: string;
-  /** Phrase de signature, isolée pour être composée en serif italique. */
+  /** Question de clôture, isolée pour être composée en serif italique. */
   signature: string | null;
   /** Texte intégral en clair, pour le bouton « copier ». */
   texteBrut: string;
@@ -30,16 +36,21 @@ export interface Cas {
 const DOSSIER = path.join(process.cwd(), "content", "cas");
 
 /**
- * Reconnaît la signature de la série en fin de texte, quelles que soient les
- * variantes d'espacement, de casse ou de ponctuation finale.
+ * La question de clôture. Elle est le plus souvent « à quel moment avons-nous
+ * trouvé ça normal ? », mais certains CAS la reformulent : on reconnaît donc
+ * toute dernière ligne qui ouvre sur « à quel moment » et se ferme sur un
+ * point d'interrogation.
  */
-const SIGNATURE = /^à\s+quel\s+moment\s+avons[-\s]nous\s+trouvé\s+ça\s+normal\s*[?!.]*$/i;
+const SIGNATURE = /^à\s+quel\s+moment\b.*\?\s*$/i;
 
 function enHtml(markdown: string): string {
   return String(
     unified()
       .use(remarkParse)
       .use(remarkGfm)
+      // Les retours à la ligne sont voulus : ces textes sont écrits en lignes,
+      // pas en paragraphes coulants.
+      .use(remarkBreaks)
       .use(remarkRehype)
       .use(rehypeStringify)
       .processSync(markdown),
@@ -60,6 +71,18 @@ function separerSignature(corps: string): { texte: string; signature: string | n
   return { texte: corps.trimEnd(), signature: null };
 }
 
+function premiereLigne(texte: string): string {
+  const ligne = texte
+    .split("\n")
+    .map((l) => l.trim())
+    .find((l) => l !== "" && !l.startsWith("#") && !l.startsWith(">"));
+  return ligne ?? "";
+}
+
+function chaineOuNull(valeur: unknown): string | null {
+  return typeof valeur === "string" && valeur.trim() !== "" ? valeur.trim() : null;
+}
+
 function lireFichier(fichier: string): Cas {
   const brut = fs.readFileSync(path.join(DOSSIER, fichier), "utf8");
   const { data, content } = matter(brut);
@@ -68,21 +91,20 @@ function lireFichier(fichier: string): Cas {
   if (!Number.isInteger(numero)) {
     throw new Error(`content/cas/${fichier} : frontmatter « numero » manquant ou invalide.`);
   }
-  for (const champ of ["titre", "date", "categorie", "extrait"] as const) {
-    if (typeof data[champ] !== "string" || data[champ].trim() === "") {
-      throw new Error(`content/cas/${fichier} : frontmatter « ${champ} » manquant.`);
-    }
-  }
 
   const { texte, signature } = separerSignature(content);
+  const titre = chaineOuNull(data.titre) ?? premiereLigne(texte);
+  if (titre === "") {
+    throw new Error(`content/cas/${fichier} : ni titre ni texte, impossible d'afficher ce CAS.`);
+  }
 
   return {
     numero,
     slug: String(numero).padStart(3, "0"),
-    titre: data.titre,
-    date: data.date,
-    categorie: data.categorie,
-    extrait: data.extrait,
+    titre,
+    date: chaineOuNull(data.date),
+    categorie: chaineOuNull(data.categorie),
+    extrait: chaineOuNull(data.extrait),
     brouillon: data.brouillon === true,
     corps: enHtml(texte),
     signature,
@@ -123,6 +145,7 @@ export function getDernierCas(): Cas | undefined {
 export function getCategories(): { nom: string; total: number }[] {
   const compte = new Map<string, number>();
   for (const c of getTousLesCas()) {
+    if (!c.categorie) continue;
     compte.set(c.categorie, (compte.get(c.categorie) ?? 0) + 1);
   }
   return [...compte.entries()]
@@ -141,7 +164,8 @@ export function getVoisins(slug: string): { precedent: Cas | null; suivant: Cas 
   };
 }
 
-export function formaterDate(iso: string): string {
+export function formaterDate(iso: string | null): string | null {
+  if (!iso) return null;
   const d = new Date(`${iso}T00:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
   return new Intl.DateTimeFormat("fr-FR", {

@@ -5,7 +5,7 @@ export default function PiedDePage() {
   return (
     <footer className="mt-12 border-t border-trait md:mt-20">
       <div className="mx-auto flex max-w-page flex-col gap-10 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-10">
-        <p className="max-w-lecture font-serif text-xl leading-snug text-craie italic md:text-2xl">
+        <p className="max-w-lecture font-serif text-xl leading-snug text-encre italic md:text-2xl">
           {site.signature}
         </p>
 
@@ -15,14 +15,14 @@ export default function PiedDePage() {
               <li key={lien.href}>
                 <Link
                   href={lien.href}
-                  className="text-cendre transition-colors hover:text-craie"
+                  className="text-discret transition-colors hover:text-encre"
                 >
                   {lien.label}
                 </Link>
               </li>
             ))}
           </ul>
-          <p className="text-cendre">
+          <p className="text-discret">
             Une série signée {site.auteur} · {new Date().getFullYear()}
           </p>
         </div>

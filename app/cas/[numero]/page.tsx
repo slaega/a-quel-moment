@@ -26,22 +26,23 @@ export async function generateMetadata({
   // L'affiche est générée au build par scripts/generer-og.mjs.
   const url = `${site.url}/cas/${cas.slug}/`;
   const affiche = `/og/cas-${cas.slug}.png`;
+  const accroche = cas.extrait ?? cas.titre;
   return {
     title: cas.titre,
-    description: cas.extrait,
+    description: accroche,
     alternates: { canonical: url },
     openGraph: {
       type: "article",
       url,
-      title: cas.extrait,
-      description: `CAS ${cas.slug} · ${cas.titre} — ${site.nom}`,
-      publishedTime: cas.date,
+      title: accroche,
+      description: `CAS ${cas.slug} — ${site.nom}`,
+      ...(cas.date ? { publishedTime: cas.date } : {}),
       images: [{ url: affiche, width: 1200, height: 630, alt: cas.titre }],
     },
     twitter: {
       card: "summary_large_image",
-      title: cas.extrait,
-      description: `CAS ${cas.slug} · ${cas.titre}`,
+      title: accroche,
+      description: `CAS ${cas.slug} — ${site.nom}`,
       images: [affiche],
     },
   };
@@ -53,12 +54,13 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
   if (!cas) notFound();
 
   const { precedent, suivant } = getVoisins(cas.slug);
+  const date = formaterDate(cas.date);
 
   return (
     <div className="mx-auto max-w-page px-6 pt-12 pb-24 md:px-10 md:pt-20">
       <Link
         href="/cas/"
-        className="text-sm text-cendre transition-colors hover:text-craie"
+        className="text-sm text-discret transition-colors hover:text-encre"
       >
         ← Tous les CAS
       </Link>
@@ -68,10 +70,12 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
         <header>
           <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
             <NumeroCas slug={cas.slug} taille="grande" />
-            <span className="surtitre text-cendre">{cas.categorie}</span>
-            <time dateTime={cas.date} className="text-sm text-cendre">
-              {formaterDate(cas.date)}
-            </time>
+            {cas.categorie && <span className="surtitre text-discret">{cas.categorie}</span>}
+            {date && cas.date && (
+              <time dateTime={cas.date} className="text-sm text-discret">
+                {date}
+              </time>
+            )}
           </div>
 
           <h1 className="titre-affiche mt-7 max-w-3xl text-[2rem] md:text-5xl">
@@ -80,7 +84,7 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
         </header>
 
         {cas.brouillon && (
-          <p className="mt-10 max-w-lecture border border-trait px-4 py-3 text-sm text-cendre">
+          <p className="mt-10 max-w-lecture border border-trait px-4 py-3 text-sm text-discret">
             Brouillon — ce texte attend sa version publiée.
           </p>
         )}
@@ -107,8 +111,8 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
       >
         {precedent ? (
           <Link href={`/cas/${precedent.slug}/`} className="group py-4">
-            <span className="surtitre text-cendre">CAS précédent</span>
-            <span className="mt-3 block text-lg font-medium tracking-tight text-craie transition-colors group-hover:text-rouge-vif">
+            <span className="surtitre text-discret">CAS précédent</span>
+            <span className="mt-3 block text-lg font-medium tracking-tight text-encre transition-colors group-hover:text-rouge-vif">
               {precedent.slug} · {precedent.titre}
             </span>
           </Link>
@@ -118,8 +122,8 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
 
         {suivant && (
           <Link href={`/cas/${suivant.slug}/`} className="group py-4 sm:text-right">
-            <span className="surtitre text-cendre">CAS suivant</span>
-            <span className="mt-3 block text-lg font-medium tracking-tight text-craie transition-colors group-hover:text-rouge-vif">
+            <span className="surtitre text-discret">CAS suivant</span>
+            <span className="mt-3 block text-lg font-medium tracking-tight text-encre transition-colors group-hover:text-rouge-vif">
               {suivant.slug} · {suivant.titre}
             </span>
           </Link>

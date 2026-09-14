@@ -22,7 +22,7 @@ export default function Archive() {
     <div className="mx-auto max-w-page px-6 pt-16 pb-24 md:px-10 md:pt-24">
       <header className="mb-12 md:mb-16">
         <h1 className="titre-affiche text-4xl md:text-6xl">Les CAS</h1>
-        <p className="mt-6 max-w-lecture text-lg leading-relaxed text-cendre">
+        <p className="mt-6 max-w-lecture text-lg leading-relaxed text-discret">
           Tous les textes publiés, du plus récent au premier. Chacun part d&apos;un fait
           réel et s&apos;arrête là où la question commence.
         </p>

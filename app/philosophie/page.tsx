@@ -30,14 +30,16 @@ export default function Philosophie() {
 
       {reference && (
         <section className="mt-24 border-t border-trait pt-16 md:mt-32">
-          <p className="surtitre mb-10 text-cendre">Le texte de référence</p>
+          <p className="surtitre mb-10 text-discret">Le texte de référence</p>
 
           <article className="border-l-2 border-rouge pl-6 md:pl-12">
             <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
               <NumeroCas slug={reference.slug} />
-              <time dateTime={reference.date} className="text-sm text-cendre">
-                {formaterDate(reference.date)}
-              </time>
+              {reference.date && (
+                <time dateTime={reference.date} className="text-sm text-discret">
+                  {formaterDate(reference.date)}
+                </time>
+              )}
             </div>
 
             <h2 className="titre-affiche mt-6 max-w-3xl text-3xl md:text-4xl">
@@ -65,7 +67,7 @@ export default function Philosophie() {
           </h2>
           <Link
             href="/cas/"
-            className="shrink-0 border-b border-rouge pb-1 text-sm text-craie transition-colors hover:text-rouge-vif"
+            className="shrink-0 border-b border-rouge pb-1 text-sm text-encre transition-colors hover:text-rouge-vif"
           >
             Lire les CAS publiés
           </Link>

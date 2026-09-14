@@ -24,7 +24,7 @@ export default function APropos() {
       <p className="mt-20 border-t border-trait pt-10">
         <Link
           href="/cas/"
-          className="border-b border-rouge pb-1 text-sm text-craie transition-colors hover:text-rouge-vif"
+          className="border-b border-rouge pb-1 text-sm text-encre transition-colors hover:text-rouge-vif"
         >
           Lire les CAS
         </Link>

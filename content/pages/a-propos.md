@@ -25,6 +25,5 @@ La seule chose demandée : gardez le texte entier, et gardez la question à la f
 
 Un fait à signaler, une scène que vous avez vue, une remarque sur un CAS publié — écrivez.
 
-<!-- Remplace l'adresse ci-dessous par ton vrai contact. -->
 
-[contact@a-quel-moment.example](mailto:contact@a-quel-moment.example)
+[a-quel-moment@slaega.com](mailto:a-quel-moment@slaega.com)

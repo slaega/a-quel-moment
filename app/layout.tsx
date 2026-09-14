@@ -3,6 +3,7 @@ import { Inter, Lora } from "next/font/google";
 import Entete from "@/components/Entete";
 import PiedDePage from "@/components/PiedDePage";
 import { site } from "@/lib/site";
+import { SCRIPT_THEME } from "@/lib/theme";
 import "./globals.css";
 
 const inter = Inter({
@@ -43,11 +44,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${lora.variable}`}>
+    <html lang="fr" className={`${inter.variable} ${lora.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_THEME }} />
+      </head>
       <body className="flex min-h-screen flex-col">
         <a
           href="#contenu"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-4 focus:border focus:border-rouge focus:bg-encre focus:px-4 focus:py-2"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:m-4 focus:border focus:border-rouge focus:bg-fond focus:px-4 focus:py-2"
         >
           Aller au contenu
         </a>
