@@ -31,13 +31,12 @@ const ESTOMPE = "#B9B6B1";
 /**
  * Le logo Slaega, s'il a été déposé dans public/.
  *
- * Les affiches sont toujours sombres : une marque foncée y disparaîtrait. On
- * préfère donc slaega-mark-clair.png quand il existe, et on retombe sinon sur
- * le fichier principal. Sur le site, ce problème est réglé autrement — voir
- * LOGO_MONOCHROME dans lib/logo.ts.
+ * Les affiches sont toujours sombres : la marque d'origine, dont le « S » est
+ * presque noir, y disparaîtrait. On prend donc la variante pour fond sombre
+ * quand elle existe, et on retombe sinon sur le fichier d'origine.
  */
 function chargerLogo() {
-  const candidats = ["slaega-mark-clair.png", "slaega-mark.png"];
+  const candidats = ["slaega-mark-sur-sombre.png", "slaega-mark.png"];
   const chemin = candidats
     .map((f) => path.join(RACINE, "public", f))
     .find((c) => fs.existsSync(c));
@@ -213,7 +212,7 @@ function marqueEditeur() {
     return texte({ fontSize: 17, fontWeight: 600, color: CENDRE, letterSpacing: 3 }, "SLAEGA");
   }
 
-  const hauteur = 26;
+  const hauteur = 36;
   const largeur = Math.round((LOGO.largeur / LOGO.hauteur) * hauteur);
 
   return {
@@ -222,7 +221,7 @@ function marqueEditeur() {
       src: LOGO.uri,
       width: largeur,
       height: hauteur,
-      style: { width: largeur, height: hauteur, opacity: 0.7 },
+      style: { width: largeur, height: hauteur, opacity: 0.85 },
     },
   };
 }

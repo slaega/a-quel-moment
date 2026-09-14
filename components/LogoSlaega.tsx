@@ -1,17 +1,15 @@
 import type { Logo } from "@/lib/logo";
 
 /**
- * La marque Slaega.
+ * La marque Slaega, déclinée pour les deux thèmes.
  *
- * Trois cas, dans cet ordre :
+ * Quand la variante pour fond sombre existe, les deux images sont posées et
+ * c'est le CSS qui montre la bonne (voir .si-clair / .si-sombre dans
+ * app/globals.css). Le serveur ne peut pas savoir quel thème la personne
+ * utilise : trancher en JavaScript provoquerait un écart d'hydratation et un
+ * clignotement.
  *
- * 1. public/slaega-mark.png existe et la marque est monochrome — elle est
- *    teintée en `currentColor` par masque CSS, donc elle suit le thème.
- * 2. Le fichier existe et la marque est en couleurs — elle s'affiche telle
- *    quelle.
- * 3. Aucun fichier — logotype typographique provisoire.
- *
- * Voir lib/logo.ts pour poser le fichier et régler LOGO_MONOCHROME.
+ * Sans fichier de logo, on retombe sur un logotype typographique provisoire.
  */
 export default function LogoSlaega({
   logo,
@@ -23,44 +21,30 @@ export default function LogoSlaega({
 }) {
   if (logo) {
     const largeur = Math.round((logo.largeur / logo.hauteur) * hauteur);
+    const taille = { width: largeur, height: hauteur };
 
-    if (logo.monochrome) {
-      return (
-        <span
-          role="img"
-          aria-label="Slaega"
-          style={{
-            width: largeur,
-            height: hauteur,
-            backgroundColor: "currentColor",
-            maskImage: `url(${logo.src})`,
-            WebkitMaskImage: `url(${logo.src})`,
-            maskSize: "contain",
-            WebkitMaskSize: "contain",
-            maskRepeat: "no-repeat",
-            WebkitMaskRepeat: "no-repeat",
-            maskPosition: "center",
-            WebkitMaskPosition: "center",
-            display: "inline-block",
-          }}
-        />
-      );
+    /* eslint-disable @next/next/no-img-element -- export statique :
+       l'optimiseur d'images de Next n'y tourne pas. */
+    if (!logo.srcSurSombre) {
+      return <img src={logo.src} alt="Slaega" {...taille} style={taille} />;
     }
 
-    /* eslint-disable-next-line @next/next/no-img-element -- export statique :
-       l'optimiseur d'images de Next n'y tourne pas. */
     return (
-      <img
-        src={logo.src}
-        alt="Slaega"
-        width={largeur}
-        height={hauteur}
-        style={{ height: hauteur, width: largeur }}
-      />
+      <>
+        <img src={logo.src} alt="Slaega" className="si-clair" {...taille} style={taille} />
+        <img
+          src={logo.srcSurSombre}
+          alt=""
+          aria-hidden="true"
+          className="si-sombre"
+          {...taille}
+          style={taille}
+        />
+      </>
     );
+    /* eslint-enable @next/next/no-img-element */
   }
 
-  // Provisoire, tant que le fichier n'est pas déposé.
   return (
     <svg
       viewBox="0 0 108 22"

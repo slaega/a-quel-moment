@@ -18,7 +18,7 @@ export default function SignatureEditeur({
       className="group inline-flex items-center gap-2.5 text-discret transition-colors hover:text-encre"
     >
       <span>{prefixe}</span>
-      <LogoSlaega logo={logo} hauteur={13} />
+      <LogoSlaega logo={logo} hauteur={20} />
     </a>
   );
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "npm run og && next dev",
     "og": "node scripts/generer-og.mjs",
+    "logo": "node scripts/variante-logo.mjs",
     "prebuild": "npm run og",
     "build": "next build",
     "start": "npx serve out",
@@ -33,6 +34,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "satori": "^0.33.4",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.7.0"
   }

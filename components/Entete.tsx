@@ -30,7 +30,7 @@ export default function Entete({ logo }: { logo: Logo | null }) {
             rel="noreferrer"
             className="text-discret transition-colors hover:text-encre"
           >
-            <LogoSlaega logo={logo} hauteur={12} />
+            <LogoSlaega logo={logo} hauteur={19} />
           </a>
         </div>
 
