@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette — sobre, trois valeurs et un accent. */
+  --color-encre: #0b0b0c;
+  --color-voile: #131315;
+  --color-trait: #232326;
+  --color-cendre: #86837e;
+  --color-craie: #f2f0ec;
+  --color-rouge: #c8362b;
+  --color-rouge-vif: #e0574b;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-lora), Georgia, "Times New Roman", serif;
+
+  /* Colonne de lecture : ~62 caractères, pensée pour le pouce. */
+  --container-lecture: 34rem;
+  --container-page: 64rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-encre);
+    color: var(--color-craie);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-rouge);
+    color: var(--color-craie);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rouge-vif);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility titre-affiche {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+@utility surtitre {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Corps d'un CAS : paragraphes courts, respiration large. */
+@utility prose-cas {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--color-craie) 88%, transparent);
+  text-wrap: pretty;
+
+  /* Marges remises à plat, puis un seul rythme vertical entre blocs.
+     Les règles ciblant un élément (h2, h3) le surchargent ensuite. */
+  & :where(p, ul, ol, blockquote, hr, h2, h3, figure) {
+    margin: 0;
+  }
+
+  & > * + * {
+    margin-top: 1.5em;
+  }
+
+  & strong {
+    color: var(--color-craie);
+    font-weight: 600;
+  }
+
+  & em {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  & a {
+    color: var(--color-craie);
+    text-decoration: underline;
+    text-decoration-color: var(--color-rouge);
+    text-underline-offset: 0.25em;
+    transition: color 150ms ease;
+  }
+
+  & a:hover {
+    color: var(--color-rouge-vif);
+  }
+
+  & h2 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: var(--color-craie);
+    margin-top: 2.5em;
+  }
+
+  & h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-craie);
+    margin-top: 2em;
+  }
+
+  & blockquote {
+    border-left: 2px solid var(--color-rouge);
+    padding-left: 1.25rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1875rem;
+    color: var(--color-craie);
+  }
+
+  & ul,
+  & ol {
+    padding-left: 1.25rem;
+  }
+
+  & ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  & ul > li {
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  & ul > li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-rouge);
+  }
+
+  & ol {
+    list-style: decimal;
+  }
+
+  & li + li {
+    margin-top: 0.5em;
+  }
+
+  & hr {
+    border: 0;
+    border-top: 1px solid var(--color-trait);
+    margin-block: 3em;
+  }
+
+  @media (width >= 48rem) {
+    font-size: 1.1875rem;
+    line-height: 1.8;
+  }
+}
