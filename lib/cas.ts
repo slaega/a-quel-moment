@@ -43,6 +43,21 @@ const DOSSIER = path.join(process.cwd(), "content", "cas");
  */
 const SIGNATURE = /^à\s+quel\s+moment\b.*\?\s*$/i;
 
+/**
+ * Empêche une ligne qui commence par un nombre suivi d'un point de devenir une
+ * liste numérotée.
+ *
+ * Ces textes sont écrits en français ordinaire, pas en Markdown : « 2013. »
+ * ouvrant un paragraphe est une date, pas une énumération. Sans ça, le
+ * paragraphe part en retrait sous une puce invisible.
+ *
+ * L'échappement ne sert qu'au rendu. Le texte copié reste intact : il est pris
+ * du fichier d'origine, avant cette étape.
+ */
+function neutraliserListesAccidentelles(markdown: string): string {
+  return markdown.replace(/^(\s*)(\d+)([.)])(\s)/gm, "$1$2\\$3$4");
+}
+
 function enHtml(markdown: string): string {
   return String(
     unified()
@@ -53,7 +68,7 @@ function enHtml(markdown: string): string {
       .use(remarkBreaks)
       .use(remarkRehype)
       .use(rehypeStringify)
-      .processSync(markdown),
+      .processSync(neutraliserListesAccidentelles(markdown)),
   );
 }
 

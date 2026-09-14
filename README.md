@@ -85,6 +85,21 @@ Deux conventions tenues dans tous les fichiers :
 - **espace insécable** dans les milliers (`300 000`), sinon le nombre se coupe
   en fin de ligne — y compris dans l'extrait, qui part sur l'affiche de partage.
 
+### Un piège du Markdown, déjà neutralisé
+
+Une ligne qui commence par un nombre suivi d'un point — `2013. J'étais admis
+au CHU` — est une liste numérotée pour Markdown. Le paragraphe partait en
+retrait sous une puce invisible.
+
+Ces textes sont du français ordinaire, pas du Markdown : ce cas est désarmé
+dans `lib/cas.ts`, il n'y a donc rien à échapper à la main. L'échappement ne
+touche que le rendu ; le texte du bouton « copier » est pris du fichier
+d'origine et reste intact.
+
+Le revers : une vraie liste numérotée est impossible dans un CAS. Ça n'a pas
+d'importance pour le format, et les pages éditoriales de `content/pages/`
+passent par un autre chemin, où les listes fonctionnent normalement.
+
 ## Les affiches de partage
 
 Chaque CAS a sa propre image d'aperçu — une affiche 1200 × 630 reprenant la
