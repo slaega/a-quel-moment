@@ -1,78 +1,75 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import EnteteDePage from "@/components/EnteteDePage";
-import NumeroCas from "@/components/NumeroCas";
 import Signature from "@/components/Signature";
-import { formaterDate, getCas } from "@/lib/cas";
-import { getPage } from "@/lib/pages";
+import { getCas } from "@/lib/cas";
+import { site } from "@/lib/site";
+import { notFound } from "next/navigation";
 
-const page = getPage("philosophie");
-
-// Le CAS #014 est le texte de référence : la philosophie derrière le format.
+/**
+ * Le manifeste de la série est un CAS comme les autres — le 014. Cette page
+ * n'a donc pas de texte à elle : elle donne au 014 la place d'une page de
+ * référence, atteignable depuis la navigation.
+ */
 const REFERENCE = "014";
 
-export const metadata: Metadata = {
-  title: page.titre,
-  description: page.description,
-};
+export function generateMetadata(): Metadata {
+  const cas = getCas(REFERENCE);
+  if (!cas) return { title: "Philosophie" };
+
+  return {
+    title: cas.titre,
+    description: cas.extrait ?? site.description,
+    alternates: { canonical: `${site.url}/philosophie/` },
+    openGraph: {
+      type: "article",
+      url: `${site.url}/philosophie/`,
+      title: cas.extrait ?? cas.titre,
+      description: `${site.nom} — la philosophie de la série`,
+      images: [{ url: `/og/cas-${cas.slug}.png`, width: 1200, height: 630, alt: cas.titre }],
+    },
+  };
+}
 
 export default function Philosophie() {
-  const reference = getCas(REFERENCE);
+  const cas = getCas(REFERENCE);
+  if (!cas) notFound();
 
   return (
     <div className="mx-auto max-w-page px-6 pt-16 pb-24 md:px-10 md:pt-24">
-      <EnteteDePage surtitre="Le manifeste" titre={page.titre} chapo={page.chapo} />
-
-      <div
-        className="prose-cas max-w-lecture"
-        dangerouslySetInnerHTML={{ __html: page.corps }}
+      <EnteteDePage
+        surtitre="Le manifeste"
+        titre={cas.titre}
+        chapo={cas.extrait ?? undefined}
       />
 
-      {reference && (
-        <section className="mt-24 border-t border-trait pt-16 md:mt-32">
-          <p className="surtitre mb-10 text-discret">Le texte de référence</p>
+      <article className="border-l-2 border-rouge pl-6 md:pl-12">
+        <div
+          className="prose-cas max-w-lecture"
+          dangerouslySetInnerHTML={{ __html: cas.corps }}
+        />
 
-          <article className="border-l-2 border-rouge pl-6 md:pl-12">
-            <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-              <NumeroCas slug={reference.slug} />
-              {reference.date && (
-                <time dateTime={reference.date} className="text-sm text-discret">
-                  {formaterDate(reference.date)}
-                </time>
-              )}
-            </div>
+        {cas.signature && (
+          <div className="mt-14 max-w-lecture border-t border-trait pt-10">
+            <Signature texte={cas.signature} taille="grande" />
+          </div>
+        )}
+      </article>
 
-            <h2 className="titre-affiche mt-6 max-w-3xl text-3xl md:text-4xl">
-              {reference.titre}
-            </h2>
-
-            <div
-              className="prose-cas mt-10 max-w-lecture"
-              dangerouslySetInnerHTML={{ __html: reference.corps }}
-            />
-
-            {reference.signature && (
-              <div className="mt-12 max-w-lecture border-t border-trait pt-10">
-                <Signature texte={reference.signature} taille="grande" />
-              </div>
-            )}
-          </article>
-        </section>
-      )}
-
-      <section className="mt-24 border-t border-trait pt-16 md:mt-32">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <h2 className="titre-affiche max-w-lecture text-3xl md:text-4xl">
-            Le réflexe s&apos;attrape. Commencez par un seul fait.
-          </h2>
-          <Link
-            href="/cas/"
-            className="shrink-0 border-b border-rouge pb-1 text-sm text-encre transition-colors hover:text-rouge-vif"
-          >
-            Lire les CAS publiés
-          </Link>
-        </div>
-      </section>
+      <div className="mt-20 flex flex-col gap-4 border-t border-trait pt-10 text-sm sm:flex-row sm:justify-between">
+        <Link
+          href={`/cas/${cas.slug}/`}
+          className="text-discret transition-colors hover:text-encre"
+        >
+          Ce texte est le CAS {cas.slug} — le lire dans l&apos;archive, et le copier
+        </Link>
+        <Link
+          href="/cas/"
+          className="shrink-0 border-b border-rouge pb-1 text-encre transition-colors hover:text-rouge-vif"
+        >
+          Tous les CAS
+        </Link>
+      </div>
     </div>
   );
 }

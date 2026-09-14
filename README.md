@@ -60,12 +60,30 @@ ligne du fichier — les variantes de ponctuation et de casse sont reconnues.
 
 ## Modifier les pages éditoriales
 
-`/philosophie` et `/a-propos` sont aussi en Markdown, dans `content/pages/`.
-Leur frontmatter attend `titre`, `chapo` et, si besoin, `description` (balises meta).
+`/a-propos` est en Markdown, dans `content/pages/a-propos.md`. Son frontmatter
+attend `titre`, `chapo` et, si besoin, `description` (balises meta).
 
-La page `/philosophie` reprend en plus le CAS de référence — le **#014** — juste
-en dessous du manifeste. Pour changer de référence, modifier la constante
-`REFERENCE` dans `app/philosophie/page.tsx`.
+`/philosophie` n'a pas de texte à elle : le manifeste de la série est un CAS
+comme les autres — le **#014** — et la page lui donne la place d'une page de
+référence, atteignable depuis la navigation. Pour changer de texte de
+référence, modifier la constante `REFERENCE` dans `app/philosophie/page.tsx`.
+
+### La question de clôture
+
+Elle varie d'un CAS à l'autre : « avons-nous trouvé ça normal ? », « allons-nous
+encore trouver ça normal ? », ou une reformulation propre au texte. La
+reconnaissance porte donc sur la forme générale — une dernière ligne qui ouvre
+sur « à quel moment » et se ferme sur un point d'interrogation — et non sur une
+phrase figée. Écris la tienne normalement, elle sera détachée et composée en
+serif italique.
+
+### Typographie du texte
+
+Deux conventions tenues dans tous les fichiers :
+
+- **apostrophes typographiques** (`’`), jamais droites ;
+- **espace insécable** dans les milliers (`300 000`), sinon le nombre se coupe
+  en fin de ligne — y compris dans l'extrait, qui part sur l'affiche de partage.
 
 ## Les affiches de partage
 
