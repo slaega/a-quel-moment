@@ -42,6 +42,40 @@
 }
 
 /*
+ * Le moment de la journée, en teinte de fond.
+ *
+ * Le site porte la question « à quel moment » : il répond en changeant avec
+ * l'heure. L'aurore réchauffe le papier, le crépuscule le refroidit, et la nuit
+ * bascule d'elle-même en sombre (voir lib/theme.ts). Le rouge, lui, ne bouge
+ * jamais — c'est l'identité de la série.
+ *
+ * Le zénith n'a pas de bloc : c'est la valeur de référence ci-dessus.
+ */
+:root[data-theme="light"][data-moment="aurore"] {
+  --r-fond: #fbf6ee;
+  --r-voile: #fffdf8;
+  --r-trait: #e9e0d1;
+}
+
+:root[data-theme="light"][data-moment="crepuscule"] {
+  --r-fond: #f4f4f7;
+  --r-voile: #fdfdff;
+  --r-trait: #dedee5;
+}
+
+:root[data-theme="dark"][data-moment="aurore"] {
+  --r-fond: #0c0b09;
+  --r-voile: #151312;
+  --r-trait: #272421;
+}
+
+:root[data-theme="dark"][data-moment="crepuscule"] {
+  --r-fond: #0a0a0e;
+  --r-voile: #121216;
+  --r-trait: #222229;
+}
+
+/*
  * « inline » est indispensable ici : les utilitaires reçoivent la var() plutôt
  * qu'une couleur figée au build, ce qui permet la bascule au runtime.
  */

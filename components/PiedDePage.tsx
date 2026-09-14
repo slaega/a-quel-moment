@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SignatureEditeur from "@/components/SignatureEditeur";
 import { nav, site } from "@/lib/site";
 
 export default function PiedDePage() {
@@ -22,8 +23,10 @@ export default function PiedDePage() {
               </li>
             ))}
           </ul>
-          <p className="text-discret">
-            Une série signée {site.auteur} · {new Date().getFullYear()}
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-discret">
+            <SignatureEditeur prefixe="Une série signée" />
+            <span aria-hidden="true">·</span>
+            <span>{new Date().getFullYear()}</span>
           </p>
         </div>
       </div>

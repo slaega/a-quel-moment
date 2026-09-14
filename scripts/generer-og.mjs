@@ -170,7 +170,11 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
               },
               signature,
             ),
-            marque ? texte({ fontSize: 19, color: CENDRE, letterSpacing: 1.2 }, "slaega") : null,
+            // Marque de l'éditeur. À remplacer par le vrai logo le jour venu :
+            // satori accepte une <img> en data URI, largeur et hauteur fournies.
+            marque
+              ? texte({ fontSize: 17, fontWeight: 600, color: CENDRE, letterSpacing: 3 }, "SLAEGA")
+              : null,
           ]),
         ],
       ),

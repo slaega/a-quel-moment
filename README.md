@@ -111,9 +111,29 @@ doit rester lisible sur son fond. Tout est déclaré dans `app/globals.css`.
 
 Corps et titres en **Inter**, signature en **Lora** italique.
 
+### Le moment de la journée
+
+Le site porte la question « à quel moment » : il y répond en changeant avec
+l'heure de la personne qui le lit.
+
+| Moment | Heures | Effet |
+| --- | --- | --- |
+| Aurore | 06h – 12h | Thème clair, papier réchauffé |
+| Zénith | 12h – 18h | Thème clair, papier neutre |
+| Crépuscule | 18h – 06h | Thème sombre, fond légèrement refroidi |
+
+Le rouge, lui, ne bouge jamais : c'est l'identité de la série.
+
+L'heure est forcément lue **côté navigateur** — un export statique est servi tel
+quel à toute heure et sous tous les fuseaux. Le script de `lib/theme.ts` pose
+`data-moment` et `data-theme` sur `<html>` avant le premier rendu.
+
+Un choix explicite de thème l'emporte toujours : la teinte du moment continue de
+s'appliquer, mais sans forcer le sombre le soir.
+
 ### Clair et sombre
 
-Par défaut le site suit la préférence système. La bascule dans l'en-tête impose
+Sans choix explicite, le site suit la préférence système — et le crépuscule. La bascule dans l'en-tête impose
 un choix, retenu dans `localStorage` (`aqm-theme`).
 
 Deux détails valent d'être connus avant de toucher à ce mécanisme :
@@ -128,8 +148,23 @@ Deux détails valent d'être connus avant de toucher à ce mécanisme :
 Le bloc `@theme` est en mode `inline` — sans ça, Tailwind figerait les couleurs
 au build et la bascule n'aurait aucun effet.
 
-Les affiches de partage restent sombres dans les deux cas : ce sont des images
+Les affiches de partage restent sombres dans tous les cas : ce sont des images
 figées, elles portent l'identité de la série.
+
+### Le logo Slaega
+
+Le logotype actuel est **provisoire** : le vrai logo n'a pas pu être récupéré
+depuis slaega.com pendant la construction du site.
+
+Pour le mettre en place, remplacer le contenu du `<svg>` de
+`components/LogoSlaega.tsx` par celui du logo officiel, en gardant
+`fill="currentColor"` — c'est ce qui le fait suivre le thème sans avoir à
+fournir deux fichiers. L'en-tête et le pied de page passent tous les deux par
+ce composant, il n'y a rien d'autre à changer.
+
+Les affiches de partage ont leur propre marque, dans `scripts/generer-og.mjs` :
+satori ne peut pas lire un composant React. Elle s'y remplace par une `<img>` en
+data URI, largeur et hauteur fournies.
 
 ## Structure
 

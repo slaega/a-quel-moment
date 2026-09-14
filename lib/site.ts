@@ -1,6 +1,7 @@
 export const site = {
   nom: "À quel moment",
   auteur: "Slaega",
+  editeurUrl: "https://slaega.com",
   // Remplace par le domaine final avant le déploiement : il sert de base
   // aux URLs absolues des balises Open Graph.
   url: "https://a-quel-moment.vercel.app",
