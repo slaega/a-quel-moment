@@ -62,6 +62,27 @@ La page `/philosophie` reprend en plus le CAS de référence — le **#014** —
 en dessous du manifeste. Pour changer de référence, modifier la constante
 `REFERENCE` dans `app/philosophie/page.tsx`.
 
+## Les affiches de partage
+
+Chaque CAS a sa propre image d'aperçu — une affiche 1200 × 630 reprenant la
+bande rouge, le numéro, le titre, l'extrait et la signature.
+
+Elles sont fabriquées au build par `scripts/generer-og.mjs` (satori pour la mise
+en page, resvg pour le PNG), et déposées dans `public/og/`. Le script tourne tout
+seul : `npm run build` déclenche `prebuild`, et `npm run dev` le lance aussi.
+Pour le relancer à la main :
+
+```bash
+npm run og
+```
+
+`public/og/` est ignoré par git : les affiches sont régénérées à chaque build,
+il n'y a rien à committer. Ajouter un CAS suffit à créer la sienne.
+
+Le gabarit se trouve dans la fonction `affiche()` du script — mêmes couleurs, mêmes
+polices que le site. La taille du titre descend par paliers quand il s'allonge,
+pour qu'une accroche longue reste dans le cadre.
+
 ## Avant de déployer
 
 Renseigner le domaine final dans `lib/site.ts` (`site.url`) : il sert de base aux
@@ -94,4 +115,5 @@ content/pages/       pages éditoriales
 lib/cas.ts           lecture des CAS, rendu Markdown, détection de la signature
 lib/pages.ts         lecture des pages éditoriales
 lib/site.ts          nom, domaine, navigation
+scripts/             génération des affiches Open Graph
 ```

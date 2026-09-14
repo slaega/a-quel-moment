@@ -23,7 +23,9 @@ export async function generateMetadata({
   if (!cas) return {};
 
   // L'extrait sert de titre au partage : c'est lui qui accroche dans un fil.
+  // L'affiche est générée au build par scripts/generer-og.mjs.
   const url = `${site.url}/cas/${cas.slug}/`;
+  const affiche = `/og/cas-${cas.slug}.png`;
   return {
     title: cas.titre,
     description: cas.extrait,
@@ -34,11 +36,13 @@ export async function generateMetadata({
       title: cas.extrait,
       description: `CAS ${cas.slug} · ${cas.titre} — ${site.nom}`,
       publishedTime: cas.date,
+      images: [{ url: affiche, width: 1200, height: 630, alt: cas.titre }],
     },
     twitter: {
       card: "summary_large_image",
       title: cas.extrait,
       description: `CAS ${cas.slug} · ${cas.titre}`,
+      images: [affiche],
     },
   };
 }
