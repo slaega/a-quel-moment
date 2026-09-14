@@ -244,9 +244,12 @@ async function main() {
     .readdirSync(SOURCE)
     .filter((f) => f.endsWith(".md") && !f.startsWith("_"));
 
+  const numeros = [];
+
   for (const fichier of fichiers) {
     const { data, content } = matter(fs.readFileSync(path.join(SOURCE, fichier), "utf8"));
     const slug = String(Number(data.numero)).padStart(3, "0");
+    numeros.push(Number(data.numero));
     const { texte, signature } = separerSignature(content);
 
     const png = await enPng(
@@ -280,6 +283,40 @@ async function main() {
     `Affiches générées : ${fichiers.length + 1} → public/og/` +
       (LOGO ? "" : " (logotype provisoire — public/slaega-mark.png absent)"),
   );
+
+  inventaire(numeros);
+}
+
+/**
+ * Dit à voix haute ce que le site contient vraiment.
+ *
+ * Un site statique affiche ses fichiers sans rien réclamer : un CAS jamais
+ * déposé ne manque à personne au build, il manque en ligne. Ce relevé rend
+ * l'écart visible tout de suite.
+ */
+function inventaire(numeros) {
+  if (numeros.length === 0) {
+    console.warn("Aucun CAS dans content/cas/ : le site sera vide.");
+    return;
+  }
+
+  const tries = [...numeros].sort((a, b) => a - b);
+  const premier = tries[0];
+  const dernier = tries[tries.length - 1];
+
+  const manquants = [];
+  for (let n = premier; n <= dernier; n += 1) {
+    if (!tries.includes(n)) manquants.push(String(n).padStart(3, "0"));
+  }
+
+  console.log(
+    `CAS ${String(premier).padStart(3, "0")} → ${String(dernier).padStart(3, "0")} ` +
+      `(${tries.length} texte${tries.length > 1 ? "s" : ""})`,
+  );
+
+  if (manquants.length > 0) {
+    console.warn(`  Trous dans la numérotation : ${manquants.join(", ")}`);
+  }
 }
 
 await main();

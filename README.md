@@ -36,6 +36,11 @@ Le texte, en paragraphes courts.
 Rien d'autre à faire : l'archive, la page du CAS, la navigation précédent/suivant,
 le filtre par catégorie et le sitemap se mettent à jour au build.
 
+Le build annonce ce qu'il a trouvé — `CAS 001 → 008 (8 textes)` — et signale les
+trous dans la numérotation. Un site statique affiche ses fichiers sans rien
+réclamer : un CAS jamais déposé ne manque à personne au build, il manque en
+ligne. Ce relevé est là pour s'en apercevoir avant de publier.
+
 ### Le frontmatter
 
 | Champ | Rôle |
