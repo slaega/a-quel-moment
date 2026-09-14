@@ -98,8 +98,22 @@ et du sitemap. Une erreur ici ne casse pas le site : elle casse silencieusement
 tous les aperçus au partage, ce qui ne se voit qu'en collant un lien quelque
 part. À vérifier si le domaine change.
 
-Le build produit `out/`, un dossier de fichiers statiques — déployable tel quel
-sur Vercel, Netlify, GitHub Pages ou n'importe quel hébergeur.
+### Vercel
+
+L'hébergement est sur Vercel, branché sur ce dépôt : **pousser sur la branche
+par défaut suffit à redéployer**. `vercel.json` versionne la configuration de
+build plutôt que de la laisser vivre dans le tableau de bord.
+
+Rien d'autre à lancer à la main. `npm run build` déclenche `prebuild`, donc les
+affiches de partage sont régénérées à chaque déploiement — c'est pourquoi
+`public/og/` n'a pas besoin d'être committé.
+
+Pour vérifier avant de pousser que le build passera là-bas, reproduire ses
+conditions — installation depuis le lockfile, rien d'autre :
+
+```bash
+rm -rf node_modules out .next && npm ci && npm run build
+```
 
 ## Direction artistique
 
