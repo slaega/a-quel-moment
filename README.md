@@ -83,7 +83,9 @@ Deux conventions tenues dans tous les fichiers :
 
 - **apostrophes typographiques** (`’`), jamais droites ;
 - **espace insécable** dans les milliers (`300 000`), sinon le nombre se coupe
-  en fin de ligne — y compris dans l'extrait, qui part sur l'affiche de partage.
+  en fin de ligne — y compris dans l'extrait, qui part sur l'affiche de partage ;
+- **espace insécable dans les guillemets** (`« mot »`), sinon un `«` peut rester
+  seul en fin de ligne et un `»` seul en début de la suivante.
 
 ### Un piège du Markdown, déjà neutralisé
 
