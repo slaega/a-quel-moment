@@ -3,12 +3,19 @@ import SignatureEditeur from "@/components/SignatureEditeur";
 import type { Logo } from "@/lib/logo";
 import { nav, site } from "@/lib/site";
 
-export default function PiedDePage({ logo }: { logo: Logo | null }) {
+export default function PiedDePage({
+  logo,
+  signature,
+}: {
+  logo: Logo | null;
+  /** Question de clôture de la page. À défaut, celle de la série. */
+  signature?: string;
+}) {
   return (
     <footer className="mt-12 border-t border-trait md:mt-20">
       <div className="mx-auto flex max-w-page flex-col gap-10 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-10">
         <p className="max-w-lecture font-serif text-xl leading-snug text-encre italic md:text-2xl">
-          {site.signature}
+          {signature ?? site.signature}
         </p>
 
         <div className="flex flex-col gap-3 text-sm md:items-end">

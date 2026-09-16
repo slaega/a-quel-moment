@@ -93,8 +93,11 @@
 
   /* Colonne de lecture. Visée : 65 à 70 signes par ligne — au-delà, l'œil
      perd la ligne suivante ; en deçà, un texte long se hache. */
-  --container-lecture: 42rem;
+  --container-lecture: 46rem;
   --container-page: 64rem;
+  /* Les pages de texte : un cadre plus étroit que l'en-tête, pour que la
+     colonne ne flotte pas dans un vide qui la fait paraître serrée. */
+  --container-article: 56rem;
 }
 
 @layer base {
@@ -262,8 +265,8 @@
   }
 
   @media (width >= 48rem) {
-    font-size: 1.1875rem;
-    line-height: 1.8;
+    font-size: 1.25rem;
+    line-height: 1.75;
   }
 }
 

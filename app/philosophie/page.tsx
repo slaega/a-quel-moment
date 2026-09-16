@@ -5,6 +5,7 @@ import Signature from "@/components/Signature";
 import { getCas } from "@/lib/cas";
 import { site } from "@/lib/site";
 import { notFound } from "next/navigation";
+import Gabarit from "@/components/Gabarit";
 
 /**
  * Le manifeste de la série est un CAS comme les autres — le 014. Cette page
@@ -36,40 +37,42 @@ export default function Philosophie() {
   if (!cas) notFound();
 
   return (
-    <div className="mx-auto max-w-page px-6 pt-16 pb-24 md:px-10 md:pt-24">
-      <EnteteDePage
-        surtitre="Le manifeste"
-        titre={cas.titre}
-        chapo={cas.extrait ?? undefined}
-      />
-
-      <article className="border-l-2 border-rouge pl-6 md:pl-12">
-        <div
-          className="prose-cas max-w-lecture"
-          dangerouslySetInnerHTML={{ __html: cas.corps }}
+    <Gabarit signature={cas.signature ?? undefined}>
+      <div className="mx-auto max-w-article px-6 pt-16 pb-24 md:px-10 md:pt-24">
+        <EnteteDePage
+          surtitre="Le manifeste"
+          titre={cas.titre}
+          chapo={cas.extrait ?? undefined}
         />
 
-        {cas.signature && (
-          <div className="mt-14 max-w-lecture border-t border-trait pt-10">
-            <Signature texte={cas.signature} taille="grande" />
-          </div>
-        )}
-      </article>
+        <article className="border-l-2 border-rouge pl-6 md:pl-12">
+          <div
+            className="prose-cas max-w-lecture"
+            dangerouslySetInnerHTML={{ __html: cas.corps }}
+          />
 
-      <div className="mt-20 flex flex-col gap-4 border-t border-trait pt-10 text-sm sm:flex-row sm:justify-between">
-        <Link
-          href={`/cas/${cas.slug}/`}
-          className="text-discret transition-colors hover:text-encre"
-        >
-          Ce texte est le CAS {cas.slug} — le lire dans l&apos;archive, et le copier
-        </Link>
-        <Link
-          href="/cas/"
-          className="shrink-0 border-b border-rouge pb-1 text-encre transition-colors hover:text-rouge-vif"
-        >
-          Tous les CAS
-        </Link>
+          {cas.signature && (
+            <div className="mt-14 max-w-lecture border-t border-trait pt-10">
+              <Signature texte={cas.signature} taille="grande" />
+            </div>
+          )}
+        </article>
+
+        <div className="mt-20 flex flex-col gap-4 border-t border-trait pt-10 text-sm sm:flex-row sm:justify-between">
+          <Link
+            href={`/cas/${cas.slug}/`}
+            className="text-discret transition-colors hover:text-encre"
+          >
+            Ce texte est le CAS {cas.slug} — le lire dans l&apos;archive, et le copier
+          </Link>
+          <Link
+            href="/cas/"
+            className="shrink-0 border-b border-rouge pb-1 text-encre transition-colors hover:text-rouge-vif"
+          >
+            Tous les CAS
+          </Link>
+        </div>
       </div>
-    </div>
+    </Gabarit>
   );
 }

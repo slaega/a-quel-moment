@@ -70,6 +70,14 @@ référence, modifier la constante `REFERENCE` dans `app/philosophie/page.tsx`.
 
 ### La question de clôture
 
+**Le pied de page reprend celle de la page lue**, pas une phrase figée : sur un
+CAS qui demande « allons-nous encore trouver ça normal ? », le pied répondrait
+sinon « avons-nous trouvé ça normal ? » à deux centimètres de l'article.
+
+C'est pourquoi le pied vit dans `components/Gabarit.tsx` et non dans
+`app/layout.tsx` : la mise en page racine ne sait pas quel texte est lu. Chaque
+page passe la sienne ; à défaut, celle de la série s'affiche.
+
 Elle varie d'un CAS à l'autre : « avons-nous trouvé ça normal ? », « allons-nous
 encore trouver ça normal ? », ou une reformulation propre au texte. La
 reconnaissance porte donc sur la forme générale — une dernière ligne qui ouvre
@@ -170,10 +178,13 @@ doit rester lisible sur son fond. Tout est déclaré dans `app/globals.css`.
 
 Corps et titres en **Inter**, signature en **Lora** italique.
 
-La colonne de lecture vise **65 à 70 signes par ligne** (`--container-lecture`).
-Au-delà, l'œil retrouve mal le début de la ligne suivante ; en deçà, un texte
-long se hache en fragments. Les premiers CAS étaient courts et s'accommodaient
-d'une colonne étroite ; les textes longs, non.
+La colonne de lecture vise **environ 73 signes par ligne** à 20 px
+(`--container-lecture`). Au-delà, l'œil retrouve mal le début de la ligne
+suivante ; en deçà, un texte long se hache en fragments.
+
+Les pages de texte sont cadrées par `--container-article`, plus étroit que
+l'en-tête : une colonne posée dans un cadre trop large paraît serrée même
+quand elle ne l'est pas, parce que l'œil la compare au vide qui l'entoure.
 
 ### Le moment de la journée
 

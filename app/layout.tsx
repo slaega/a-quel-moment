@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
 import Entete from "@/components/Entete";
-import PiedDePage from "@/components/PiedDePage";
 import { getLogo } from "@/lib/logo";
 import { site } from "@/lib/site";
 import { SCRIPT_THEME } from "@/lib/theme";
@@ -59,10 +58,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Aller au contenu
         </a>
         <Entete logo={logo} />
-        <main id="contenu" className="flex-1">
-          {children}
-        </main>
-        <PiedDePage logo={logo} />
+        {/* <main> et le pied de page sont rendus par components/Gabarit :
+            le pied reprend la question de clôture, qui dépend de la page. */}
+        {children}
       </body>
     </html>
   );
