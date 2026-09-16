@@ -91,8 +91,9 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-lora), Georgia, "Times New Roman", serif;
 
-  /* Colonne de lecture : ~62 caractères, pensée pour le pouce. */
-  --container-lecture: 34rem;
+  /* Colonne de lecture. Visée : 65 à 70 signes par ligne — au-delà, l'œil
+     perd la ligne suivante ; en deçà, un texte long se hache. */
+  --container-lecture: 42rem;
   --container-page: 64rem;
 }
 

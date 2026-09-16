@@ -170,6 +170,11 @@ doit rester lisible sur son fond. Tout est déclaré dans `app/globals.css`.
 
 Corps et titres en **Inter**, signature en **Lora** italique.
 
+La colonne de lecture vise **65 à 70 signes par ligne** (`--container-lecture`).
+Au-delà, l'œil retrouve mal le début de la ligne suivante ; en deçà, un texte
+long se hache en fragments. Les premiers CAS étaient courts et s'accommodaient
+d'une colonne étroite ; les textes longs, non.
+
 ### Le moment de la journée
 
 Le site porte la question « à quel moment » : il y répond en changeant avec

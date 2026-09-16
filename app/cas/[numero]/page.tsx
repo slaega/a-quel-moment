@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BoutonCopier from "@/components/BoutonCopier";
+import BoutonPartager from "@/components/BoutonPartager";
 import NumeroCas from "@/components/NumeroCas";
 import Signature from "@/components/Signature";
 import { formaterDate, getCas, getTousLesCas, getVoisins } from "@/lib/cas";
@@ -100,8 +101,9 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
           </div>
         )}
 
-        <div className="mt-12">
+        <div className="mt-12 flex flex-wrap gap-3">
           <BoutonCopier texte={cas.texteBrut} />
+          <BoutonPartager titre={`CAS ${cas.slug} — ${cas.titre}`} />
         </div>
       </article>
 
