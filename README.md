@@ -93,11 +93,11 @@ serif italique.
 Les CAS 001 à 008 sont arrivés sans date : la leur est **reconstruite**, un par
 jour en remontant depuis le 009 (7 septembre), daté par l'auteur.
 
-Les CAS 015 à 018 n'ont **pas de date**, et c'est volontaire. Leurs jours d'ajout
-au dépôt avaient d'abord servi de dates, jusqu'à ce que le CAS 019 — daté du
-11 septembre par l'auteur — montre que ces jours-là venaient après lui dans le
-calendrier alors qu'ils le précèdent dans la numérotation. Une date fausse vaut
-moins que pas de date : elles ont été retirées, en attendant les vraies.
+Tous les autres sont datés par l'auteur. Les CAS 015 à 019 ont fait un
+aller-retour : leurs dates d'arrivée dans le dépôt se sont révélées être leurs
+vraies dates de parution, sauf pour le 019, dont le frontmatter portait le
+11 septembre alors qu'il paraît avec le 018. Le contrôle de cohérence ci-dessous
+a servi aux deux passages.
 
 `formaterDate` corrige au passage `Intl`, qui écrit « 1 septembre » là où le
 français demande « 1er septembre ».
