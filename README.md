@@ -99,13 +99,22 @@ français demande « 1er septembre ».
 
 ### Typographie du texte
 
-Deux conventions tenues dans tous les fichiers :
+```bash
+npm run typo
+```
+
+À lancer après chaque ajout ou modification d'un CAS. La commande dit ce
+qu'elle a corrigé, et ne touche rien d'autre :
 
 - **apostrophes typographiques** (`’`), jamais droites ;
-- **espace insécable** dans les milliers (`300 000`), sinon le nombre se coupe
+- **espace insécable dans les milliers** (`41 304`), sinon le nombre se coupe
   en fin de ligne — y compris dans l'extrait, qui part sur l'affiche de partage ;
-- **espace insécable dans les guillemets** (`« mot »`), sinon un `«` peut rester
-  seul en fin de ligne et un `»` seul en début de la suivante.
+- **espace insécable avant le pourcentage** (`67,95 %`), même raison ;
+- **espace insécable dans les guillemets** (`« mot »`), sinon un `«` reste seul
+  en fin de ligne et un `»` seul en début de la suivante.
+
+Les espaces avant `:`, `;`, `!` et `?` restent ordinaires : les corriger toutes
+changerait chaque ligne pour un gain invisible.
 
 ### Un piège du Markdown, déjà neutralisé
 

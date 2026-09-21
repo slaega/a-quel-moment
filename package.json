@@ -7,6 +7,7 @@
     "dev": "npm run og && next dev",
     "og": "node scripts/generer-og.mjs",
     "logo": "node scripts/variante-logo.mjs",
+    "typo": "node scripts/typographie.mjs",
     "prebuild": "npm run og",
     "build": "next build",
     "start": "npx serve out",
