@@ -56,6 +56,12 @@ function chargerLogo() {
 
 const LOGO = chargerLogo();
 
+/**
+ * Numéros restés sans texte, et qui le resteront. Sans cette liste, le relevé
+ * les réclamerait à chaque build jusqu'à ce qu'on cesse de le lire.
+ */
+const SANS_SUITE = [11, 12];
+
 const polices = [
   {
     name: "Inter",
@@ -306,12 +312,19 @@ function inventaire(entrees) {
 
   const manquants = [];
   for (let n = premier; n <= dernier; n += 1) {
-    if (!numeros.includes(n)) manquants.push(String(n).padStart(3, "0"));
+    if (!numeros.includes(n) && !SANS_SUITE.includes(n)) {
+      manquants.push(String(n).padStart(3, "0"));
+    }
   }
+
+  const sansSuite = SANS_SUITE.filter((n) => n > premier && n < dernier)
+    .map((n) => String(n).padStart(3, "0"));
 
   console.log(
     `CAS ${String(premier).padStart(3, "0")} → ${String(dernier).padStart(3, "0")} ` +
-      `(${tries.length} texte${tries.length > 1 ? "s" : ""})`,
+      `(${tries.length} texte${tries.length > 1 ? "s" : ""}` +
+      (sansSuite.length > 0 ? `, ${sansSuite.join(" et ")} sans suite` : "") +
+      ")",
   );
 
   if (manquants.length > 0) {

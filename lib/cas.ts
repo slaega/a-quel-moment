@@ -23,6 +23,8 @@ export interface Cas {
   categorie: string | null;
   /** Phrase mise en avant dans l'archive et au partage. */
   extrait: string | null;
+  /** Origine du texte quand il ne vient pas de l'auteur seul. */
+  contribution: string | null;
   /** true tant que le texte publié n'a pas remplacé le brouillon. */
   brouillon: boolean;
   /** Corps du texte en HTML, signature finale retirée. */
@@ -120,6 +122,7 @@ function lireFichier(fichier: string): Cas {
     date: chaineOuNull(data.date),
     categorie: chaineOuNull(data.categorie),
     extrait: chaineOuNull(data.extrait),
+    contribution: chaineOuNull(data.contribution),
     brouillon: data.brouillon === true,
     corps: enHtml(texte),
     signature,

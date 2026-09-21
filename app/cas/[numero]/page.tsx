@@ -84,6 +84,15 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
             <h1 className="titre-affiche mt-7 max-w-3xl text-[2rem] md:text-5xl">
               {cas.titre}
             </h1>
+
+            {cas.contribution && (
+              <p className="mt-6 flex max-w-lecture items-baseline gap-2.5 text-sm text-discret">
+                <span aria-hidden="true" className="shrink-0 text-rouge-vif">
+                  ↳
+                </span>
+                {cas.contribution}
+              </p>
+            )}
           </header>
 
           {cas.brouillon && (

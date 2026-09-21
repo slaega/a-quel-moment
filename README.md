@@ -52,6 +52,7 @@ ligne. Ce relevé est là pour s'en apercevoir avant de publier.
 | `date` | Format `YYYY-MM-DD`. Date de **publication**, pas d'ajout au site. |
 | `categorie` | Libre — sert au filtre de l'archive (santé, emploi, éducation, économie, philosophie, quotidien…). |
 | `extrait` | Une ou deux phrases. Sert de titre Open Graph : c'est ce qu'on voit quand le lien est partagé. |
+| `contribution` | Optionnel. Origine du texte quand il ne vient pas de l'auteur seul — affiché sous le titre. |
 | `brouillon` | Optionnel. `true` affiche un bandeau « Brouillon » sur la page du CAS. |
 
 ### La signature
@@ -90,9 +91,13 @@ serif italique.
 ### Les dates
 
 Les CAS 001 à 008 sont arrivés sans date : la leur est **reconstruite**, un par
-jour en remontant depuis le 009 (7 septembre), qui est daté par l'auteur. Celles
-des 015 et 016 sont leurs jours d'ajout au dépôt. Les vraies dates de
-publication les remplacent dès qu'elles sont connues — une ligne par fichier.
+jour en remontant depuis le 009 (7 septembre), daté par l'auteur.
+
+Les CAS 015 à 018 n'ont **pas de date**, et c'est volontaire. Leurs jours d'ajout
+au dépôt avaient d'abord servi de dates, jusqu'à ce que le CAS 019 — daté du
+11 septembre par l'auteur — montre que ces jours-là venaient après lui dans le
+calendrier alors qu'ils le précèdent dans la numérotation. Une date fausse vaut
+moins que pas de date : elles ont été retirées, en attendant les vraies.
 
 `formaterDate` corrige au passage `Intl`, qui écrit « 1 septembre » là où le
 français demande « 1er septembre ».
@@ -111,7 +116,11 @@ qu'elle a corrigé, et ne touche rien d'autre :
   en fin de ligne — y compris dans l'extrait, qui part sur l'affiche de partage ;
 - **espace insécable avant le pourcentage** (`67,95 %`), même raison ;
 - **espace insécable dans les guillemets** (`« mot »`), sinon un `«` reste seul
-  en fin de ligne et un `»` seul en début de la suivante.
+  en fin de ligne et un `»` seul en début de la suivante ;
+- **guillemets droits convertis en chevrons** dans le corps du texte.
+
+Le frontmatter ne reçoit que les quatre premières : les guillemets y délimitent
+les valeurs YAML, les transformer casserait le fichier.
 
 Les espaces avant `:`, `;`, `!` et `?` restent ordinaires : les corriger toutes
 changerait chaque ligne pour un gain invisible.
