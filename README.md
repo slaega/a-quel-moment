@@ -36,8 +36,10 @@ Le texte, en paragraphes courts.
 Rien d'autre à faire : l'archive, la page du CAS, la navigation précédent/suivant,
 le filtre par catégorie et le sitemap se mettent à jour au build.
 
-Le build annonce ce qu'il a trouvé — `CAS 001 → 008 (8 textes)` — et signale les
-trous dans la numérotation. Un site statique affiche ses fichiers sans rien
+Le build annonce ce qu'il a trouvé — `CAS 001 → 016 (14 textes)` — et signale
+trois choses : les trous dans la numérotation, les CAS sans date, et toute date
+qui recule par rapport au CAS précédent. L'archive étant classée par numéro, une
+date qui remonte le temps est presque toujours une erreur de saisie. Un site statique affiche ses fichiers sans rien
 réclamer : un CAS jamais déposé ne manque à personne au build, il manque en
 ligne. Ce relevé est là pour s'en apercevoir avant de publier.
 
@@ -47,7 +49,7 @@ ligne. Ce relevé est là pour s'en apercevoir avant de publier.
 | --- | --- |
 | `numero` | Numéro de la série. Donne l'URL (`/cas/015/`) et l'ordre de tri. |
 | `titre` | Titre affiché en haut du CAS et dans l'archive. |
-| `date` | Format `YYYY-MM-DD`. |
+| `date` | Format `YYYY-MM-DD`. Date de **publication**, pas d'ajout au site. |
 | `categorie` | Libre — sert au filtre de l'archive (santé, emploi, éducation, économie, philosophie, quotidien…). |
 | `extrait` | Une ou deux phrases. Sert de titre Open Graph : c'est ce qu'on voit quand le lien est partagé. |
 | `brouillon` | Optionnel. `true` affiche un bandeau « Brouillon » sur la page du CAS. |
@@ -84,6 +86,16 @@ reconnaissance porte donc sur la forme générale — une dernière ligne qui ou
 sur « à quel moment » et se ferme sur un point d'interrogation — et non sur une
 phrase figée. Écris la tienne normalement, elle sera détachée et composée en
 serif italique.
+
+### Les dates
+
+Les CAS 001 à 008 sont arrivés sans date : la leur est **reconstruite**, un par
+jour en remontant depuis le 009 (7 septembre), qui est daté par l'auteur. Celles
+des 015 et 016 sont leurs jours d'ajout au dépôt. Les vraies dates de
+publication les remplacent dès qu'elles sont connues — une ligne par fichier.
+
+`formaterDate` corrige au passage `Intl`, qui écrit « 1 septembre » là où le
+français demande « 1er septembre ».
 
 ### Typographie du texte
 

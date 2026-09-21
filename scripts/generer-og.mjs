@@ -248,7 +248,7 @@ async function main() {
   for (const fichier of fichiers) {
     const { data, content } = matter(fs.readFileSync(path.join(SOURCE, fichier), "utf8"));
     const slug = String(Number(data.numero)).padStart(3, "0");
-    numeros.push(Number(data.numero));
+    numeros.push({ numero: Number(data.numero), date: data.date ?? null });
     const { texte, signature } = separerSignature(content);
 
     const png = await enPng(
@@ -293,19 +293,20 @@ async function main() {
  * déposé ne manque à personne au build, il manque en ligne. Ce relevé rend
  * l'écart visible tout de suite.
  */
-function inventaire(numeros) {
-  if (numeros.length === 0) {
+function inventaire(entrees) {
+  if (entrees.length === 0) {
     console.warn("Aucun CAS dans content/cas/ : le site sera vide.");
     return;
   }
 
-  const tries = [...numeros].sort((a, b) => a - b);
-  const premier = tries[0];
-  const dernier = tries[tries.length - 1];
+  const tries = [...entrees].sort((a, b) => a.numero - b.numero);
+  const numeros = tries.map((e) => e.numero);
+  const premier = numeros[0];
+  const dernier = numeros[numeros.length - 1];
 
   const manquants = [];
   for (let n = premier; n <= dernier; n += 1) {
-    if (!tries.includes(n)) manquants.push(String(n).padStart(3, "0"));
+    if (!numeros.includes(n)) manquants.push(String(n).padStart(3, "0"));
   }
 
   console.log(
@@ -315,6 +316,23 @@ function inventaire(numeros) {
 
   if (manquants.length > 0) {
     console.warn(`  Trous dans la numérotation : ${manquants.join(", ")}`);
+  }
+
+  // Une date antérieure à celle d'un CAS plus ancien se lit comme une erreur
+  // de saisie : l'archive est classée par numéro, les dates doivent suivre.
+  const sansDate = tries.filter((e) => !e.date).map((e) => String(e.numero).padStart(3, "0"));
+  if (sansDate.length > 0) {
+    console.log(`  Sans date : ${sansDate.join(", ")}`);
+  }
+
+  const dates = tries.filter((e) => e.date);
+  const reculs = dates
+    .slice(1)
+    .filter((e, i) => e.date < dates[i].date)
+    .map((e) => `${String(e.numero).padStart(3, "0")} (${e.date})`);
+
+  if (reculs.length > 0) {
+    console.warn(`  Dates qui reculent par rapport au CAS précédent : ${reculs.join(", ")}`);
   }
 }
 

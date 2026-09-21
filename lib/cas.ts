@@ -183,10 +183,14 @@ export function formaterDate(iso: string | null): string | null {
   if (!iso) return null;
   const d = new Date(`${iso}T00:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("fr-FR", {
+
+  const rendu = new Intl.DateTimeFormat("fr-FR", {
     day: "numeric",
     month: "long",
     year: "numeric",
     timeZone: "UTC",
   }).format(d);
+
+  // Intl écrit « 1 septembre » ; le français demande « 1er septembre ».
+  return d.getUTCDate() === 1 ? rendu.replace(/^1 /, "1er ") : rendu;
 }
