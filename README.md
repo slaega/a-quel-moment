@@ -36,10 +36,16 @@ Le texte, en paragraphes courts.
 Rien d'autre à faire : l'archive, la page du CAS, la navigation précédent/suivant,
 le filtre par catégorie et le sitemap se mettent à jour au build.
 
-Le build annonce ce qu'il a trouvé — `CAS 001 → 016 (14 textes)` — et signale
-trois choses : les trous dans la numérotation, les CAS sans date, et toute date
-qui recule par rapport au CAS précédent. L'archive étant classée par numéro, une
-date qui remonte le temps est presque toujours une erreur de saisie. Un site statique affiche ses fichiers sans rien
+Le build annonce ce qu'il a trouvé — `CAS 001 → 020 (18 textes)` — et signale
+quatre choses :
+
+- les **trous dans la numérotation**, hors numéros déclarés sans suite ;
+- les CAS **sans date** ;
+- toute **date qui recule** par rapport au CAS précédent — l'archive étant
+  classée par numéro, une date qui remonte le temps est presque toujours une
+  erreur de saisie ;
+- les CAS **sans question de clôture**, presque toujours un texte collé sans sa
+  dernière ligne. Un site statique affiche ses fichiers sans rien
 réclamer : un CAS jamais déposé ne manque à personne au build, il manque en
 ligne. Ce relevé est là pour s'en apercevoir avant de publier.
 

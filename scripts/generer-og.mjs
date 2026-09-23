@@ -254,8 +254,12 @@ async function main() {
   for (const fichier of fichiers) {
     const { data, content } = matter(fs.readFileSync(path.join(SOURCE, fichier), "utf8"));
     const slug = String(Number(data.numero)).padStart(3, "0");
-    numeros.push({ numero: Number(data.numero), date: data.date ?? null });
     const { texte, signature } = separerSignature(content);
+    numeros.push({
+      numero: Number(data.numero),
+      date: data.date ?? null,
+      signature: signature !== null,
+    });
 
     const png = await enPng(
       affiche({
@@ -336,6 +340,15 @@ function inventaire(entrees) {
   const sansDate = tries.filter((e) => !e.date).map((e) => String(e.numero).padStart(3, "0"));
   if (sansDate.length > 0) {
     console.log(`  Sans date : ${sansDate.join(", ")}`);
+  }
+
+  // Chaque CAS se ferme sur la question de la série. Son absence est presque
+  // toujours un texte collé sans sa dernière ligne.
+  const sansQuestion = tries
+    .filter((e) => !e.signature)
+    .map((e) => String(e.numero).padStart(3, "0"));
+  if (sansQuestion.length > 0) {
+    console.warn(`  Sans question de clôture : ${sansQuestion.join(", ")}`);
   }
 
   const dates = tries.filter((e) => e.date);
