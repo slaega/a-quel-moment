@@ -8,6 +8,8 @@ import Signature from "@/components/Signature";
 import { formaterDate, getCas, getTousLesCas, getVoisins } from "@/lib/cas";
 import { site } from "@/lib/site";
 import Gabarit from "@/components/Gabarit";
+import DonneesStructurees from "@/components/DonneesStructurees";
+import { schemaCas } from "@/lib/schema";
 
 type Params = { numero: string };
 
@@ -39,6 +41,7 @@ export async function generateMetadata({
       title: accroche,
       description: `CAS ${cas.slug} — ${site.nom}`,
       ...(cas.date ? { publishedTime: cas.date } : {}),
+      ...(cas.revision ? { modifiedTime: cas.revision } : {}),
       images: [{ url: affiche, width: 1200, height: 630, alt: cas.titre }],
     },
     twitter: {
@@ -60,6 +63,7 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
 
   return (
     <Gabarit signature={cas.signature ?? undefined}>
+      <DonneesStructurees schema={schemaCas(cas)} />
       <div className="mx-auto max-w-article px-6 pt-12 pb-24 md:px-10 md:pt-20">
         <Link
           href="/cas/"

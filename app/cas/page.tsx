@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import ArchiveCas, { type EntreeCas } from "@/components/ArchiveCas";
 import { formaterDate, getCategories, getTousLesCas } from "@/lib/cas";
 import Gabarit from "@/components/Gabarit";
+import DonneesStructurees from "@/components/DonneesStructurees";
+import { schemaArchive } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Les CAS",
@@ -10,7 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default function Archive() {
-  const entrees: EntreeCas[] = getTousLesCas().map((c) => ({
+  const cas = getTousLesCas();
+  const entrees: EntreeCas[] = cas.map((c) => ({
     slug: c.slug,
     titre: c.titre,
     categorie: c.categorie,
@@ -21,6 +24,7 @@ export default function Archive() {
 
   return (
     <Gabarit>
+      <DonneesStructurees schema={schemaArchive(cas)} />
       <div className="mx-auto max-w-page px-6 pt-16 pb-24 md:px-10 md:pt-24">
         <header className="mb-12 md:mb-16">
           <h1 className="titre-affiche text-4xl md:text-6xl">Les CAS</h1>

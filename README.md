@@ -108,6 +108,25 @@ a servi aux deux passages.
 `formaterDate` corrige au passage `Intl`, qui écrit « 1 septembre » là où le
 français demande « 1er septembre ».
 
+**Deux dates, à ne pas confondre.** Celle du frontmatter est la date de
+*parution du texte* : elle s'affiche sous le titre, part dans
+`article:published_time` et dans `datePublished`. La date de *dernière
+modification de la page*, elle, est une autre chose — elle est calculée par
+`lib/revision.ts` à partir de l'historique git, et c'est elle seule qui
+alimente le `lastmod` du sitemap et `dateModified`.
+
+Les mélanger a un coût réel. Chaque CAS a été réécrit plusieurs fois par le
+gabarit — le bouton partager, la largeur de la colonne, le pied de page qui
+reprend la question ont tous régénéré le HTML des textes d'août. Un sitemap
+qui annonce « modifié le 1er septembre » une page dont le contenu a changé le
+21 apprend à Google que nos dates sont fausses ; il cesse alors de les lire
+sur *tout* le fichier, et le site perd son seul signal de recrawl.
+
+`lib/revision.ts` échoue en silence : sans git, ou sur un clone trop court
+pour remonter jusqu'au fichier, il retombe sur la date du gabarit puis sur la
+date de parution, et n'invente jamais une date « maintenant » qui changerait
+à chaque build.
+
 ### Typographie du texte
 
 ```bash
@@ -187,12 +206,37 @@ Rien d'autre à lancer à la main. `npm run build` déclenche `prebuild`, donc l
 affiches de partage sont régénérées à chaque déploiement — c'est pourquoi
 `public/og/` n'a pas besoin d'être committé.
 
+Le build lit l'historique git pour dater les pages (voir « Les dates »). Si les
+`lastmod` du sitemap se mettent à pointer tous la même date, c'est que le clone
+de build est trop court pour remonter jusqu'aux fichiers de contenu : le repli
+est correct, mais moins précis.
+
 Pour vérifier avant de pousser que le build passera là-bas, reproduire ses
 conditions — installation depuis le lockfile, rien d'autre :
 
 ```bash
 rm -rf node_modules out .next && npm ci && npm run build
 ```
+
+## Référencement
+
+Trois choses portent l'indexation, et aucune n'est cosmétique :
+
+- **`app/sitemap.ts`** ne déclare que l'URL et `lastmod`. `changefreq` et
+  `priority` ont été retirés : Google les ignore depuis des années, et le
+  `changefreq: yearly` qui traînait sur les CAS invitait les autres robots à
+  ne plus repasser. Chaque page porte sa propre date : l'accueil et l'archive
+  bougent à chaque parution, `/philosophie/` et `/à-propos/` seulement quand on
+  les édite.
+- **`lib/schema.ts`** produit le JSON-LD, injecté par
+  `components/DonneesStructurees`. Sans lui, Google n'avait que du HTML sobre
+  et des balises Open Graph — qui servent aux réseaux sociaux, pas à
+  l'indexation. Un CAS se déclare `BlogPosting` daté et signé, rattaché par
+  `isPartOf` au `Blog` de `/cas/` ; l'archive énumère les 19 textes, ce qui
+  donne au robot un chemin de découverte en plus du maillage interne.
+- **Le maillage** : l'accueil ne pointe que le dernier CAS, tous les autres
+  passent par `/cas/`. Chaque texte est donc à deux clics de la racine — c'est
+  court, mais ça repose entièrement sur l'archive.
 
 ## Direction artistique
 
@@ -306,6 +350,8 @@ content/cas/         un fichier .md par CAS
 content/pages/       pages éditoriales
 lib/cas.ts           lecture des CAS, rendu Markdown, détection de la signature
 lib/pages.ts         lecture des pages éditoriales
+lib/revision.ts      date de dernière modification des pages, prise dans git
+lib/schema.ts        JSON-LD du site, de la série et des CAS
 lib/site.ts          nom, domaine, navigation
 scripts/             génération des affiches Open Graph
 ```

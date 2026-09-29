@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import { laPlusRecente, revisionDuFichier, revisionDuGabarit } from "@/lib/revision";
 
 export interface Cas {
   /** Numéro de publication, tel qu'il apparaît dans la série. */
@@ -33,6 +34,13 @@ export interface Cas {
   signature: string | null;
   /** Texte intégral en clair, pour le bouton « copier ». */
   texteBrut: string;
+  /**
+   * Dernière modification réelle de la page, pour le sitemap et dateModified.
+   * Distincte de `date`, qui est la date de parution du texte. null quand on
+   * ne peut pas l'établir : mieux vaut aucune date qu'une date inventée, que
+   * chaque build changerait.
+   */
+  revision: string | null;
 }
 
 const DOSSIER = path.join(process.cwd(), "content", "cas");
@@ -127,6 +135,15 @@ function lireFichier(fichier: string): Cas {
     corps: enHtml(texte),
     signature,
     texteBrut: content.trim(),
+    // La page a changé chaque fois que son texte ou le gabarit a bougé.
+    // Sans historique git exploitable, on retombe sur la date de publication.
+    // La date éditoriale n'entre pas dans ce calcul : elle ne sert que de
+    // repli quand git ne dit rien (clone trop court, build hors dépôt).
+    revision:
+      laPlusRecente(
+        revisionDuFichier(path.join(DOSSIER, fichier)),
+        revisionDuGabarit(),
+      ) ?? chaineOuNull(data.date),
   };
 }
 

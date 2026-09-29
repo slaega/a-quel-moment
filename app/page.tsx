@@ -3,6 +3,8 @@ import CarteCas from "@/components/CarteCas";
 import { getDernierCas, getTousLesCas } from "@/lib/cas";
 import { site } from "@/lib/site";
 import Gabarit from "@/components/Gabarit";
+import DonneesStructurees from "@/components/DonneesStructurees";
+import { schemaSite } from "@/lib/schema";
 
 export default function Accueil() {
   const dernier = getDernierCas();
@@ -11,6 +13,7 @@ export default function Accueil() {
   return (
     <Gabarit>
       <>
+        <DonneesStructurees schema={schemaSite()} />
         {/* Le manifeste, seul. */}
         <section className="mx-auto max-w-page px-6 pt-24 pb-20 text-center md:px-10 md:pt-40 md:pb-28">
           <p className="surtitre text-discret">Une série signée {site.auteur}</p>
