@@ -3,6 +3,13 @@ import SignatureEditeur from "@/components/SignatureEditeur";
 import type { Logo } from "@/lib/logo";
 import { nav, site } from "@/lib/site";
 
+/**
+ * Le pied reprend la question de la page lue — celle du CAS, pas celle de la
+ * série. C'est la raison d'être de components/Gabarit.
+ *
+ * Elle est composée ici en grand : arrivé en bas d'un texte, le lecteur doit
+ * retomber sur la question plutôt que sur un plan de site.
+ */
 export default function PiedDePage({
   logo,
   signature,
@@ -12,29 +19,34 @@ export default function PiedDePage({
   signature?: string;
 }) {
   return (
-    <footer className="mt-12 border-t border-trait md:mt-20">
-      <div className="mx-auto flex max-w-page flex-col gap-10 px-6 py-12 md:flex-row md:items-end md:justify-between md:px-10">
-        <p className="max-w-lecture font-serif text-xl leading-snug text-encre italic md:text-2xl">
+    <footer className="mt-(--spacing-mouvement) border-t border-trait">
+      <div className="gouttiere mx-auto max-w-page py-14 md:py-20">
+        <p className="max-w-[22ch] font-serif text-question leading-(--text-question--line-height) text-encre italic sm:max-w-[28ch]">
           {signature ?? site.signature}
         </p>
 
-        <div className="flex flex-col gap-3 text-sm md:items-end">
-          <ul className="flex flex-wrap gap-x-6 gap-y-2">
-            {nav.map((lien) => (
-              <li key={lien.href}>
-                <Link
-                  href={lien.href}
-                  className="text-discret transition-colors hover:text-encre"
-                >
-                  {lien.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-discret">
+        <div className="mt-12 flex flex-col gap-8 border-t border-trait pt-8 sm:flex-row sm:items-start sm:justify-between md:mt-16">
+          <nav aria-label="Navigation de pied de page">
+            <ul className="flex flex-wrap gap-x-7 gap-y-1">
+              {nav.map((lien) => (
+                <li key={lien.href}>
+                  <Link
+                    href={lien.href}
+                    className="surtitre lien-sobre cible text-discret hover:text-encre"
+                  >
+                    {lien.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <p className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-meta text-discret sm:justify-end">
             <SignatureEditeur prefixe="Une série signée" logo={logo} />
-            <span aria-hidden="true">·</span>
-            <span>{new Date().getFullYear()}</span>
+            <span aria-hidden="true" className="text-trait">
+              /
+            </span>
+            <span className="chiffres">{new Date().getFullYear()}</span>
           </p>
         </div>
       </div>

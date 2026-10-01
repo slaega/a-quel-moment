@@ -26,7 +26,7 @@ export default function BasculeTheme() {
       onClick={basculer}
       aria-label="Changer de thème"
       title="Changer de thème"
-      className="-m-2 p-2 text-discret transition-colors hover:text-encre"
+      className="-mr-2 inline-flex size-11 items-center justify-center text-discret transition-colors hover:text-encre"
     >
       {/* Lune : affichée en thème clair, elle annonce le passage au sombre. */}
       <svg

@@ -59,7 +59,7 @@ export default function BoutonPartager({ titre }: { titre: string }) {
     <button
       type="button"
       onClick={partager}
-      className="group inline-flex items-center gap-2.5 border border-trait px-4 py-2.5 text-sm text-encre transition-colors hover:border-rouge hover:text-rouge-vif"
+      className="surtitre group inline-flex min-h-11 items-center gap-2.5 rounded-full border border-trait px-5 text-encre transition-colors hover:border-seconde hover:text-seconde"
     >
       <svg
         aria-hidden="true"

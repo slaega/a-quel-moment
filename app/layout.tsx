@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Lora } from "next/font/google";
+import { Inter, Newsreader } from "next/font/google";
 import Entete from "@/components/Entete";
 import { getLogo } from "@/lib/logo";
 import { site } from "@/lib/site";
@@ -12,11 +12,20 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const lora = Lora({
+/*
+ * La serif de la série : titres, corps des CAS, question de clôture.
+ *
+ * Newsreader remplace Lora. Les CAS se lisent d'une traite et souvent sur
+ * téléphone ; il fallait une serif de presse, dessinée pour le texte autant
+ * que pour l'affiche, avec une italique qui tienne la question de clôture à
+ * grande taille. C'est le seul changement d'identité de la refonte, et il
+ * tient en une ligne : reprendre Lora ici suffirait à revenir en arrière.
+ */
+const serifEdito = Newsreader({
   subsets: ["latin"],
-  style: ["italic", "normal"],
+  style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-lora",
+  variable: "--font-serif-edito",
 });
 
 export const metadata: Metadata = {
@@ -46,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const logo = getLogo();
 
   return (
-    <html lang="fr" className={`${inter.variable} ${lora.variable}`} suppressHydrationWarning>
+    <html lang="fr" className={`${inter.variable} ${serifEdito.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_THEME }} />
       </head>

@@ -7,36 +7,49 @@ import LogoSlaega from "@/components/LogoSlaega";
 import type { Logo } from "@/lib/logo";
 import { nav, site } from "@/lib/site";
 
+/**
+ * Le bandeau de titre.
+ *
+ * Il ne se replie pas en menu hamburger : trois entrées tiennent sur une
+ * ligne dès 320 px si on les compose en capitales étroites. Un menu caché
+ * derrière un bouton coûterait un geste de plus pour masquer trois mots.
+ *
+ * Le nom et la navigation sont donc sur deux rangs sur téléphone, un seul
+ * dès la tablette — sans rien escamoter.
+ */
 export default function Entete({ logo }: { logo: Logo | null }) {
   const chemin = usePathname();
 
   return (
-    <header className="border-b border-trait">
-      <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-x-8 gap-y-3 px-6 py-6 md:px-10">
-        <div className="flex items-center gap-3.5">
+    <header className="sticky top-0 z-40 border-b border-trait bg-fond/92 backdrop-blur-sm">
+      <div className="gouttiere mx-auto flex max-w-page flex-col gap-y-2 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-x-10 sm:py-4">
+        <div className="flex items-center justify-between gap-4 sm:justify-start">
           <Link
             href="/"
-            className="text-[0.9375rem] font-semibold tracking-tight text-encre transition-colors hover:text-rouge-vif"
+            className="group cible gap-px font-serif text-[1.0625rem] tracking-tight text-encre sm:text-lg"
           >
             {site.nom}
-            <span className="text-rouge-vif">?</span>
+            <span className="text-rouge transition-transform duration-200 group-hover:translate-y-px">
+              ?
+            </span>
           </Link>
 
-          <span aria-hidden="true" className="h-3.5 w-px bg-trait" />
+          <span aria-hidden="true" className="hidden h-4 w-px bg-trait sm:block" />
 
           <a
             href={site.editeurUrl}
             target="_blank"
             rel="noreferrer"
-            className="text-discret transition-colors hover:text-encre"
+            aria-label={`${site.auteur}, éditeur de la série`}
+            className="cible shrink-0 text-discret transition-opacity hover:opacity-70"
           >
-            <LogoSlaega logo={logo} hauteur={19} />
+            <LogoSlaega logo={logo} hauteur={17} />
           </a>
         </div>
 
-        <div className="flex items-center gap-x-6 gap-y-2">
+        <div className="flex items-center justify-between gap-x-5 sm:justify-end sm:gap-x-7">
           <nav aria-label="Navigation principale">
-            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+            <ul className="flex items-center gap-x-5 sm:gap-x-7">
               {nav.map((lien) => {
                 const actif = chemin === lien.href || chemin.startsWith(lien.href);
                 return (
@@ -45,12 +58,22 @@ export default function Entete({ logo }: { logo: Logo | null }) {
                       href={lien.href}
                       aria-current={actif ? "page" : undefined}
                       className={
-                        actif
-                          ? "text-rouge-vif"
-                          : "text-discret transition-colors hover:text-encre"
+                        // Sur téléphone, l'interlettrage des capitales est
+                        // resserré : à pleine chasse, les trois entrées
+                        // débordent de la ligne et se coupent en deux.
+                        "surtitre cible relative whitespace-nowrap text-[0.75rem] tracking-[0.09em] transition-colors sm:text-meta sm:tracking-[0.16em] " +
+                        (actif ? "text-encre" : "text-discret hover:text-encre")
                       }
                     >
                       {lien.label}
+                      {/* Le repère de page courante : un filet rouge, pas une
+                          couleur de texte — la lisibilité reste maximale. */}
+                      {actif && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute inset-x-0 bottom-1.5 h-px bg-rouge"
+                        />
+                      )}
                     </Link>
                   </li>
                 );

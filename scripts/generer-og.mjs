@@ -27,6 +27,8 @@ const CRAIE = "#F2F0EC";
 const ROUGE = "#C8362B";
 const CENDRE = "#86837E";
 const ESTOMPE = "#B9B6B1";
+// La seconde encre, réservée aux catégories — comme sur le site.
+const SECONDE = "#64BCC4";
 
 /**
  * Le logo Slaega, s'il a été déposé dans public/.
@@ -76,10 +78,20 @@ const polices = [
     data: fs.readFileSync(require.resolve("@fontsource/inter/files/inter-latin-600-normal.woff")),
   },
   {
-    name: "Lora",
+    name: "Serif",
+    weight: 400,
+    style: "normal",
+    data: fs.readFileSync(
+      require.resolve("@fontsource/newsreader/files/newsreader-latin-400-normal.woff"),
+    ),
+  },
+  {
+    name: "Serif",
     weight: 400,
     style: "italic",
-    data: fs.readFileSync(require.resolve("@fontsource/lora/files/lora-latin-400-italic.woff")),
+    data: fs.readFileSync(
+      require.resolve("@fontsource/newsreader/files/newsreader-latin-400-italic.woff"),
+    ),
   },
 ];
 
@@ -158,12 +170,12 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
         [
           e("div", { display: "flex", flexDirection: "column" }, [
             e("div", { display: "flex", alignItems: "center", marginBottom: 34 }, [
-              texte({ fontSize: 30, fontWeight: 600, color: ROUGE, letterSpacing: -0.5 }, numero),
+              texte({ fontSize: 34, fontFamily: "Serif", color: ROUGE }, numero),
               categorie
                 ? texte(
                     {
                       fontSize: 18,
-                      color: CENDRE,
+                      color: SECONDE,
                       letterSpacing: 3.4,
                       textTransform: "uppercase",
                       marginLeft: 28,
@@ -176,10 +188,10 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
             texte(
               {
                 fontSize: tailleDuTitre(titre),
-                fontWeight: 600,
+                fontFamily: "Serif",
                 color: CRAIE,
-                letterSpacing: -2,
-                lineHeight: 1.08,
+                letterSpacing: -1,
+                lineHeight: 1.1,
               },
               titre,
             ),
@@ -196,7 +208,7 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
             texte(
               {
                 fontSize: tailleDeLaSignature(signature),
-                fontFamily: "Lora",
+                fontFamily: "Serif",
                 fontStyle: "italic",
                 color: CRAIE,
                 lineHeight: 1.35,

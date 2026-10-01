@@ -1,17 +1,20 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
+import LigneCas, { type EntreeCas } from "@/components/LigneCas";
 
-export interface EntreeCas {
-  slug: string;
-  titre: string;
-  categorie: string | null;
-  extrait: string | null;
-  dateIso: string | null;
-  dateLisible: string | null;
-}
+export type { EntreeCas };
 
+/**
+ * L'archive filtrable.
+ *
+ * Le filtre est une barre de catégories, pas un menu déroulant : vingt textes
+ * et douze catégories tiennent à l'écran, et voir la répartition fait partie
+ * de la lecture de l'archive. Les compteurs restent affichés pour ça.
+ *
+ * Les lignes sont celles de l'accueil (components/LigneCas) : un seul dessin
+ * de sommaire pour tout le site.
+ */
 export default function ArchiveCas({
   entrees,
   categories,
@@ -28,14 +31,20 @@ export default function ArchiveCas({
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrer par catégorie">
-        <Chip actif={filtre === null} onClick={() => setFiltre(null)}>
-          Tous <span className="tabular-nums opacity-50">{entrees.length}</span>
-        </Chip>
+      {/* Défilement horizontal sur téléphone plutôt qu'un pavé de boutons qui
+          repousse le sommaire sous la ligne de flottaison. */}
+      <div
+        role="group"
+        aria-label="Filtrer par catégorie"
+        className="-mx-[max(1.25rem,min(0.6rem+3.2vw,3.5rem))] flex gap-x-2 overflow-x-auto px-[max(1.25rem,min(0.6rem+3.2vw,3.5rem))] pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden"
+      >
+        <Puce actif={filtre === null} onClick={() => setFiltre(null)}>
+          Tous <Compteur n={entrees.length} />
+        </Puce>
         {categories.map((c) => (
-          <Chip key={c.nom} actif={filtre === c.nom} onClick={() => setFiltre(c.nom)}>
-            {c.nom} <span className="tabular-nums opacity-50">{c.total}</span>
-          </Chip>
+          <Puce key={c.nom} actif={filtre === c.nom} onClick={() => setFiltre(c.nom)}>
+            {c.nom} <Compteur n={c.total} />
+          </Puce>
         ))}
       </div>
 
@@ -43,47 +52,26 @@ export default function ArchiveCas({
         {visibles.length} CAS affichés.
       </p>
 
-      <ul className="mt-12 border-t border-trait">
-        {visibles.map((e) => (
-          <li key={e.slug} className="border-b border-trait">
-            <Link
-              href={`/cas/${e.slug}/`}
-              className="group flex flex-col gap-3 py-7 transition-colors md:flex-row md:items-baseline md:gap-8"
-            >
-              <span className="shrink-0 font-semibold tabular-nums text-rouge-vif md:w-20">
-                {e.slug}
-              </span>
-
-              <span className="flex-1">
-                <span className="block text-xl font-medium tracking-tight text-encre transition-colors group-hover:text-rouge-vif md:text-2xl">
-                  {e.titre}
-                </span>
-                {e.extrait && (
-                  <span className="mt-2 block max-w-lecture text-base leading-relaxed text-discret">
-                    {e.extrait}
-                  </span>
-                )}
-              </span>
-
-              <span className="flex shrink-0 items-baseline gap-4 text-sm text-discret md:flex-col md:items-end md:gap-1.5">
-                {e.categorie && <span className="surtitre">{e.categorie}</span>}
-                {e.dateIso && e.dateLisible && (
-                  <time dateTime={e.dateIso}>{e.dateLisible}</time>
-                )}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      {visibles.length === 0 && (
-        <p className="py-16 text-center text-discret">Aucun CAS dans cette catégorie.</p>
+      {visibles.length > 0 ? (
+        <ul className="mt-10 border-t border-trait md:mt-14">
+          {visibles.map((e) => (
+            <LigneCas key={e.slug} cas={e} />
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-14 border-y border-trait py-20 text-center font-serif text-chapo text-discret italic">
+          Aucun CAS dans cette catégorie, pour l&apos;instant.
+        </p>
       )}
     </>
   );
 }
 
-function Chip({
+function Compteur({ n }: { n: number }) {
+  return <span className="chiffres opacity-55">{n}</span>;
+}
+
+function Puce({
   actif,
   onClick,
   children,
@@ -98,9 +86,9 @@ function Chip({
       onClick={onClick}
       aria-pressed={actif}
       className={
-        "border px-3.5 py-1.5 text-sm transition-colors " +
+        "surtitre inline-flex min-h-11 shrink-0 items-center gap-[0.5em] rounded-full border px-4 whitespace-nowrap transition-colors " +
         (actif
-          ? "border-rouge text-rouge-vif"
+          ? "border-seconde bg-seconde-voile text-seconde"
           : "border-trait text-discret hover:border-discret hover:text-encre")
       }
     >

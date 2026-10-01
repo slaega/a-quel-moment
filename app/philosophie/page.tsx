@@ -38,36 +38,36 @@ export default function Philosophie() {
 
   return (
     <Gabarit signature={cas.signature ?? undefined}>
-      <div className="mx-auto max-w-article px-6 pt-16 pb-24 md:px-10 md:pt-24">
+      <div className="gouttiere mx-auto max-w-article pt-10 pb-20 md:pt-16 md:pb-28">
         <EnteteDePage
           surtitre="Le manifeste"
           titre={cas.titre}
           chapo={cas.extrait ?? undefined}
         />
 
-        <article className="border-l-2 border-rouge pl-6 md:pl-12">
+        <article className="md:border-l-2 md:border-rouge md:pl-12">
           <div
             className="prose-cas max-w-lecture"
             dangerouslySetInnerHTML={{ __html: cas.corps }}
           />
 
           {cas.signature && (
-            <div className="mt-14 max-w-lecture border-t border-trait pt-10">
-              <Signature texte={cas.signature} taille="grande" />
+            <div className="mt-16 max-w-lecture md:mt-20">
+              <Signature texte={cas.signature} />
             </div>
           )}
         </article>
 
-        <div className="mt-20 flex flex-col gap-4 border-t border-trait pt-10 text-sm sm:flex-row sm:justify-between">
+        <div className="mt-16 flex flex-col gap-2 border-t border-trait pt-8 sm:flex-row sm:items-center sm:justify-between md:mt-24">
           <Link
             href={`/cas/${cas.slug}/`}
-            className="text-discret transition-colors hover:text-encre"
+            className="surtitre lien-sobre cible text-discret hover:text-encre"
           >
             Ce texte est le CAS {cas.slug} — le lire dans l&apos;archive, et le copier
           </Link>
           <Link
             href="/cas/"
-            className="shrink-0 border-b border-rouge pb-1 text-encre transition-colors hover:text-rouge-vif"
+            className="surtitre lien-sobre cible shrink-0 text-seconde"
           >
             Tous les CAS
           </Link>

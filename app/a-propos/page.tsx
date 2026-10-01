@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default function APropos() {
   return (
     <Gabarit>
-      <div className="mx-auto max-w-page px-6 pt-16 pb-24 md:px-10 md:pt-24">
+      <div className="gouttiere mx-auto max-w-article pt-10 pb-20 md:pt-16 md:pb-28">
         <EnteteDePage surtitre={site.auteur} titre={page.titre} chapo={page.chapo} />
 
         <div
@@ -26,7 +26,7 @@ export default function APropos() {
         <p className="mt-20 border-t border-trait pt-10">
           <Link
             href="/cas/"
-            className="border-b border-rouge pb-1 text-sm text-encre transition-colors hover:text-rouge-vif"
+            className="surtitre lien-sobre cible text-seconde"
           >
             Lire les CAS
           </Link>

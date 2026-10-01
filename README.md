@@ -310,8 +310,14 @@ Trois choses portent l'indexation, et aucune n'est cosmétique :
 
 ## Direction artistique
 
+Le registre est celui d'une **revue imprimée** : une serif qui porte, des
+filets plutôt que des cadres, des compositions asymétriques, et de l'air.
+Aucune carte, aucune ombre, aucun dégradé — ce qui sépare, c'est un trait.
+
+### Deux encres, et pas une de plus
+
 Les couleurs sont nommées par **rôle**, jamais par teinte : un seul jeu de noms
-sert les deux thèmes.
+sert les deux thèmes. Tout est déclaré dans `app/globals.css`.
 
 | Rôle | Clair | Sombre |
 | --- | --- | --- |
@@ -319,22 +325,100 @@ sert les deux thèmes.
 | `encre` (texte) | `#16130F` | `#F2F0EC` |
 | `discret` (texte secondaire) | `#6A6660` | `#86837E` |
 | `trait` (filets) | `#E0DCD3` | `#232326` |
-| `rouge` (bandes, grands numéros) | `#B7291E` | `#C8362B` |
-| `rouge-vif` (liens, survols, petites mentions) | `#A8241A` | `#EE6A5E` |
+| `rouge` (filets, numéros) | `#B7291E` | `#C8362B` |
+| `rouge-vif` (petites mentions) | `#A8241A` | `#EE6A5E` |
+| `seconde` (l'appareil) | `#17565E` | `#64BCC4` |
 
-Deux rouges, parce qu'un seul ne peut pas tenir les deux emplois : celui des
-bandes et des grands numéros peut être sombre et dense, celui des petits textes
-doit rester lisible sur son fond. Tout est déclaré dans `app/globals.css`.
+Les deux encres de couleur ne se mélangent pas, et c'est la règle la plus
+utile du système :
 
-Corps et titres en **Inter**, signature en **Lora** italique.
+- **le rouge est la voix de la série** — le point d'interrogation de la une,
+  les numéros, le filet qui tient un article, la règle sous la question. Rien
+  d'autre ;
+- **la seconde encre est l'appareil** — catégories, sources, renvois d'un CAS
+  à un autre, repères de navigation, actions.
 
-La colonne de lecture vise **environ 73 signes par ligne** à 20 px
+Les confondre reviendrait à ce que la série parle de la même voix que ses
+étiquettes. Le pétrole a été choisi parce qu'il est le complémentaire
+chromatique du rouge de marque, et parce que rouge + bleu sur papier teinté
+est le second encrage habituel des revues. Il tient **7,63:1 en clair** et
+**8,93:1 en sombre** — AAA dans les deux thèmes.
+
+Deux rouges, en revanche, parce qu'un seul ne peut pas tenir les deux emplois :
+celui des filets et des grands numéros peut être sombre et dense, celui des
+petits textes doit rester lisible sur son fond.
+
+### Typographie
+
+**Newsreader** (serif) porte les titres, le corps des CAS et la question de
+clôture. **Inter** tient tout le reste : métadonnées, navigation, boutons.
+
+Le corps d'un CAS est en serif parce que ces textes se lisent d'une traite et
+le plus souvent sur téléphone : une grotesque d'interface fatigue sur quinze
+paragraphes.
+
+L'échelle est **fluide**, en `clamp()`, bornée sur 320 px d'un côté et
+~1280 px de l'autre. Une échelle à paliers obligerait à choisir entre un titre
+écrasé à 360 px et un titre qui saute brutalement à 768 px.
+
+| Jeton | Emploi |
+| --- | --- |
+| `text-manchette` | la question, en une |
+| `text-manchette-2` | titre d'un CAS, d'une page |
+| `text-section` | titre de section, entrée de sommaire |
+| `text-question` | la question de clôture, détachée |
+| `text-chapo` | chapô, extrait mis en avant |
+| `text-corps` | le corps d'un CAS |
+| `text-meta` | métadonnées, légendes, interface |
+
+La colonne de lecture vise **62 à 68 signes par ligne**
 (`--container-lecture`). Au-delà, l'œil retrouve mal le début de la ligne
 suivante ; en deçà, un texte long se hache en fragments.
 
 Les pages de texte sont cadrées par `--container-article`, plus étroit que
 l'en-tête : une colonne posée dans un cadre trop large paraît serrée même
 quand elle ne l'est pas, parce que l'œil la compare au vide qui l'entoure.
+
+### Les motifs
+
+`app/globals.css` déclare quelques utilitaires qui portent les décisions :
+
+| Utilitaire | Ce qu'il fait |
+| --- | --- |
+| `gouttiere` | le pas horizontal de toute page — 20 px à 320 px, de l'air ensuite |
+| `manchette` | serif, interlettrage serré, équilibrage sur plusieurs lignes |
+| `surtitre` | le petit label capitales qui nomme une section ou une catégorie |
+| `filet-sommaire` | le trait qui court d'un label jusqu'au bord du bloc |
+| `cible` | une zone tactile d'au moins 44 px, sans grossir ce qui est écrit |
+| `lien-sobre` | un soulignement qui se révèle au survol |
+| `chiffres` | chiffres alignés, pour les numéros et les compteurs |
+
+### Mobile
+
+La version téléphone n'est pas une réduction du bureau. Trois décisions lui
+sont propres :
+
+- **Le filet rouge d'un article est horizontal sous 768 px**, vertical
+  au-dessus. Une bande à gauche mangerait la largeur de lecture sans rien
+  tenir.
+- **Les catégories de l'archive défilent horizontalement** plutôt que de
+  former un pavé de treize boutons qui repousserait le sommaire sous la ligne
+  de flottaison.
+- **L'interlettrage de la navigation est resserré** sous 640 px : à pleine
+  chasse, les trois entrées se coupent en deux lignes.
+
+Rien n'est escamoté derrière un menu : trois entrées tiennent sur une ligne
+dès 320 px, et un bouton pour cacher trois mots coûterait un geste de plus.
+
+### Accessibilité
+
+Tout ce qui se clique fait au moins 44 px de haut, sauf les liens pris dans
+une phrase — les étirer casserait l'interligne, et WCAG 2.2 les exclut pour
+cette raison. Les contrastes sont vérifiés dans le tableau ci-dessus. La page
+courante est signalée par un filet rouge plutôt que par une couleur de texte,
+pour que la lisibilité reste maximale. Les animations se limitent à des
+changements de couleur et à deux filets qui s'allongent, et
+`prefers-reduced-motion` les coupe toutes.
 
 ### Le moment de la journée
 
@@ -415,7 +499,7 @@ typographique et `npm run og` le signale.
 
 ```
 app/                 pages (accueil, /cas, /cas/[numero], /philosophie, /a-propos)
-components/          en-tête, pied de page, archive filtrable, sources, boutons…
+components/          en-tête, pied, sommaire, archive filtrable, sources, boutons…
 content/cas/         un fichier .md par CAS
 content/pages/       pages éditoriales
 lib/cas.ts           lecture des CAS, rendu Markdown, détection de la signature

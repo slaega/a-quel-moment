@@ -3,14 +3,19 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BoutonCopier from "@/components/BoutonCopier";
 import BoutonPartager from "@/components/BoutonPartager";
-import NumeroCas from "@/components/NumeroCas";
-import Signature from "@/components/Signature";
-import { formaterDate, getCas, getTousLesCas, getVoisins } from "@/lib/cas";
-import { site } from "@/lib/site";
-import Gabarit from "@/components/Gabarit";
 import DonneesStructurees from "@/components/DonneesStructurees";
+import Gabarit from "@/components/Gabarit";
 import Sources from "@/components/Sources";
+import {
+  formaterDate,
+  getCas,
+  getRecommandations,
+  getTousLesCas,
+  getVoisins,
+  type Cas,
+} from "@/lib/cas";
 import { schemaCas } from "@/lib/schema";
+import { site } from "@/lib/site";
 
 type Params = { numero: string };
 
@@ -60,39 +65,59 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
   if (!cas) notFound();
 
   const { precedent, suivant } = getVoisins(cas.slug);
+  const aLireEnsuite = getRecommandations(cas.slug);
   const date = formaterDate(cas.date);
 
   return (
     <Gabarit signature={cas.signature ?? undefined}>
       <DonneesStructurees schema={schemaCas(cas)} />
-      <div className="mx-auto max-w-article px-6 pt-12 pb-24 md:px-10 md:pt-20">
+
+      <div className="gouttiere mx-auto max-w-article pt-6 pb-16 md:pt-10 md:pb-24">
         <Link
           href="/cas/"
-          className="text-sm text-discret transition-colors hover:text-encre"
+          className="surtitre lien-sobre cible text-discret hover:text-encre"
         >
           ← Tous les CAS
         </Link>
 
-        {/* Mise en page d'affiche : bande rouge à gauche, texte aligné à gauche. */}
-        <article className="mt-10 border-l-2 border-rouge pl-6 md:mt-14 md:pl-12">
+        {/*
+          Le filet rouge de la série. Vertical sur grand écran, où il tient
+          l'article ; horizontal sur téléphone, où une bande à gauche
+          mangerait la largeur de lecture sans rien tenir.
+        */}
+        <article className="mt-10 md:mt-16 md:border-l-2 md:border-rouge md:pl-12">
           <header>
-            <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-              <NumeroCas slug={cas.slug} taille="grande" />
-              {cas.categorie && <span className="surtitre text-discret">{cas.categorie}</span>}
+            <span
+              aria-hidden="true"
+              className="block h-0.5 w-12 bg-rouge md:hidden"
+            />
+
+            <div className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-2 md:mt-0">
+              <span className="chiffres font-serif text-4xl leading-none text-rouge md:text-5xl">
+                {cas.slug}
+              </span>
+              {cas.categorie && <span className="surtitre text-seconde">{cas.categorie}</span>}
               {date && cas.date && (
-                <time dateTime={cas.date} className="text-sm text-discret">
+                <time dateTime={cas.date} className="chiffres text-meta text-discret">
                   {date}
                 </time>
               )}
             </div>
 
-            <h1 className="titre-affiche mt-7 max-w-3xl text-[2rem] md:text-5xl">
+            <h1 className="manchette mt-8 max-w-[18ch] text-manchette-2 md:mt-10">
               {cas.titre}
             </h1>
 
+            {/* Une introduction, seulement quand elle existe vraiment. */}
+            {cas.chapo && (
+              <p className="mt-8 max-w-lecture font-serif text-chapo text-encre/80">
+                {cas.chapo}
+              </p>
+            )}
+
             {cas.contribution && (
-              <p className="mt-6 flex max-w-lecture items-baseline gap-2.5 text-sm text-discret">
-                <span aria-hidden="true" className="shrink-0 text-rouge-vif">
+              <p className="mt-7 flex max-w-lecture items-baseline gap-2.5 text-meta text-discret">
+                <span aria-hidden="true" className="shrink-0 text-seconde">
                   ↳
                 </span>
                 {cas.contribution}
@@ -101,55 +126,104 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
           </header>
 
           {cas.brouillon && (
-            <p className="mt-10 max-w-lecture border border-trait px-4 py-3 text-sm text-discret">
+            <p className="mt-10 max-w-lecture border border-trait px-4 py-3 text-meta text-discret">
               Brouillon — ce texte attend sa version publiée.
             </p>
           )}
 
           <div
-            className="prose-cas mt-12 max-w-lecture md:mt-14"
+            className="prose-cas mt-12 max-w-lecture md:mt-16"
             dangerouslySetInnerHTML={{ __html: cas.corps }}
           />
 
+          {/*
+            La question. Elle est le point d'arrivée de tout le texte : elle a
+            donc son propre mouvement, son filet, et la plus grande taille de
+            la page après le titre.
+          */}
           {cas.signature && (
-            <div className="mt-14 max-w-lecture border-t border-trait pt-10">
-              <Signature texte={cas.signature} taille="grande" />
+            <div className="mt-16 max-w-lecture md:mt-20">
+              <span aria-hidden="true" className="block h-px w-16 bg-rouge" />
+              <p className="mt-8 font-serif text-question leading-(--text-question--line-height) text-encre italic">
+                {cas.signature}
+              </p>
             </div>
           )}
 
           <Sources sources={cas.sources} />
 
-          <div className="mt-12 flex flex-wrap gap-3">
+          <div className="mt-14 flex flex-wrap gap-3">
             <BoutonCopier texte={cas.texteBrut} />
             <BoutonPartager titre={`CAS ${cas.slug} — ${cas.titre}`} />
           </div>
         </article>
 
+        {/* Le texte d'avant et celui d'après, dans l'ordre de la série. */}
         <nav
           aria-label="CAS précédent et suivant"
-          className="mt-20 grid gap-px border-t border-trait pt-10 sm:grid-cols-2 sm:gap-8"
+          className="mt-20 grid gap-px border-t border-trait sm:grid-cols-2 sm:gap-10 md:mt-28"
         >
           {precedent ? (
-            <Link href={`/cas/${precedent.slug}/`} className="group py-4">
-              <span className="surtitre text-discret">CAS précédent</span>
-              <span className="mt-3 block text-lg font-medium tracking-tight text-encre transition-colors group-hover:text-rouge-vif">
-                {precedent.slug} · {precedent.titre}
-              </span>
-            </Link>
+            <Voisin cas={precedent} sens="Précédent" />
           ) : (
-            <span />
+            <span className="hidden sm:block" />
           )}
-
-          {suivant && (
-            <Link href={`/cas/${suivant.slug}/`} className="group py-4 sm:text-right">
-              <span className="surtitre text-discret">CAS suivant</span>
-              <span className="mt-3 block text-lg font-medium tracking-tight text-encre transition-colors group-hover:text-rouge-vif">
-                {suivant.slug} · {suivant.titre}
-              </span>
-            </Link>
-          )}
+          {suivant && <Voisin cas={suivant} sens="Suivant" aligneADroite />}
         </nav>
+
+        {/* Recommandations : même catégorie d'abord, voisins exclus. */}
+        {aLireEnsuite.length > 0 && (
+          <section
+            aria-labelledby="a-lire"
+            className="mt-16 border-t border-trait pt-10 md:mt-24"
+          >
+            <h2 id="a-lire" className="surtitre filet-sommaire mb-8 text-discret">
+              À lire ensuite
+            </h2>
+            <ul className="grid gap-x-12 gap-y-8 sm:grid-cols-2">
+              {aLireEnsuite.map((c) => (
+                <li key={c.slug}>
+                  <Link href={`/cas/${c.slug}/`} className="group block">
+                    <span className="flex items-baseline gap-3">
+                      <span className="chiffres font-serif text-lg text-rouge">{c.slug}</span>
+                      {c.categorie && (
+                        <span className="surtitre text-seconde">{c.categorie}</span>
+                      )}
+                    </span>
+                    <span className="manchette mt-3 block text-section text-encre decoration-rouge decoration-1 underline-offset-[0.16em] group-hover:underline">
+                      {c.titre}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </Gabarit>
+  );
+}
+
+function Voisin({
+  cas,
+  sens,
+  aligneADroite = false,
+}: {
+  cas: Pick<Cas, "slug" | "titre">;
+  sens: string;
+  aligneADroite?: boolean;
+}) {
+  return (
+    <Link
+      href={`/cas/${cas.slug}/`}
+      className={"group block py-7 " + (aligneADroite ? "sm:text-right" : "")}
+    >
+      <span className="surtitre text-discret">{sens}</span>
+      <span className="manchette mt-3 flex items-baseline gap-3 text-section text-encre decoration-rouge decoration-1 underline-offset-[0.16em] group-hover:underline">
+        {!aligneADroite && <span className="chiffres text-rouge">{cas.slug}</span>}
+        <span className={aligneADroite ? "ml-auto" : ""}>{cas.titre}</span>
+        {aligneADroite && <span className="chiffres text-rouge">{cas.slug}</span>}
+      </span>
+    </Link>
   );
 }

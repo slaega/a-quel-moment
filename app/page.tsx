@@ -1,89 +1,136 @@
 import Link from "next/link";
 import CarteCas from "@/components/CarteCas";
-import { getDernierCas, getTousLesCas } from "@/lib/cas";
-import { site } from "@/lib/site";
-import Gabarit from "@/components/Gabarit";
 import DonneesStructurees from "@/components/DonneesStructurees";
+import Gabarit from "@/components/Gabarit";
+import LigneCas from "@/components/LigneCas";
+import { formaterDate, getTousLesCas } from "@/lib/cas";
 import { schemaSite } from "@/lib/schema";
+import { site } from "@/lib/site";
+
+/** Combien de textes le sommaire de la une montre, sous le dernier paru. */
+const AU_SOMMAIRE = 6;
 
 export default function Accueil() {
-  const dernier = getDernierCas();
-  const total = getTousLesCas().length;
+  const tous = getTousLesCas();
+  const [dernier, ...precedents] = tous;
+  const sommaire = precedents.slice(0, AU_SOMMAIRE);
 
   return (
     <Gabarit>
-      <>
-        <DonneesStructurees schema={schemaSite()} />
-        {/* Le manifeste, seul. */}
-        <section className="mx-auto max-w-page px-6 pt-24 pb-20 text-center md:px-10 md:pt-40 md:pb-28">
+      <DonneesStructurees schema={schemaSite()} />
+
+      {/*
+        La une. Composition asymétrique : la question est alignée à gauche et
+        occupe la largeur, le repère de série se range à droite. Un titre
+        centré au milieu d'un écran vide ne dit rien du contenu — ici la
+        question est le contenu, et le premier CAS suit immédiatement.
+      */}
+      <section className="gouttiere mx-auto max-w-page pt-10 pb-14 md:pt-16 md:pb-20">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
           <p className="surtitre text-discret">Une série signée {site.auteur}</p>
+          <p className="surtitre chiffres text-seconde">
+            {tous.length} CAS publiés
+          </p>
+        </div>
 
-          <h1 className="titre-affiche mx-auto mt-10 max-w-4xl text-[2.5rem] sm:text-6xl md:text-7xl lg:text-[5.25rem]">
-            À quel moment avons-nous trouvé ça{" "}
-            <em className="font-serif font-normal italic">normal</em>
-            <span className="text-rouge"> ?</span>
-          </h1>
+        <h1 className="manchette mt-9 max-w-[16ch] text-manchette md:mt-14">
+          À quel moment avons-nous trouvé ça <em className="italic">normal</em>
+          <span className="text-rouge not-italic"> ?</span>
+        </h1>
+
+        <p className="mt-9 max-w-lecture font-serif text-chapo text-encre/75 md:mt-12">
+          Des textes courts qui partent d&apos;un fait réel — pas d&apos;une opinion, pas
+          d&apos;une théorie. Une scène que tout le monde a déjà vue, et devant laquelle
+          tout le monde s&apos;est tu.
+        </p>
+      </section>
+
+      {/* Le dernier paru, en une. */}
+      {dernier && (
+        <section
+          aria-labelledby="dernier-paru"
+          className="gouttiere mx-auto max-w-page border-t border-trait py-14 md:py-20"
+        >
+          <h2 id="dernier-paru" className="surtitre filet-sommaire mb-10 text-discret md:mb-14">
+            Le dernier paru
+          </h2>
+          <CarteCas cas={dernier} />
         </section>
+      )}
 
-        {/* Le principe, en quatre phrases. */}
-        <section className="mx-auto max-w-page border-t border-trait px-6 py-16 md:px-10 md:py-20">
-          <div className="grid gap-10 md:grid-cols-[14rem_1fr] md:gap-16">
-            <h2 className="surtitre text-discret">Le principe</h2>
-            <div className="max-w-lecture space-y-6 text-lg leading-relaxed text-encre/80 md:text-xl">
+      {/* Le sommaire : les textes précédents, en index de revue. */}
+      {sommaire.length > 0 && (
+        <section
+          aria-labelledby="sommaire"
+          className="gouttiere mx-auto max-w-page border-t border-trait py-14 md:py-20"
+        >
+          <h2 id="sommaire" className="surtitre filet-sommaire mb-6 text-discret md:mb-10">
+            Dans la série
+          </h2>
+
+          <ul className="border-t border-trait">
+            {sommaire.map((c) => (
+              <LigneCas
+                key={c.slug}
+                cas={{
+                  slug: c.slug,
+                  titre: c.titre,
+                  categorie: c.categorie,
+                  extrait: c.extrait,
+                  dateIso: c.date,
+                  dateLisible: formaterDate(c.date),
+                }}
+              />
+            ))}
+          </ul>
+
+          <Link
+            href="/cas/"
+            className="group cible mt-8 items-baseline gap-3 text-encre"
+          >
+            <span className="manchette text-section">
+              Voir les {tous.length} CAS
+            </span>
+            <span
+              aria-hidden="true"
+              className="inline-block h-px w-10 translate-y-[-0.35em] bg-rouge transition-[width] duration-200 group-hover:w-16"
+            />
+          </Link>
+        </section>
+      )}
+
+      {/* Le principe, en fin de une — un colophon, pas une page d'accueil. */}
+      <section
+        aria-labelledby="principe"
+        className="gouttiere mx-auto max-w-page border-t border-trait py-14 md:py-20"
+      >
+        <div className="grid gap-y-8 md:grid-cols-[12rem_1fr] md:gap-x-16">
+          <h2 id="principe" className="surtitre text-discret md:pt-2">
+            Le principe
+          </h2>
+
+          <div className="max-w-lecture">
+            <div className="space-y-6 font-serif text-chapo text-encre/85">
               <p>
-                Chaque CAS part d&apos;un fait réel. Pas une opinion, pas une théorie : une
-                scène que tout le monde a déjà vue, et devant laquelle tout le monde s&apos;est
-                tu.
+                Chaque CAS part d&apos;un fait réel. On le raconte en quelques lignes,
+                sans commentaire.
               </p>
               <p>
-                On la raconte en quelques lignes, sans commentaire. On montre ensuite ce
-                qu&apos;elle nous a fait accepter — la chose qu&apos;on a laissée devenir normale
-                sans jamais l&apos;avoir décidée.
+                On montre ensuite ce qu&apos;il nous a fait accepter — la chose
+                qu&apos;on a laissée devenir normale sans jamais l&apos;avoir décidée.
               </p>
-              <p>
-                Puis on pose la seule question qui reste. Toujours la même, à la fin de
-                chaque texte.
-              </p>
+              <p>Puis on pose la seule question qui reste. Toujours la même.</p>
             </div>
+
+            <Link
+              href="/philosophie/"
+              className="surtitre lien-sobre cible mt-7 text-seconde"
+            >
+              La philosophie de la série
+            </Link>
           </div>
-        </section>
-
-        {/* Le dernier CAS publié. */}
-        {dernier && (
-          <section className="mx-auto max-w-page border-t border-trait px-6 py-16 md:px-10 md:py-24">
-            <h2 className="surtitre mb-12 text-discret">Le dernier CAS</h2>
-            <CarteCas cas={dernier} />
-          </section>
-        )}
-
-        <section className="mx-auto max-w-page border-t border-trait px-6 py-16 md:px-10 md:py-20">
-          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-lecture">
-              <h2 className="titre-affiche text-3xl md:text-4xl">
-                {total} CAS publiés, et la même question à chaque fois.
-              </h2>
-              <p className="mt-5 text-lg leading-relaxed text-discret">
-                L&apos;archive complète, classée par numéro et par catégorie.
-              </p>
-            </div>
-
-            <div className="flex shrink-0 flex-col items-start gap-3 text-sm md:items-end">
-              <Link
-                href="/cas/"
-                className="border-b border-rouge pb-1 text-encre transition-colors hover:text-rouge-vif"
-              >
-                Voir tous les CAS
-              </Link>
-              <Link
-                href="/philosophie/"
-                className="border-b border-trait pb-1 text-discret transition-colors hover:border-rouge hover:text-encre"
-              >
-                Lire la philosophie de la série
-              </Link>
-            </div>
-          </div>
-        </section>
-      </>
+        </div>
+      </section>
     </Gabarit>
   );
 }

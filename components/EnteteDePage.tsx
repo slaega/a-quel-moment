@@ -1,3 +1,4 @@
+/** L'en-tête d'une page de texte : surtitre, titre, chapô. */
 export default function EnteteDePage({
   surtitre,
   titre,
@@ -8,13 +9,11 @@ export default function EnteteDePage({
   chapo?: string;
 }) {
   return (
-    <header className="mb-14 md:mb-20">
-      {surtitre && <p className="surtitre mb-6 text-discret">{surtitre}</p>}
-      <h1 className="titre-affiche max-w-3xl text-4xl md:text-6xl">{titre}</h1>
+    <header className="mb-12 md:mb-16">
+      {surtitre && <p className="surtitre text-discret">{surtitre}</p>}
+      <h1 className="manchette mt-7 max-w-[18ch] text-manchette-2">{titre}</h1>
       {chapo && (
-        <p className="mt-7 max-w-lecture text-lg leading-relaxed text-discret md:text-xl">
-          {chapo}
-        </p>
+        <p className="mt-7 max-w-lecture font-serif text-chapo text-encre/75">{chapo}</p>
       )}
     </header>
   );

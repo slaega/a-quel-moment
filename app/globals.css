@@ -1,11 +1,27 @@
 @import "tailwindcss";
 
 /*
- * Deux thèmes, un seul jeu de rôles. Les noms disent la fonction (fond, encre,
- * trait…), jamais la teinte : basculer de thème ne change que ces valeurs.
+ * ─────────────────────────────────────────────────────────────────────────
+ * 1. LES DEUX ENCRES
+ * ─────────────────────────────────────────────────────────────────────────
  *
- * rouge      — le rouge de marque : bandes, filets, grands numéros (hors texte courant)
- * rouge-vif  — le rouge lisible : liens, survols, petites mentions
+ * Un seul jeu de rôles pour les deux thèmes. Les noms disent la fonction
+ * (fond, encre, trait…), jamais la teinte : basculer de thème ne change que
+ * ces valeurs.
+ *
+ * La série est imprimée en deux encres, comme une revue :
+ *
+ *   rouge    — la voix de la série. Le point d'interrogation, les numéros, le
+ *              filet qui tient un article. Rien d'autre. C'est la couleur
+ *              d'origine du projet, elle ne bouge pas.
+ *   seconde  — l'appareil. Catégories, dates, sources, renvois d'un CAS à un
+ *              autre, repères de navigation. Un pétrole sombre : c'est le
+ *              complémentaire chromatique du rouge de marque, et le second
+ *              encrage habituel des revues tirées sur papier teinté.
+ *
+ * Les confondre reviendrait à ce que la série parle de la même voix que ses
+ * étiquettes. D'où deux encres et pas une de plus : tout le reste est du noir
+ * sur du papier.
  */
 :root {
   --r-fond: #f7f5f1;
@@ -15,6 +31,9 @@
   --r-encre: #16130f;
   --r-rouge: #b7291e;
   --r-rouge-vif: #a8241a;
+  /* 7,63:1 sur le papier — AAA. */
+  --r-seconde: #17565e;
+  --r-seconde-voile: #e8efee;
 }
 
 /* Sans choix explicite, on suit le système. */
@@ -27,6 +46,9 @@
     --r-encre: #f2f0ec;
     --r-rouge: #c8362b;
     --r-rouge-vif: #ee6a5e;
+    /* 8,93:1 sur la nuit — AAA. */
+    --r-seconde: #64bcc4;
+    --r-seconde-voile: #12201f;
   }
 }
 
@@ -39,15 +61,17 @@
   --r-encre: #f2f0ec;
   --r-rouge: #c8362b;
   --r-rouge-vif: #ee6a5e;
+  --r-seconde: #64bcc4;
+  --r-seconde-voile: #12201f;
 }
 
 /*
  * Le moment de la journée, en teinte de fond.
  *
  * Le site porte la question « à quel moment » : il répond en changeant avec
- * l'heure. L'aurore réchauffe le papier, le crépuscule le refroidit, et la nuit
- * bascule d'elle-même en sombre (voir lib/theme.ts). Le rouge, lui, ne bouge
- * jamais — c'est l'identité de la série.
+ * l'heure. L'aurore réchauffe le papier, le crépuscule le refroidit, et la
+ * nuit bascule d'elle-même en sombre (voir lib/theme.ts). Les deux encres, en
+ * revanche, ne bougent jamais — c'est l'identité de la série.
  *
  * Le zénith n'a pas de bloc : c'est la valeur de référence ci-dessus.
  */
@@ -76,8 +100,19 @@
 }
 
 /*
- * « inline » est indispensable ici : les utilitaires reçoivent la var() plutôt
- * qu'une couleur figée au build, ce qui permet la bascule au runtime.
+ * ─────────────────────────────────────────────────────────────────────────
+ * 2. L'ÉCHELLE TYPOGRAPHIQUE
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Fluide, en clamp(), parce que la série se lit d'abord sur téléphone : une
+ * échelle à paliers oblige à choisir entre un titre écrasé à 360 px et un
+ * titre qui saute à 768 px. Ici chaque taille suit la largeur sans marche.
+ *
+ * Les bornes basses sont calées sur 320 px, les hautes sur ~1280 px.
+ *
+ * « inline » est indispensable dans @theme : les utilitaires reçoivent la
+ * var() plutôt qu'une couleur figée au build, ce qui permet la bascule de
+ * thème au runtime.
  */
 @theme inline {
   --color-fond: var(--r-fond);
@@ -87,17 +122,42 @@
   --color-encre: var(--r-encre);
   --color-rouge: var(--r-rouge);
   --color-rouge-vif: var(--r-rouge-vif);
+  --color-seconde: var(--r-seconde);
+  --color-seconde-voile: var(--r-seconde-voile);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-serif: var(--font-lora), Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-serif-edito), Georgia, "Times New Roman", serif;
 
-  /* Colonne de lecture. Visée : 65 à 70 signes par ligne — au-delà, l'œil
-     perd la ligne suivante ; en deçà, un texte long se hache. */
-  --container-lecture: 46rem;
-  --container-page: 64rem;
-  /* Les pages de texte : un cadre plus étroit que l'en-tête, pour que la
-     colonne ne flotte pas dans un vide qui la fait paraître serrée. */
-  --container-article: 56rem;
+  /* La question de une, sur l'accueil. */
+  --text-manchette: clamp(2.25rem, 1.15rem + 5.5vw, 5.5rem);
+  --text-manchette--line-height: 1.02;
+  /* Le titre d'un CAS, d'une archive, d'une page. */
+  --text-manchette-2: clamp(1.875rem, 1.25rem + 3.1vw, 3.5rem);
+  --text-manchette-2--line-height: 1.08;
+  /* Un titre de section. */
+  --text-section: clamp(1.375rem, 1.1rem + 1.4vw, 2rem);
+  --text-section--line-height: 1.2;
+  /* La question de clôture, détachée. */
+  --text-question: clamp(1.375rem, 1.05rem + 1.6vw, 2.125rem);
+  --text-question--line-height: 1.3;
+  /* Chapô, accroche, extrait mis en avant. */
+  --text-chapo: clamp(1.125rem, 1.03rem + 0.5vw, 1.375rem);
+  --text-chapo--line-height: 1.55;
+  /* Le corps d'un CAS. */
+  --text-corps: clamp(1.1875rem, 1.1rem + 0.42vw, 1.375rem);
+  --text-corps--line-height: 1.72;
+  /* Métadonnées, légendes, interface. */
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.5;
+
+  /* Colonne de lecture. Visée : 62 à 68 signes par ligne en serif — au-delà
+     l'œil perd la ligne suivante, en deçà un texte long se hache. */
+  --container-lecture: 40rem;
+  --container-article: 58rem;
+  --container-page: 78rem;
+
+  /* Rythme vertical entre deux mouvements d'une page. */
+  --spacing-mouvement: clamp(4rem, 2rem + 9vw, 9rem);
 }
 
 @layer base {
@@ -125,6 +185,8 @@
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    /* Un téléphone étroit ne doit jamais défiler de côté. */
+    overflow-x: hidden;
   }
 
   ::selection {
@@ -150,26 +212,72 @@
   }
 }
 
-@utility titre-affiche {
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.04;
+/*
+ * ─────────────────────────────────────────────────────────────────────────
+ * 3. LES MOTIFS
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+/* Le pas horizontal de toute page. 20 px à 320 px, de l'air ensuite. */
+@utility gouttiere {
+  padding-inline: clamp(1.25rem, 0.6rem + 3.2vw, 3.5rem);
+}
+
+/* Les grands titres : serif, serrés, équilibrés sur plusieurs lignes. */
+@utility manchette {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.018em;
   text-wrap: balance;
 }
 
+/* Le petit label capitales qui nomme une section ou une catégorie. */
 @utility surtitre {
-  font-size: 0.6875rem;
+  font-size: var(--text-meta);
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  font-feature-settings: "ss01";
 }
 
-/* Corps d'un CAS : paragraphes courts, respiration large. */
+/*
+ * Un filet qui court sous un label, à la manière d'un sommaire de revue.
+ * Le trait part du label et file jusqu'au bord du bloc.
+ */
+@utility filet-sommaire {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--color-trait);
+  }
+}
+
+/* Chiffres alignés, pour les numéros de CAS et les compteurs. */
+@utility chiffres {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/*
+ * Corps d'un CAS.
+ *
+ * En serif : ces textes se lisent d'une traite, souvent sur téléphone, et une
+ * grotesque d'interface fatigue sur quinze paragraphes. Les retours à la
+ * ligne sont voulus (voir remarkBreaks) : le rythme vertical doit donc
+ * distinguer un saut de ligne d'un changement de paragraphe.
+ */
 @utility prose-cas {
-  font-size: 1.125rem;
-  line-height: 1.75;
-  color: color-mix(in srgb, var(--color-encre) 88%, transparent);
+  font-family: var(--font-serif);
+  font-size: var(--text-corps);
+  line-height: var(--text-corps--line-height);
+  color: color-mix(in srgb, var(--color-encre) 92%, transparent);
   text-wrap: pretty;
+  hyphens: auto;
 
   /* Marges remises à plat, puis un seul rythme vertical entre blocs.
      Les règles ciblant un élément (h2, h3) le surchargent ensuite. */
@@ -178,7 +286,13 @@
   }
 
   & > * + * {
-    margin-top: 1.5em;
+    margin-top: 1.45em;
+  }
+
+  /* Un paragraphe d'un seul souffle — le « Maintenant, imagine. » d'un CAS —
+     respire davantage : c'est une respiration de l'auteur, pas une ligne. */
+  & > p:has(br) {
+    text-wrap: pretty;
   }
 
   & strong {
@@ -187,45 +301,47 @@
   }
 
   & em {
-    font-family: var(--font-serif);
     font-style: italic;
   }
 
+  /* Les renvois d'un CAS à un autre portent la seconde encre, comme toutes
+     les références. Voir lib/renvois.ts. */
   & a {
-    color: var(--color-encre);
+    color: var(--color-seconde);
     text-decoration: underline;
-    text-decoration-color: var(--color-rouge);
-    text-underline-offset: 0.25em;
-    transition: color 150ms ease;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, var(--color-seconde) 45%, transparent);
+    text-underline-offset: 0.22em;
+    transition: text-decoration-color 160ms ease;
   }
 
   & a:hover {
-    color: var(--color-rouge-vif);
+    text-decoration-color: var(--color-seconde);
   }
 
   & h2 {
-    font-size: 1.625rem;
+    font-size: var(--text-section);
+    line-height: var(--text-section--line-height);
     font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
+    letter-spacing: -0.015em;
     color: var(--color-encre);
-    margin-top: 2.5em;
+    margin-top: 2.2em;
   }
 
   & h3 {
-    font-size: 1.0625rem;
+    font-size: 1.125em;
     font-weight: 600;
     color: var(--color-encre);
-    margin-top: 2em;
+    margin-top: 1.9em;
   }
 
+  /* Une citation : décalée dans la marge, tenue par un filet rouge. */
   & blockquote {
     border-left: 2px solid var(--color-rouge);
-    padding-left: 1.25rem;
-    font-family: var(--font-serif);
+    padding-left: clamp(1rem, 3vw, 1.75rem);
     font-style: italic;
-    font-size: 1.1875rem;
     color: var(--color-encre);
+    margin-block: 2em;
   }
 
   & ul,
@@ -262,18 +378,39 @@
     border: 0;
     border-top: 1px solid var(--color-trait);
     margin-block: 3em;
-  }
-
-  @media (width >= 48rem) {
-    font-size: 1.25rem;
-    line-height: 1.75;
+    width: 4rem;
   }
 }
 
 /*
- * Icônes de la bascule de thème. Piloter leur visibilité en CSS — et non en
- * JavaScript — évite à la fois le clignotement au chargement et tout écart
- * d'hydratation : le serveur ne sait pas quel thème la personne utilise.
+ * Un lien de l'interface : le soulignement se révèle au survol plutôt que de
+ * barrer la page en permanence. Discret, mais toujours visible au clavier.
+ */
+@utility lien-sobre {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: transparent;
+  transition:
+    color 160ms ease,
+    text-decoration-color 160ms ease;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/*
+ * ─────────────────────────────────────────────────────────────────────────
+ * 4. CE QUI DÉPEND DU THÈME, SANS JAVASCRIPT
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * Deux images, deux icônes : celle du thème clair et celle du thème sombre.
+ * La bascule est faite en CSS plutôt qu'en JavaScript — ça évite à la fois le
+ * clignotement au chargement et tout écart d'hydratation, puisque le serveur
+ * ne sait pas quel thème la personne utilise.
+ *
+ * Sert à la bascule de thème (lune/soleil) et aux deux versions du logo.
  */
 .si-sombre {
   display: none;
@@ -295,4 +432,20 @@
   :root:not([data-theme="light"]) .si-clair {
     display: none;
   }
+}
+
+/*
+ * Une cible tactile d'au moins 44 px, sans grossir ce qui est écrit.
+ *
+ * Un lien de navigation composé en capitales fait 13 px de haut : viser juste
+ * au pouce devient un exercice. La zone sensible est donc étendue autour du
+ * texte, qui lui ne bouge pas.
+ *
+ * Ne s'applique pas aux liens pris dans une phrase : les étirer casserait
+ * l'interligne du paragraphe, et WCAG 2.2 les exclut pour cette raison.
+ */
+@utility cible {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }

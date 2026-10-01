@@ -1,22 +1,18 @@
 import { site } from "@/lib/site";
 
-/** La phrase qui clôt chaque CAS — serif italique, précédée d'un filet rouge. */
-export default function Signature({
-  texte = site.signature,
-  taille = "normale",
-}: {
-  texte?: string;
-  taille?: "normale" | "grande";
-}) {
+/**
+ * La question qui clôt un texte, précédée de son filet rouge.
+ *
+ * Elle porte la plus grande taille de la page après le titre : c'est le point
+ * d'arrivée du texte, pas une mention de fin.
+ */
+export default function Signature({ texte = site.signature }: { texte?: string }) {
   return (
-    <p
-      className={
-        taille === "grande"
-          ? "font-serif text-2xl leading-snug text-encre italic md:text-[1.75rem]"
-          : "font-serif text-xl leading-snug text-encre italic md:text-[1.375rem]"
-      }
-    >
-      {texte}
-    </p>
+    <div>
+      <span aria-hidden="true" className="block h-px w-16 bg-rouge" />
+      <p className="mt-8 font-serif text-question leading-(--text-question--line-height) text-encre italic">
+        {texte}
+      </p>
+    </div>
   );
 }

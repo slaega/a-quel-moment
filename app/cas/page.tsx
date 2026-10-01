@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import ArchiveCas, { type EntreeCas } from "@/components/ArchiveCas";
-import { formaterDate, getCategories, getTousLesCas } from "@/lib/cas";
-import Gabarit from "@/components/Gabarit";
 import DonneesStructurees from "@/components/DonneesStructurees";
+import Gabarit from "@/components/Gabarit";
+import { formaterDate, getCategories, getTousLesCas } from "@/lib/cas";
 import { schemaArchive } from "@/lib/schema";
 
 export const metadata: Metadata = {
@@ -22,16 +22,28 @@ export default function Archive() {
     dateLisible: formaterDate(c.date),
   }));
 
+  const premier = cas[cas.length - 1];
+  const dernier = cas[0];
+  const periode =
+    premier?.date && dernier?.date
+      ? `${formaterDate(premier.date)} — ${formaterDate(dernier.date)}`
+      : null;
+
   return (
     <Gabarit>
       <DonneesStructurees schema={schemaArchive(cas)} />
-      <div className="mx-auto max-w-page px-6 pt-16 pb-24 md:px-10 md:pt-24">
+
+      <div className="gouttiere mx-auto max-w-page pt-10 pb-20 md:pt-16 md:pb-28">
         <header className="mb-12 md:mb-16">
-          <h1 className="titre-affiche text-4xl md:text-6xl">Les CAS</h1>
-          <p className="mt-6 max-w-lecture text-lg leading-relaxed text-discret">
+          <p className="surtitre text-discret">L&apos;archive</p>
+          <h1 className="manchette mt-7 max-w-[14ch] text-manchette-2">Les CAS</h1>
+          <p className="mt-7 max-w-lecture font-serif text-chapo text-encre/75">
             Tous les textes publiés, du plus récent au premier. Chacun part d&apos;un fait
             réel et s&apos;arrête là où la question commence.
           </p>
+          {periode && (
+            <p className="chiffres mt-6 text-meta text-discret">{periode}</p>
+          )}
         </header>
 
         <ArchiveCas entrees={entrees} categories={getCategories()} />

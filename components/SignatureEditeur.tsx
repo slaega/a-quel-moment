@@ -15,7 +15,7 @@ export default function SignatureEditeur({
       href={site.editeurUrl}
       target="_blank"
       rel="noreferrer"
-      className="group inline-flex items-center gap-2.5 text-discret transition-colors hover:text-encre"
+      className="group cible gap-2.5 text-discret transition-colors hover:text-encre"
     >
       <span>{prefixe}</span>
       <LogoSlaega logo={logo} hauteur={20} />

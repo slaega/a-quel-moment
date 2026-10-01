@@ -32,6 +32,15 @@ export interface Cas {
   categorie: string | null;
   /** Phrase mise en avant dans l'archive et au partage. */
   extrait: string | null;
+  /**
+   * L'extrait, mais seulement quand il n'est pas déjà dans le texte.
+   *
+   * La plupart des extraits sont une phrase reprise du corps : l'afficher en
+   * chapô la ferait lire deux fois à trois lignes d'intervalle. Quand il est
+   * en revanche une vraie introduction, écrite pour résumer, il mérite sa
+   * place en tête d'article.
+   */
+  chapo: string | null;
   /** Origine du texte quand il ne vient pas de l'auteur seul. */
   contribution: string | null;
   /** true tant que le texte publié n'a pas remplacé le brouillon. */
@@ -186,6 +195,21 @@ function lireSources(valeur: unknown, fichier: string): Source[] {
   });
 }
 
+/** Compare deux textes en ignorant la ponctuation et les espaces. */
+function aplatir(texte: string): string {
+  return texte
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function chapoInedit(extrait: string | null, corps: string): string | null {
+  if (!extrait) return null;
+  return aplatir(corps).includes(aplatir(extrait)) ? null : extrait;
+}
+
 function lireFichier(fichier: string): Cas {
   const brut = fs.readFileSync(path.join(DOSSIER, fichier), "utf8");
   const { data, content } = matter(brut);
@@ -208,6 +232,7 @@ function lireFichier(fichier: string): Cas {
     date: chaineOuNull(data.date),
     categorie: chaineOuNull(data.categorie),
     extrait: chaineOuNull(data.extrait),
+    chapo: chapoInedit(chaineOuNull(data.extrait), content),
     contribution: chaineOuNull(data.contribution),
     brouillon: data.brouillon === true,
     corps: enHtml(texte, { existants: numerosPublies(), courant: numero }),
@@ -264,6 +289,34 @@ export function getCategories(): { nom: string; total: number }[] {
 }
 
 /** Voisins dans l'ordre de publication : précédent = numéro inférieur. */
+/**
+ * Quoi lire ensuite.
+ *
+ * La même catégorie d'abord — c'est le lien le plus fort entre deux textes —
+ * puis les numéros les plus proches pour compléter. Les voisins immédiats
+ * sont exclus : ils ont déjà leur place dans la navigation précédent/suivant,
+ * et les proposer deux fois sur le même écran ne recommande rien.
+ */
+export function getRecommandations(slug: string, combien = 2): Cas[] {
+  const tous = getTousLesCas();
+  const i = tous.findIndex((c) => c.slug === slug);
+  if (i === -1) return [];
+
+  const courant = tous[i];
+  const dejaMontres = new Set([slug, tous[i - 1]?.slug, tous[i + 1]?.slug]);
+  const candidats = tous.filter((c) => !dejaMontres.has(c.slug));
+
+  const memeCategorie = courant.categorie
+    ? candidats.filter((c) => c.categorie === courant.categorie)
+    : [];
+
+  const parProximite = candidats
+    .filter((c) => !memeCategorie.includes(c))
+    .sort((a, b) => Math.abs(a.numero - courant.numero) - Math.abs(b.numero - courant.numero));
+
+  return [...memeCategorie, ...parProximite].slice(0, combien);
+}
+
 export function getVoisins(slug: string): { precedent: Cas | null; suivant: Cas | null } {
   const cas = getTousLesCas();
   const i = cas.findIndex((c) => c.slug === slug);
