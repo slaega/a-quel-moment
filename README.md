@@ -75,8 +75,29 @@ sources:
 ```
 
 Une URL seule suffit : le domaine sert alors de libellé. Une URL invalide
-**casse le build** — un lien mort sous un texte qui s'appuie dessus coûte plus
-cher qu'un déploiement raté.
+**casse le build**.
+
+Mais le build ne regarde que la *forme* de l'adresse. Une URL parfaitement
+écrite peut pointer sur une page supprimée — c'est arrivé au CAS 022, dont la
+source sur les 3 000 milliards de francs CFA a disparu après coup. D'où une
+commande à part :
+
+```bash
+npm run liens
+```
+
+Elle interroge vraiment chaque source et distingue trois choses, parce que les
+confondre fait retirer des sources vivantes :
+
+| | |
+| --- | --- |
+| `✗ 404` | la page a disparu. La commande sort en erreur. |
+| `? 403` | le serveur refuse les robots. À ouvrir dans un navigateur. |
+| `~` | le proxy réseau local bloque la sortie. Rien n'a été vérifié. |
+
+Elle est **hors du build** à dessein : elle dépend du réseau, et un
+déploiement ne doit pas échouer parce qu'un serveur lointain a toussé. À
+lancer après avoir ajouté des sources, et de temps en temps sur tout.
 
 Les références se placent **après** la question de clôture, en petit et en
 discret. L'ordre n'est pas négociable : la question est le dernier mot du
@@ -403,5 +424,5 @@ lib/renvois.ts       les mentions « CAS 013 » / « d'autres CAS » en liens
 lib/revision.ts      date de dernière modification des pages, prise dans git
 lib/schema.ts        JSON-LD du site, de la série et des CAS
 lib/site.ts          nom, domaine, navigation
-scripts/             génération des affiches Open Graph
+scripts/             affiches Open Graph, typographie, contrôle des liens
 ```

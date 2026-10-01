@@ -12,7 +12,8 @@
     "build": "next build",
     "start": "npx serve out",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "liens": "node scripts/liens.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
