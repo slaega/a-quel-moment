@@ -15,16 +15,16 @@ export default function CarteCas({ cas }: { cas: Cas }) {
 
   return (
     <article className="grid gap-y-6 border-l-2 border-rouge pl-5 sm:pl-8 md:grid-cols-[9rem_1fr] md:gap-x-12 md:pl-12">
-      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 md:flex-col md:items-start md:gap-y-3 md:pt-3">
-        <span className="numero text-3xl text-rouge md:text-4xl">
-          {cas.slug}
-        </span>
-        {cas.categorie && <EtiquetteCategorie nom={cas.categorie} />}
-        {date && cas.date && (
-          <time dateTime={cas.date} className="chiffres text-meta text-discret">
-            {date}
-          </time>
-        )}
+      <div className="md:pt-3">
+        <span className="numero block text-3xl text-rouge md:text-4xl">{cas.slug}</span>
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 md:mt-4 md:flex-col md:items-start md:gap-y-3">
+          {cas.categorie && <EtiquetteCategorie nom={cas.categorie} />}
+          {date && cas.date && (
+            <time dateTime={cas.date} className="chiffres text-meta text-discret">
+              {date}
+            </time>
+          )}
+        </div>
       </div>
 
       <div className="min-w-0">

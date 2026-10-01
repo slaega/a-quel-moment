@@ -93,21 +93,27 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
         */}
         <article className="mt-6 sm:mt-10 md:mt-16 md:border-l-2 md:border-rouge md:pl-12">
           <header>
-            <span
-              aria-hidden="true"
-              className="block h-0.5 w-12 bg-rouge md:hidden"
-            />
+            <span aria-hidden="true" className="block h-0.5 w-10 bg-rouge md:hidden" />
 
-            <div className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-2 md:mt-0">
-              <span className="numero text-4xl text-rouge md:text-5xl">
+            {/*
+              Le numéro sur sa ligne, la catégorie et la date sur la suivante.
+              Alignés sur une même ligne de base, un chiffre de 36 px et une
+              étiquette de 13 px se décalaient l'un par rapport à l'autre, et
+              la date retombait seule sur un troisième rang.
+            */}
+            <div className="mt-5 md:mt-0">
+              <span className="numero block text-4xl text-rouge md:text-5xl">
                 {cas.slug}
               </span>
-              {cas.categorie && <EtiquetteCategorie nom={cas.categorie} />}
-              {date && cas.date && (
-                <time dateTime={cas.date} className="chiffres text-meta text-discret">
-                  {date}
-                </time>
-              )}
+
+              <div className="mt-3.5 flex flex-wrap items-center gap-x-4 gap-y-2 md:mt-4">
+                {cas.categorie && <EtiquetteCategorie nom={cas.categorie} />}
+                {date && cas.date && (
+                  <time dateTime={cas.date} className="chiffres text-meta text-discret">
+                    {date}
+                  </time>
+                )}
+              </div>
             </div>
 
             <h1 className="manchette mt-8 max-w-[18ch] text-manchette-2 md:mt-10">

@@ -30,10 +30,15 @@ export interface EntreeCas {
  */
 export default function LigneCas({ cas }: { cas: EntreeCas }) {
   return (
-    <li className="group relative grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 border-b border-trait py-6 sm:gap-x-7 md:grid-cols-[5rem_1fr_auto] md:gap-x-10 md:py-8">
+    <li className="group relative grid gap-y-2 border-b border-trait py-6 md:grid-cols-[5rem_1fr_auto] md:gap-x-10 md:gap-y-0 md:py-8">
+      {/*
+        Sur téléphone, le numéro est posé au-dessus du titre et non à sa
+        gauche : en colonne, il décalait le titre, l'extrait et les
+        métadonnées sur un second fer, et la ligne se lisait en escalier.
+      */}
       <span
         aria-hidden="true"
-        className="numero pt-1 text-xl text-rouge transition-transform duration-200 group-hover:-translate-y-0.5 md:text-2xl"
+        className="numero text-lg text-rouge transition-transform duration-200 group-hover:-translate-y-0.5 md:pt-1 md:text-2xl"
       >
         {cas.slug}
       </span>
