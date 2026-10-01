@@ -42,6 +42,15 @@ export function schemaCas(cas: Cas) {
     author: AUTEUR,
     publisher: AUTEUR,
     image: `${site.url}/og/cas-${cas.slug}.png`,
+    ...(cas.sources.length > 0
+      ? {
+          citation: cas.sources.map((s) => ({
+            "@type": "CreativeWork",
+            name: s.titre,
+            url: s.url,
+          })),
+        }
+      : {}),
     isPartOf: { "@id": `${site.url}/cas/#serie` },
   };
 }

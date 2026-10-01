@@ -9,6 +9,7 @@ import { formaterDate, getCas, getTousLesCas, getVoisins } from "@/lib/cas";
 import { site } from "@/lib/site";
 import Gabarit from "@/components/Gabarit";
 import DonneesStructurees from "@/components/DonneesStructurees";
+import Sources from "@/components/Sources";
 import { schemaCas } from "@/lib/schema";
 
 type Params = { numero: string };
@@ -115,6 +116,8 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
               <Signature texte={cas.signature} taille="grande" />
             </div>
           )}
+
+          <Sources sources={cas.sources} />
 
           <div className="mt-12 flex flex-wrap gap-3">
             <BoutonCopier texte={cas.texteBrut} />

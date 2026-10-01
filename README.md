@@ -60,6 +60,31 @@ ligne. Ce relevé est là pour s'en apercevoir avant de publier.
 | `extrait` | Une ou deux phrases. Sert de titre Open Graph : c'est ce qu'on voit quand le lien est partagé. |
 | `contribution` | Optionnel. Origine du texte quand il ne vient pas de l'auteur seul — affiché sous le titre. |
 | `brouillon` | Optionnel. `true` affiche un bandeau « Brouillon » sur la page du CAS. |
+| `sources` | Optionnel. Liste de références, affichées sous la question. Voir ci-dessous. |
+
+### Les sources
+
+Un CAS part d'un fait réel. Quand ce fait est chiffré, le lecteur doit pouvoir
+le vérifier depuis la page, sans partir en recherche :
+
+```yaml
+sources:
+  - titre: "Chang et al., « Use of Straighteners… », JNCI, 2022"
+    url: "https://academic.oup.com/jnci/article/114/12/1636/6759686"
+  - "https://www.nih.gov/news-events/news-releases/…"
+```
+
+Une URL seule suffit : le domaine sert alors de libellé. Une URL invalide
+**casse le build** — un lien mort sous un texte qui s'appuie dessus coûte plus
+cher qu'un déploiement raté.
+
+Les références se placent **après** la question de clôture, en petit et en
+discret. L'ordre n'est pas négociable : la question est le dernier mot du
+texte, l'appareil critique se lit une fois le texte fini. Elles ne partent pas
+dans le bouton « copier le texte » — ce qu'on copie, c'est le CAS tel qu'il est
+publié ailleurs. Elles alimentent en revanche le `citation` du JSON-LD.
+
+Un témoignage n'a pas de sources, et le bloc ne s'affiche simplement pas.
 
 ### La signature
 
@@ -345,7 +370,7 @@ typographique et `npm run og` le signale.
 
 ```
 app/                 pages (accueil, /cas, /cas/[numero], /philosophie, /a-propos)
-components/          en-tête, pied de page, archive filtrable, bouton copier…
+components/          en-tête, pied de page, archive filtrable, sources, boutons…
 content/cas/         un fichier .md par CAS
 content/pages/       pages éditoriales
 lib/cas.ts           lecture des CAS, rendu Markdown, détection de la signature

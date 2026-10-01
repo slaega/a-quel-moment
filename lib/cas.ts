@@ -9,6 +9,13 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { laPlusRecente, revisionDuFichier, revisionDuGabarit } from "@/lib/revision";
 
+/** Une référence vérifiable, affichée sous la question de clôture. */
+export interface Source {
+  /** Libellé lisible. À défaut, le domaine. */
+  titre: string;
+  url: string;
+}
+
 export interface Cas {
   /** Numéro de publication, tel qu'il apparaît dans la série. */
   numero: number;
@@ -34,6 +41,12 @@ export interface Cas {
   signature: string | null;
   /** Texte intégral en clair, pour le bouton « copier ». */
   texteBrut: string;
+  /**
+   * Références du texte. Un CAS part d'un fait réel : quand ce fait est
+   * chiffré, le lecteur doit pouvoir remonter à la source sans quitter la
+   * page pour une recherche. Vide quand le texte est un témoignage.
+   */
+  sources: Source[];
   /**
    * Dernière modification réelle de la page, pour le sitemap et dateModified.
    * Distincte de `date`, qui est la date de parution du texte. null quand on
@@ -108,6 +121,43 @@ function chaineOuNull(valeur: unknown): string | null {
   return typeof valeur === "string" && valeur.trim() !== "" ? valeur.trim() : null;
 }
 
+/**
+ * Lit le frontmatter « sources ». Accepte une URL seule ou un couple
+ * titre/url, et refuse une URL invalide : mieux vaut casser le build qu'un
+ * lien mort sous un texte qui s'appuie dessus.
+ */
+function lireSources(valeur: unknown, fichier: string): Source[] {
+  if (valeur == null) return [];
+  if (!Array.isArray(valeur)) {
+    throw new Error(`content/cas/${fichier} : « sources » doit être une liste.`);
+  }
+
+  return valeur.map((entree, i) => {
+    const place = `content/cas/${fichier} : source ${i + 1}`;
+    const brut =
+      typeof entree === "string"
+        ? { url: entree, titre: null }
+        : {
+            url: chaineOuNull((entree as Record<string, unknown>)?.url),
+            titre: chaineOuNull((entree as Record<string, unknown>)?.titre),
+          };
+
+    if (!brut.url) throw new Error(`${place} : « url » manquante.`);
+
+    let lien: URL;
+    try {
+      lien = new URL(brut.url);
+    } catch {
+      throw new Error(`${place} : « ${brut.url} » n'est pas une URL.`);
+    }
+    if (lien.protocol !== "https:" && lien.protocol !== "http:") {
+      throw new Error(`${place} : « ${brut.url} » n'est pas un lien web.`);
+    }
+
+    return { titre: brut.titre ?? lien.hostname.replace(/^www\./, ""), url: lien.href };
+  });
+}
+
 function lireFichier(fichier: string): Cas {
   const brut = fs.readFileSync(path.join(DOSSIER, fichier), "utf8");
   const { data, content } = matter(brut);
@@ -133,6 +183,7 @@ function lireFichier(fichier: string): Cas {
     contribution: chaineOuNull(data.contribution),
     brouillon: data.brouillon === true,
     corps: enHtml(texte),
+    sources: lireSources(data.sources, fichier),
     signature,
     texteBrut: content.trim(),
     // La page a changé chaque fois que son texte ou le gabarit a bougé.
