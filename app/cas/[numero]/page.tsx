@@ -74,9 +74,14 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
       <DonneesStructurees schema={schemaCas(cas)} />
 
       <div className="gouttiere mx-auto max-w-article pt-6 pb-16 md:pt-10 md:pb-24">
+        {/*
+          Masqué sur téléphone : le bandeau porte déjà « Les CAS » quarante
+          pixels plus haut. Deux liens vers la même page, l'un sous l'autre,
+          ne sont pas une commodité.
+        */}
         <Link
           href="/cas/"
-          className="surtitre lien-sobre cible text-discret hover:text-encre"
+          className="surtitre lien-sobre cible hidden text-discret hover:text-encre sm:inline-flex"
         >
           ← Tous les CAS
         </Link>
@@ -86,7 +91,7 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
           l'article ; horizontal sur téléphone, où une bande à gauche
           mangerait la largeur de lecture sans rien tenir.
         */}
-        <article className="mt-10 md:mt-16 md:border-l-2 md:border-rouge md:pl-12">
+        <article className="mt-6 sm:mt-10 md:mt-16 md:border-l-2 md:border-rouge md:pl-12">
           <header>
             <span
               aria-hidden="true"

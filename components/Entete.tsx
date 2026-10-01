@@ -10,19 +10,23 @@ import { nav, site } from "@/lib/site";
 /**
  * Le bandeau de titre.
  *
- * Il ne se replie pas en menu hamburger : trois entrées tiennent sur une
- * ligne dès 320 px si on les compose en capitales étroites. Un menu caché
- * derrière un bouton coûterait un geste de plus pour masquer trois mots.
+ * UN SEUL RANG, PARTOUT. Sur téléphone il en occupait deux, soit 121 px —
+ * près d'un cinquième d'un écran de 667 px, pris à la lecture avant même le
+ * premier mot. C'était trop pour une série qui se lit d'une traite au
+ * téléphone.
  *
- * Le nom et la navigation sont donc sur deux rangs sur téléphone, un seul
- * dès la tablette — sans rien escamoter.
+ * Trois entrées, un nom et une bascule ne tiennent pas sur une ligne de
+ * 320 px sans composer les libellés trop petit. Sous 640 px, le bandeau ne
+ * garde donc que « Les CAS » : c'est la seule destination dont un lecteur a
+ * besoin en cours de route. « Philosophie » et « À propos » restent atteignables
+ * depuis le pied de page, présent sur chaque page, et depuis l'accueil.
  *
- * Et il ne colle au haut de l'écran qu'à partir de la tablette. Sur
- * téléphone, ses deux rangs font 121 px : collé, il prendrait 18 % d'un
- * écran de 667 px pendant toute la lecture d'un texte. C'est le contraire de
- * ce que demande une série qui se lit d'une traite sur téléphone.
+ * Pas de menu replié derrière un bouton : cacher deux liens derrière un geste
+ * supplémentaire coûte plus qu'il ne rapporte, et laisse un bandeau presque
+ * vide.
  *
- * Le fond est opaque. Un bandeau translucide laissait transparaître le texte
+ * Il ne colle au haut de l'écran qu'à partir de 640 px — voir plus bas.
+ * Le fond est opaque : un bandeau translucide laissait transparaître le texte
  * qui défilait dessous, et une serif vue au travers d'un voile se lit mal.
  */
 export default function Entete({ logo }: { logo: Logo | null }) {
@@ -30,11 +34,11 @@ export default function Entete({ logo }: { logo: Logo | null }) {
 
   return (
     <header className="z-40 border-b border-trait bg-fond sm:sticky sm:top-0">
-      <div className="gouttiere mx-auto flex max-w-page flex-col gap-y-2 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-x-10 sm:py-4">
-        <div className="flex items-center justify-between gap-4 sm:justify-start">
+      <div className="gouttiere mx-auto flex max-w-page items-center justify-between gap-x-5 py-2 sm:gap-x-10 sm:py-3">
+        <div className="flex items-center gap-3 sm:gap-3.5">
           <Link
             href="/"
-            className="group cible gap-px font-(family-name:--font-titre) text-[1.0625rem] tracking-tight text-encre sm:text-lg"
+            className="group cible gap-px font-(family-name:--font-titre) text-base tracking-tight whitespace-nowrap text-encre sm:text-lg"
           >
             {site.nom}
             <span className="text-rouge transition-transform duration-200 group-hover:translate-y-px">
@@ -49,26 +53,32 @@ export default function Entete({ logo }: { logo: Logo | null }) {
             target="_blank"
             rel="noreferrer"
             aria-label={`${site.auteur}, éditeur de la série`}
-            className="cible shrink-0 text-discret transition-opacity hover:opacity-70"
+            // Masqué sur téléphone : la marque de l'éditeur tient dans le
+            // pied de page, et les 30 px qu'elle prend ici font déborder la
+            // ligne à 320 px.
+            className="cible hidden shrink-0 text-discret transition-opacity hover:opacity-70 sm:inline-flex"
           >
-            <LogoSlaega logo={logo} hauteur={17} />
+            <LogoSlaega logo={logo} hauteur={16} />
           </a>
         </div>
 
-        <div className="flex items-center justify-between gap-x-5 sm:justify-end sm:gap-x-7">
+        <div className="flex items-center gap-x-4 sm:gap-x-7">
           <nav aria-label="Navigation principale">
             <ul className="flex items-center gap-x-5 sm:gap-x-7">
-              {nav.map((lien) => {
+              {nav.map((lien, i) => {
                 const actif = chemin === lien.href || chemin.startsWith(lien.href);
                 return (
-                  <li key={lien.href}>
+                  <li
+                    key={lien.href}
+                    // Seule la première entrée tient sur un téléphone.
+                    className={i === 0 ? "" : "hidden sm:block"}
+                  >
                     <Link
                       href={lien.href}
                       aria-current={actif ? "page" : undefined}
                       className={
-                        // Sur téléphone, l'interlettrage des capitales est
-                        // resserré : à pleine chasse, les trois entrées
-                        // débordent de la ligne et se coupent en deux.
+                        // L'interlettrage des capitales est resserré sur
+                        // téléphone : à pleine chasse, le libellé se coupe.
                         "surtitre cible relative whitespace-nowrap text-[0.75rem] tracking-[0.09em] transition-colors sm:text-meta sm:tracking-[0.16em] " +
                         (actif ? "text-encre" : "text-discret hover:text-encre")
                       }

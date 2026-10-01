@@ -438,13 +438,25 @@ sont propres :
   de flottaison.
 - **L'interlettrage de la navigation est resserré** sous 640 px : à pleine
   chasse, les trois entrées se coupent en deux lignes.
-- **L'en-tête ne colle au haut de l'écran qu'à partir de 640 px.** Ses deux
-  rangs font 121 px : collé sur un écran de 667 px, il prendrait 18 % de la
-  hauteur pendant toute la lecture d'un texte. C'est le contraire de ce que
-  demande une série qui se lit d'une traite sur téléphone.
+- **L'en-tête tient sur un seul rang, et ne colle qu'à partir de 640 px.**
+  Sur deux rangs il faisait 121 px, soit 18 % d'un écran de 667 px, pris à la
+  lecture avant le premier mot. Il en fait 61, soit 9 %.
 
-Rien n'est escamoté derrière un menu : trois entrées tiennent sur une ligne
-dès 320 px, et un bouton pour cacher trois mots coûterait un geste de plus.
+**Ce que l'en-tête garde sur téléphone, et pourquoi.** Un nom, trois entrées
+et une bascule ne tiennent pas sur une ligne de 320 px sans composer les
+libellés trop petit. Sous 640 px il ne garde donc que **« Les CAS »** : la
+seule destination dont un lecteur a besoin en cours de route. « Philosophie »
+et « À propos » restent dans le pied de page, présent partout, et sur
+l'accueil. La marque de l'éditeur disparaît aussi du bandeau — elle tient dans
+le pied, et ses 30 px faisaient déborder la ligne à 320 px.
+
+Toujours pas de menu replié : cacher deux liens derrière un geste
+supplémentaire coûte plus qu'il ne rapporte, et laisse un bandeau presque
+vide.
+
+Le lien **« ← Tous les CAS »** en tête d'un texte disparaît sous 640 px : le
+bandeau porte déjà « Les CAS » quarante pixels plus haut, et deux liens vers
+la même page l'un sous l'autre ne sont pas une commodité.
 
 Le fond de l'en-tête est **opaque**. Un bandeau translucide laissait
 transparaître le texte qui défilait dessous, et une serif lue au travers d'un
