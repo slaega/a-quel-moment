@@ -328,6 +328,36 @@
     text-decoration-color: var(--color-seconde);
   }
 
+  /*
+   * Un renvoi vers un autre CAS, composé en balise.
+   *
+   * Souligné comme un lien ordinaire, il passait inaperçu au milieu d'un
+   * paragraphe en serif — et complètement sur un téléphone. Le fond teinté
+   * et le cadre le signalent sans l'arracher à la phrase.
+   *
+   * Reste « inline » : un inline-block casserait l'interligne du paragraphe
+   * dès que le renvoi tombe en fin de ligne.
+   */
+  & a.renvoi-cas {
+    text-decoration: none;
+    padding: 0.1em 0.45em;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-seconde) 32%, transparent);
+    background-color: color-mix(in srgb, var(--color-seconde) 9%, transparent);
+    font-family: var(--font-sans);
+    font-size: 0.78em;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease;
+  }
+
+  & a.renvoi-cas:hover {
+    border-color: var(--color-seconde);
+    background-color: color-mix(in srgb, var(--color-seconde) 16%, transparent);
+  }
+
   & h2 {
     font-size: var(--text-section);
     line-height: var(--text-section--line-height);

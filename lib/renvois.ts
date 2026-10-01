@@ -32,7 +32,15 @@ export interface OptionsRenvois {
 }
 
 function lien(url: string, texte: string): PhrasingContent {
-  return { type: "link", url, children: [{ type: "text", value: texte }] };
+  return {
+    type: "link",
+    url,
+    // La classe fait du renvoi une balise visible plutôt qu'un mot souligné.
+    // Dans un paragraphe en serif, un filet fin sous « CAS » se remarque à
+    // peine — et pas du tout sur un téléphone tenu à bout de bras.
+    data: { hProperties: { className: ["renvoi-cas"] } },
+    children: [{ type: "text", value: texte }],
+  };
 }
 
 /** Découpe un nœud texte en texte et liens. Renvoie null si rien ne change. */

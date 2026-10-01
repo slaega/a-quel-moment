@@ -1,4 +1,5 @@
 import Link from "next/link";
+import EtiquetteCategorie from "@/components/EtiquetteCategorie";
 
 export interface EntreeCas {
   slug: string;
@@ -20,41 +21,47 @@ export interface EntreeCas {
  * le numéro tient une colonne à lui, le titre occupe la largeur, et les
  * métadonnées se rangent à droite sur grand écran, sous le titre sur
  * téléphone. Aucune ombre, aucun cadre — un filet suffit à séparer.
+ *
+ * DEUX DESTINATIONS DANS UNE LIGNE. La ligne entière mène au CAS, et la
+ * catégorie mène à l'archive filtrée. Imbriquer un lien dans un lien est
+ * interdit : c'est donc le titre qui porte le lien, et son ::after couvre
+ * toute la ligne. La catégorie passe au-dessus. Les deux restent des liens
+ * distincts au clavier comme au lecteur d'écran.
  */
 export default function LigneCas({ cas }: { cas: EntreeCas }) {
   return (
-    <li className="border-b border-trait">
-      <Link
-        href={`/cas/${cas.slug}/`}
-        className="group grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 py-6 sm:gap-x-7 md:grid-cols-[5rem_1fr_auto] md:gap-x-10 md:py-8"
+    <li className="group relative grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 border-b border-trait py-6 sm:gap-x-7 md:grid-cols-[5rem_1fr_auto] md:gap-x-10 md:py-8">
+      <span
+        aria-hidden="true"
+        className="numero pt-1 text-xl text-rouge transition-transform duration-200 group-hover:-translate-y-0.5 md:text-2xl"
       >
-        <span
-          aria-hidden="true"
-          className="numero pt-1 text-xl text-rouge transition-transform duration-200 group-hover:-translate-y-0.5 md:text-2xl"
+        {cas.slug}
+      </span>
+
+      <div className="min-w-0">
+        <Link
+          href={`/cas/${cas.slug}/`}
+          className="manchette block text-section text-encre decoration-rouge decoration-1 underline-offset-[0.18em] after:absolute after:inset-0 hover:underline"
         >
-          {cas.slug}
-        </span>
+          {cas.titre}
+        </Link>
 
-        <span className="min-w-0">
-          <span className="manchette block text-section text-encre decoration-rouge decoration-1 underline-offset-[0.18em] group-hover:underline">
-            {cas.titre}
-          </span>
-          {cas.extrait && (
-            <span className="mt-2.5 block max-w-lecture text-[0.9375rem] leading-relaxed text-discret md:text-base">
-              {cas.extrait}
-            </span>
-          )}
-          {/* Sur téléphone, les métadonnées suivent le titre plutôt que de
-              se serrer dans une colonne de droite inexistante. */}
-          <span className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 md:hidden">
-            <Metadonnees cas={cas} />
-          </span>
-        </span>
+        {cas.extrait && (
+          <p className="mt-2.5 max-w-lecture text-[0.9375rem] leading-relaxed text-discret md:text-base">
+            {cas.extrait}
+          </p>
+        )}
 
-        <span className="hidden shrink-0 flex-col items-end gap-1.5 pt-1 text-right md:flex">
+        {/* Sur téléphone, les métadonnées suivent le titre plutôt que de se
+            serrer dans une colonne de droite inexistante. */}
+        <div className="relative z-10 mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 md:hidden">
           <Metadonnees cas={cas} />
-        </span>
-      </Link>
+        </div>
+      </div>
+
+      <div className="relative z-10 hidden shrink-0 flex-col items-end gap-2 pt-1 text-right md:flex">
+        <Metadonnees cas={cas} />
+      </div>
     </li>
   );
 }
@@ -62,7 +69,7 @@ export default function LigneCas({ cas }: { cas: EntreeCas }) {
 function Metadonnees({ cas }: { cas: EntreeCas }) {
   return (
     <>
-      {cas.categorie && <span className="surtitre text-seconde">{cas.categorie}</span>}
+      {cas.categorie && <EtiquetteCategorie nom={cas.categorie} />}
       {cas.dateIso && cas.dateLisible && (
         <time dateTime={cas.dateIso} className="chiffres text-meta text-discret">
           {cas.dateLisible}

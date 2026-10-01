@@ -1,4 +1,5 @@
 import Link from "next/link";
+import EtiquetteCategorie from "@/components/EtiquetteCategorie";
 import { formaterDate, type Cas } from "@/lib/cas";
 
 /**
@@ -18,7 +19,7 @@ export default function CarteCas({ cas }: { cas: Cas }) {
         <span className="numero text-3xl text-rouge md:text-4xl">
           {cas.slug}
         </span>
-        {cas.categorie && <span className="surtitre text-seconde">{cas.categorie}</span>}
+        {cas.categorie && <EtiquetteCategorie nom={cas.categorie} />}
         {date && cas.date && (
           <time dateTime={cas.date} className="chiffres text-meta text-discret">
             {date}

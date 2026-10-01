@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import BoutonCopier from "@/components/BoutonCopier";
 import BoutonPartager from "@/components/BoutonPartager";
 import DonneesStructurees from "@/components/DonneesStructurees";
+import EtiquetteCategorie from "@/components/EtiquetteCategorie";
 import Gabarit from "@/components/Gabarit";
 import Sources from "@/components/Sources";
 import {
@@ -96,7 +97,7 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
               <span className="numero text-4xl text-rouge md:text-5xl">
                 {cas.slug}
               </span>
-              {cas.categorie && <span className="surtitre text-seconde">{cas.categorie}</span>}
+              {cas.categorie && <EtiquetteCategorie nom={cas.categorie} />}
               {date && cas.date && (
                 <time dateTime={cas.date} className="chiffres text-meta text-discret">
                   {date}
@@ -186,6 +187,8 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
                   <Link href={`/cas/${c.slug}/`} className="group block">
                     <span className="flex items-baseline gap-3">
                       <span className="numero text-lg text-rouge">{c.slug}</span>
+                      {/* Pas d'étiquette cliquable ici : elle serait
+                          imbriquée dans le lien du CAS. */}
                       {c.categorie && (
                         <span className="surtitre text-seconde">{c.categorie}</span>
                       )}

@@ -379,6 +379,38 @@ Les pages de texte sont cadrées par `--container-article`, plus étroit que
 l'en-tête : une colonne posée dans un cadre trop large paraît serrée même
 quand elle ne l'est pas, parce que l'œil la compare au vide qui l'entoure.
 
+### Circuler dans la série
+
+Trois chemins mènent d'un texte aux autres, et le premier conditionne les deux
+suivants.
+
+**Le filtre vit dans l'URL.** `/cas/?categorie=économie` arrive déjà filtré.
+Tant que le filtre n'existait que dans la mémoire du navigateur, rien ne
+pouvait renvoyer vers une catégorie : ni une étiquette, ni un lien partagé, ni
+le bouton « page précédente ». Changer de filtre pousse une étape
+d'historique, et le retour arrière la défait. Une catégorie inconnue dans
+l'URL est ignorée plutôt que d'afficher une page vide.
+
+L'URL est lue **après** le premier rendu, jamais pendant : le site est exporté
+en statique, le serveur ne connaît pas le paramètre, et le lire au rendu
+produirait un écart d'hydratation.
+
+**Les catégories sont cliquables partout** — sous un CAS, dans le sommaire,
+sur la carte de une. On finit un texte sur l'identité, on touche
+« IDENTITÉ », on a les autres. Leur cadre reste visible en permanence : sur
+un écran tactile il n'y a pas de survol, et rien ne distinguerait une
+catégorie cliquable d'une simple mention.
+
+**Les renvois dans le corps sont des balises.** Souligné comme un lien
+ordinaire, « CAS » passait inaperçu au milieu d'un paragraphe en serif — et
+complètement sur un téléphone.
+
+Une ligne de sommaire porte **deux destinations** : la ligne entière mène au
+CAS, l'étiquette mène à l'archive filtrée. Imbriquer un lien dans un lien
+étant interdit, c'est le titre qui porte le lien et son `::after` couvre toute
+la ligne ; l'étiquette passe au-dessus en `z-10`. Les deux restent des liens
+distincts au clavier comme au lecteur d'écran.
+
 ### Les motifs
 
 `app/globals.css` déclare quelques utilitaires qui portent les décisions :
@@ -421,9 +453,16 @@ voile se lit mal — c'est aussi le « glassmorphism systématique » qu'il fall
 
 ### Accessibilité
 
-Tout ce qui se clique fait au moins 44 px de haut, sauf les liens pris dans
-une phrase — les étirer casserait l'interligne, et WCAG 2.2 les exclut pour
-cette raison. Les contrastes sont vérifiés dans le tableau ci-dessus. La page
+Tout ce qui se clique atteint 44 px de haut, sauf les liens pris dans une
+phrase — les étirer casserait l'interligne, et WCAG 2.2 les exclut pour cette
+raison.
+
+Attention en le vérifiant : la **zone sensible** n'est pas le **cadre
+visible**. Une étiquette de catégorie mesure 34 px mais en couvre 50 grâce à
+un pseudo-élément, et le titre d'une ligne de sommaire couvre la ligne
+entière. Mesurer `getBoundingClientRect()` donne six faux positifs par page.
+Il faut sonder les points réels avec `elementFromPoint` — et garder la sonde
+entière dans la fenêtre, sinon elle renvoie `null` et on conclut à tort. Les contrastes sont vérifiés dans le tableau ci-dessus. La page
 courante est signalée par un filet rouge plutôt que par une couleur de texte,
 pour que la lisibilité reste maximale. Les animations se limitent à des
 changements de couleur et à deux filets qui s'allongent, et
