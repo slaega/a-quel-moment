@@ -175,6 +175,30 @@ les valeurs YAML, les transformer casserait le fichier.
 Les espaces avant `:`, `;`, `!` et `?` restent ordinaires : les corriger toutes
 changerait chaque ligne pour un gain invisible.
 
+### Renvoyer à un autre CAS
+
+Écris-le en toutes lettres, en **capitales**, et le lien se fait tout seul :
+
+| Dans le texte | Mène à |
+| --- | --- |
+| `le CAS 013`, `le CAS #15`, `le CAS n° 13` | la page de ce CAS |
+| `d'autres CAS`, `les autres CAS` | l'archive `/cas/` |
+| `Ce CAS`, `en tout cas`, `dans ce cas` | rien, c'est du texte |
+
+La capitale est le signal : l'auteur écrit « CAS » pour la série et « cas »
+pour le mot courant. On ne touche jamais au second — « en tout cas » reste une
+locution, pas un lien.
+
+Pourquoi pas un lien Markdown écrit à la main : `[d'autres CAS](/cas/)` se
+retrouverait tel quel dans le bouton « copier », qui prend le fichier brut. Le
+texte publié ailleurs porterait une syntaxe de balisage. Les renvois sont donc
+reconnus au rendu (`lib/renvois.ts`), et les fichiers restent lisibles tels
+quels.
+
+Deux garde-fous : un renvoi vers un CAS qui n'existe pas (les 011 et 012 sont
+sans suite) reste du texte plutôt que de mener à une 404, et un CAS ne se lie
+jamais à lui-même.
+
 ### Un piège du Markdown, déjà neutralisé
 
 Une ligne qui commence par un nombre suivi d'un point — `2013. J'étais admis
@@ -375,6 +399,7 @@ content/cas/         un fichier .md par CAS
 content/pages/       pages éditoriales
 lib/cas.ts           lecture des CAS, rendu Markdown, détection de la signature
 lib/pages.ts         lecture des pages éditoriales
+lib/renvois.ts       les mentions « CAS 013 » / « d'autres CAS » en liens
 lib/revision.ts      date de dernière modification des pages, prise dans git
 lib/schema.ts        JSON-LD du site, de la série et des CAS
 lib/site.ts          nom, domaine, navigation

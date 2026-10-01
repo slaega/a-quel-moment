@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import { remarkRenvois, type OptionsRenvois } from "@/lib/renvois";
 import { laPlusRecente, revisionDuFichier, revisionDuGabarit } from "@/lib/revision";
 
 /** Une référence vérifiable, affichée sous la question de clôture. */
@@ -58,6 +59,30 @@ export interface Cas {
 
 const DOSSIER = path.join(process.cwd(), "content", "cas");
 
+function fichiersCas(): string[] {
+  return fs.readdirSync(DOSSIER).filter((f) => f.endsWith(".md") && !f.startsWith("_"));
+}
+
+let publies: Set<number> | null = null;
+
+/**
+ * Les numéros qui ont une page. Les renvois d'un CAS à un autre s'y réfèrent,
+ * et ils sont lus avant que les CAS eux-mêmes soient construits — d'où cette
+ * passe séparée, qui ne lit que le frontmatter.
+ *
+ * Elle évite de produire un lien vers un CAS qui n'existe pas : les 011 et
+ * 012 sont déclarés sans suite, un renvoi vers eux mènerait à une 404.
+ */
+function numerosPublies(): Set<number> {
+  if (publies) return publies;
+  publies = new Set(
+    fichiersCas()
+      .map((f) => Number(matter(fs.readFileSync(path.join(DOSSIER, f), "utf8")).data.numero))
+      .filter(Number.isInteger),
+  );
+  return publies;
+}
+
 /**
  * La question de clôture. Elle est le plus souvent « à quel moment avons-nous
  * trouvé ça normal ? », mais certains CAS la reformulent : on reconnaît donc
@@ -81,7 +106,7 @@ function neutraliserListesAccidentelles(markdown: string): string {
   return markdown.replace(/^(\s*)(\d+)([.)])(\s)/gm, "$1$2\\$3$4");
 }
 
-function enHtml(markdown: string): string {
+function enHtml(markdown: string, renvois: OptionsRenvois): string {
   return String(
     unified()
       .use(remarkParse)
@@ -89,6 +114,9 @@ function enHtml(markdown: string): string {
       // Les retours à la ligne sont voulus : ces textes sont écrits en lignes,
       // pas en paragraphes coulants.
       .use(remarkBreaks)
+      // Après remarkBreaks, avant la conversion en HTML : les renvois
+      // travaillent sur le texte, pas sur des balises.
+      .use(() => remarkRenvois(renvois))
       .use(remarkRehype)
       .use(rehypeStringify)
       .processSync(neutraliserListesAccidentelles(markdown)),
@@ -182,7 +210,7 @@ function lireFichier(fichier: string): Cas {
     extrait: chaineOuNull(data.extrait),
     contribution: chaineOuNull(data.contribution),
     brouillon: data.brouillon === true,
-    corps: enHtml(texte),
+    corps: enHtml(texte, { existants: numerosPublies(), courant: numero }),
     sources: lireSources(data.sources, fichier),
     signature,
     texteBrut: content.trim(),
@@ -204,11 +232,7 @@ let cache: Cas[] | null = null;
 export function getTousLesCas(): Cas[] {
   if (cache) return cache;
 
-  const fichiers = fs
-    .readdirSync(DOSSIER)
-    .filter((f) => f.endsWith(".md") && !f.startsWith("_"));
-
-  const cas = fichiers.map(lireFichier).sort((a, b) => b.numero - a.numero);
+  const cas = fichiersCas().map(lireFichier).sort((a, b) => b.numero - a.numero);
 
   const doublon = cas.find((c, i) => i > 0 && cas[i - 1].numero === c.numero);
   if (doublon) {
