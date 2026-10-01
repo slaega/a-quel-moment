@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Fraunces, Inter, Newsreader } from "next/font/google";
 import Entete from "@/components/Entete";
 import { getLogo } from "@/lib/logo";
 import { site } from "@/lib/site";
@@ -26,6 +26,25 @@ const serifEdito = Newsreader({
   style: ["normal", "italic"],
   display: "swap",
   variable: "--font-serif-edito",
+});
+
+/*
+ * La police des titres.
+ *
+ * Newsreader est une serif de presse : juste, et volontairement discrète.
+ * Pour les manchettes, la série demandait une voix. Fraunces en a une —
+ * chaleureuse, un peu tordue à dessein — sans tomber dans le contraste
+ * glacé d'un Bodoni ni dans l'étroitesse d'un display de mode.
+ *
+ * Elle porte les titres ; Newsreader garde tout ce qui se lit comme du texte
+ * (corps, chapô, question de clôture). Un œil de display fatigue sur quinze
+ * paragraphes ; une serif de texte n'accroche pas en manchette.
+ */
+const serifTitre = Fraunces({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-serif-titre",
 });
 
 export const metadata: Metadata = {
@@ -55,7 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const logo = getLogo();
 
   return (
-    <html lang="fr" className={`${inter.variable} ${serifEdito.variable}`} suppressHydrationWarning>
+    <html lang="fr" className={`${inter.variable} ${serifEdito.variable} ${serifTitre.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_THEME }} />
       </head>

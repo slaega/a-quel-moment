@@ -30,7 +30,7 @@ export default function LigneCas({ cas }: { cas: EntreeCas }) {
       >
         <span
           aria-hidden="true"
-          className="chiffres pt-1 font-serif text-xl text-rouge transition-transform duration-200 group-hover:-translate-y-0.5 md:text-2xl"
+          className="numero pt-1 text-xl text-rouge transition-transform duration-200 group-hover:-translate-y-0.5 md:text-2xl"
         >
           {cas.slug}
         </span>

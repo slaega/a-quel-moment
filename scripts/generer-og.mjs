@@ -77,6 +77,15 @@ const polices = [
     style: "normal",
     data: fs.readFileSync(require.resolve("@fontsource/inter/files/inter-latin-600-normal.woff")),
   },
+  // Le titre et le numéro suivent les manchettes du site.
+  {
+    name: "Titre",
+    weight: 400,
+    style: "normal",
+    data: fs.readFileSync(
+      require.resolve("@fontsource/fraunces/files/fraunces-latin-400-normal.woff"),
+    ),
+  },
   {
     name: "Serif",
     weight: 400,
@@ -170,7 +179,7 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
         [
           e("div", { display: "flex", flexDirection: "column" }, [
             e("div", { display: "flex", alignItems: "center", marginBottom: 34 }, [
-              texte({ fontSize: 34, fontFamily: "Serif", color: ROUGE }, numero),
+              texte({ fontSize: 34, fontFamily: "Titre", color: ROUGE }, numero),
               categorie
                 ? texte(
                     {
@@ -188,7 +197,7 @@ function affiche({ numero, categorie, titre, extrait, signature, marque = true }
             texte(
               {
                 fontSize: tailleDuTitre(titre),
-                fontFamily: "Serif",
+                fontFamily: "Titre",
                 color: CRAIE,
                 letterSpacing: -1,
                 lineHeight: 1.1,

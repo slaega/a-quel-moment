@@ -127,6 +127,8 @@
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-serif-edito), Georgia, "Times New Roman", serif;
+  /* Les manchettes seulement — voir app/layout.tsx. */
+  --font-titre: var(--font-serif-titre), var(--font-serif-edito), Georgia, serif;
 
   /* La question de une, sur l'accueil. */
   --text-manchette: clamp(2.25rem, 1.15rem + 5.5vw, 5.5rem);
@@ -223,9 +225,9 @@
   padding-inline: clamp(1.25rem, 0.6rem + 3.2vw, 3.5rem);
 }
 
-/* Les grands titres : serif, serrés, équilibrés sur plusieurs lignes. */
+/* Les grands titres : serif de display, serrés, équilibrés sur plusieurs lignes. */
 @utility manchette {
-  font-family: var(--font-serif);
+  font-family: var(--font-titre);
   font-weight: 400;
   letter-spacing: -0.018em;
   text-wrap: balance;
@@ -261,6 +263,13 @@
 @utility chiffres {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+}
+
+/* Le numéro d'un CAS, composé comme un titre. */
+@utility numero {
+  font-family: var(--font-titre);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
 
 /*

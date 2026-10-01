@@ -34,7 +34,7 @@ export default function Entete({ logo }: { logo: Logo | null }) {
         <div className="flex items-center justify-between gap-4 sm:justify-start">
           <Link
             href="/"
-            className="group cible gap-px font-serif text-[1.0625rem] tracking-tight text-encre sm:text-lg"
+            className="group cible gap-px font-(family-name:--font-titre) text-[1.0625rem] tracking-tight text-encre sm:text-lg"
           >
             {site.nom}
             <span className="text-rouge transition-transform duration-200 group-hover:translate-y-px">

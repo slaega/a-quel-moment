@@ -93,7 +93,7 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
             />
 
             <div className="mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-2 md:mt-0">
-              <span className="chiffres font-serif text-4xl leading-none text-rouge md:text-5xl">
+              <span className="numero text-4xl text-rouge md:text-5xl">
                 {cas.slug}
               </span>
               {cas.categorie && <span className="surtitre text-seconde">{cas.categorie}</span>}
@@ -185,7 +185,7 @@ export default async function PageCas({ params }: { params: Promise<Params> }) {
                 <li key={c.slug}>
                   <Link href={`/cas/${c.slug}/`} className="group block">
                     <span className="flex items-baseline gap-3">
-                      <span className="chiffres font-serif text-lg text-rouge">{c.slug}</span>
+                      <span className="numero text-lg text-rouge">{c.slug}</span>
                       {c.categorie && (
                         <span className="surtitre text-seconde">{c.categorie}</span>
                       )}
