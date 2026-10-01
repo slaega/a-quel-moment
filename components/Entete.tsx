@@ -16,12 +16,20 @@ import { nav, site } from "@/lib/site";
  *
  * Le nom et la navigation sont donc sur deux rangs sur téléphone, un seul
  * dès la tablette — sans rien escamoter.
+ *
+ * Et il ne colle au haut de l'écran qu'à partir de la tablette. Sur
+ * téléphone, ses deux rangs font 121 px : collé, il prendrait 18 % d'un
+ * écran de 667 px pendant toute la lecture d'un texte. C'est le contraire de
+ * ce que demande une série qui se lit d'une traite sur téléphone.
+ *
+ * Le fond est opaque. Un bandeau translucide laissait transparaître le texte
+ * qui défilait dessous, et une serif vue au travers d'un voile se lit mal.
  */
 export default function Entete({ logo }: { logo: Logo | null }) {
   const chemin = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-trait bg-fond/92 backdrop-blur-sm">
+    <header className="z-40 border-b border-trait bg-fond sm:sticky sm:top-0">
       <div className="gouttiere mx-auto flex max-w-page flex-col gap-y-2 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-x-10 sm:py-4">
         <div className="flex items-center justify-between gap-4 sm:justify-start">
           <Link

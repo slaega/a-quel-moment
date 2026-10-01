@@ -36,7 +36,9 @@ export default function ArchiveCas({
       <div
         role="group"
         aria-label="Filtrer par catégorie"
-        className="-mx-[max(1.25rem,min(0.6rem+3.2vw,3.5rem))] flex gap-x-2 overflow-x-auto px-[max(1.25rem,min(0.6rem+3.2vw,3.5rem))] pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden"
+        // Le fondu à droite dit que la barre continue hors de l'écran. Il est
+        // retiré dès md, où les catégories passent à la ligne au lieu de défiler.
+        className="-mx-[max(1.25rem,min(0.6rem+3.2vw,3.5rem))] flex gap-x-2 overflow-x-auto px-[max(1.25rem,min(0.6rem+3.2vw,3.5rem))] pb-1 [mask-image:linear-gradient(to_right,#000_calc(100%-3rem),transparent)] [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 md:[mask-image:none] [&::-webkit-scrollbar]:hidden"
       >
         <Puce actif={filtre === null} onClick={() => setFiltre(null)}>
           Tous <Compteur n={entrees.length} />

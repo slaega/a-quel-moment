@@ -406,9 +406,18 @@ sont propres :
   de flottaison.
 - **L'interlettrage de la navigation est resserré** sous 640 px : à pleine
   chasse, les trois entrées se coupent en deux lignes.
+- **L'en-tête ne colle au haut de l'écran qu'à partir de 640 px.** Ses deux
+  rangs font 121 px : collé sur un écran de 667 px, il prendrait 18 % de la
+  hauteur pendant toute la lecture d'un texte. C'est le contraire de ce que
+  demande une série qui se lit d'une traite sur téléphone.
 
 Rien n'est escamoté derrière un menu : trois entrées tiennent sur une ligne
 dès 320 px, et un bouton pour cacher trois mots coûterait un geste de plus.
+
+Le fond de l'en-tête est **opaque**. Un bandeau translucide laissait
+transparaître le texte qui défilait dessous, et une serif lue au travers d'un
+voile se lit mal — c'est aussi le « glassmorphism systématique » qu'il fallait
+éviter.
 
 ### Accessibilité
 
