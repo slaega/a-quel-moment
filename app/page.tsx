@@ -38,6 +38,19 @@ export default function Accueil() {
           <span className="text-rouge not-italic"> ?</span>
         </h1>
 
+        {/*
+          La seconde question de la série, sous la première. Huit textes sur
+          vingt la posent : n'afficher que l'une des deux décrivait la série à
+          moitié. L'une regarde ce qu'on a déjà accepté, l'autre ce qu'on
+          s'apprête à accepter encore.
+        */}
+        <p className="mt-8 flex max-w-lecture items-baseline gap-4 md:mt-10">
+          <span aria-hidden="true" className="mt-[0.6em] h-px w-8 shrink-0 bg-rouge md:w-12" />
+          <span className="font-serif text-question leading-(--text-question--line-height) text-encre/70 italic">
+            {site.signatureProjetee}
+          </span>
+        </p>
+
         <p className="mt-9 max-w-lecture font-serif text-chapo text-encre/75 md:mt-12">
           Des textes courts qui partent d&apos;un fait réel — pas d&apos;une opinion, pas
           d&apos;une théorie. Une scène que tout le monde a déjà vue, et devant laquelle
@@ -119,7 +132,11 @@ export default function Accueil() {
                 On montre ensuite ce qu&apos;il nous a fait accepter — la chose
                 qu&apos;on a laissée devenir normale sans jamais l&apos;avoir décidée.
               </p>
-              <p>Puis on pose la seule question qui reste. Toujours la même.</p>
+              <p>
+                Puis on pose la question qui reste. Elle prend deux formes : au
+                passé pour ce qu&apos;on a déjà laissé devenir normal, au futur
+                pour ce qu&apos;on s&apos;apprête à accepter encore.
+              </p>
             </div>
 
             <Link

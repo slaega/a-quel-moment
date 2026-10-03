@@ -8,7 +8,7 @@ import { schemaArchive } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Les CAS",
   description:
-    "L'archive complète de la série : chaque CAS part d'un fait réel et se termine par la même question.",
+    "L'archive complète de la série : chaque CAS part d'un fait réel et se ferme sur sa question.",
 };
 
 export default function Archive() {
@@ -39,7 +39,7 @@ export default function Archive() {
           <h1 className="manchette mt-7 max-w-[14ch] text-manchette-2">Les CAS</h1>
           <p className="mt-7 max-w-lecture font-serif text-chapo text-encre/75">
             Tous les textes publiés, du plus récent au premier. Chacun part d&apos;un fait
-            réel et s&apos;arrête là où la question commence.
+            réel et s&apos;arrête là où sa question commence.
           </p>
           {periode && (
             <p className="chiffres mt-6 text-meta text-discret">{periode}</p>

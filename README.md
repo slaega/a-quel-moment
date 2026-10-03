@@ -107,6 +107,25 @@ publié ailleurs. Elles alimentent en revanche le `citation` du JSON-LD.
 
 Un témoignage n'a pas de sources, et le bloc ne s'affiche simplement pas.
 
+### Les deux questions de la série
+
+La série n'en a pas une, elle en a deux : **onze textes** se ferment au passé
+(« à quel moment avons-nous trouvé ça normal ? »), **huit** au futur
+(« à quel moment allons-nous encore trouver ça normal ? »). L'une regarde ce
+qu'on a déjà accepté, l'autre ce qu'on s'apprête à accepter encore.
+
+Les traiter comme une seule décrivait la série à moitié — et le site
+l'affirmait noir sur blanc : « la seule question qui reste. Toujours la
+même. » C'était faux.
+
+Les deux sont dans `lib/site.ts` (`signature` et `signatureProjetee`). La
+règle d'affichage :
+
+- **sur un CAS**, la question est celle du texte, détectée dans le fichier
+  (voir ci-dessous) et reprise par le pied de page ;
+- **partout ailleurs** — accueil, archive, pages éditoriales — aucune ne
+  s'impose, donc les deux s'affichent.
+
 ### La signature
 
 La phrase finale est détectée automatiquement et sortie du corps du texte pour
