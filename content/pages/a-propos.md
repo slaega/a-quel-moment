@@ -1,10 +1,8 @@
 ---
-titre: "Seba Gedeon Matsoula Malonga"
+titre: "Slaega"
 chapo: "Derrière la série : une personne, un téléphone, et l’habitude de ne plus laisser passer."
 description: "Qui écrit la série À quel moment, et pourquoi ce format existe."
 ---
-
-Je m’appelle Seba Gedeon Matsoula Malonga. Je signe **Slaega**.
 
 La série **À quel moment** est née d’une habitude simple : écrire ce qu’on voit, au lieu de le raconter et de l’oublier.
 
