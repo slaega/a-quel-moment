@@ -1,19 +1,18 @@
 ---
-titre: "Slaega"
-chapo: "Derrière la série : une personne, un téléphone, et l'habitude de ne plus laisser passer."
+titre: "Seba Gedeon Matsoula Malonga"
+chapo: "Derrière la série : une personne, un téléphone, et l’habitude de ne plus laisser passer."
 description: "Qui écrit la série À quel moment, et pourquoi ce format existe."
 ---
 
-> À compléter — ce texte est un gabarit. Remplace-le par ta présentation :
-> qui tu es, d'où tu écris, et pourquoi tu as commencé la série.
+Je m’appelle Seba Gedeon Matsoula Malonga. Je signe **Slaega**.
 
-La série **À quel moment** est née d'une habitude simple : écrire ce qu'on voit, au lieu de le raconter et de l'oublier.
+La série **À quel moment** est née d’une habitude simple : écrire ce qu’on voit, au lieu de le raconter et de l’oublier.
 
 Pas de rédaction, pas de comité, pas de ligne éditoriale négociée. Un fait, quelques lignes, une question. Publié là où les gens lisent vraiment — sur leur téléphone, entre deux choses.
 
 ## Pourquoi ce format
 
-Parce que les textes longs ne circulent pas. Parce qu'un argument se discute, alors qu'un fait se regarde. Et parce que la question de la fin appartient à celui qui la lit : elle ne dit pas quoi penser, elle empêche seulement de passer à autre chose trop vite.
+Parce que les textes longs ne circulent pas. Parce qu’un argument se discute, alors qu’un fait se regarde. Et parce que la question de la fin appartient à celui qui la lit : elle ne dit pas quoi penser, elle empêche seulement de passer à autre chose trop vite.
 
 ## Republier, citer, reprendre
 

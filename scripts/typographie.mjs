@@ -18,7 +18,16 @@ import fs from "node:fs";
 import path from "node:path";
 
 const NBSP = " ";
-const DOSSIER = path.join(process.cwd(), "content", "cas");
+/*
+ * Tout le contenu rédigé, pas seulement les CAS. Les pages éditoriales
+ * étaient hors de cette passe : « rien à corriger » s'affichait alors qu'il y
+ * restait des apostrophes droites. Un contrôle qui ne regarde qu'une partie
+ * du contenu est pire que pas de contrôle — on s'y fie.
+ */
+const DOSSIERS = [
+  path.join(process.cwd(), "content", "cas"),
+  path.join(process.cwd(), "content", "pages"),
+];
 
 /** Sans danger partout, frontmatter compris. */
 const reglesSures = [
@@ -66,8 +75,15 @@ function appliquer(texte, regles, journal) {
 
 let total = 0;
 
-for (const fichier of fs.readdirSync(DOSSIER).filter((f) => f.endsWith(".md")).sort()) {
-  const chemin = path.join(DOSSIER, fichier);
+const aTraiter = DOSSIERS.filter((d) => fs.existsSync(d)).flatMap((dossier) =>
+  fs
+    .readdirSync(dossier)
+    .filter((f) => f.endsWith(".md"))
+    .sort()
+    .map((f) => ({ fichier: path.relative(path.join(process.cwd(), "content"), path.join(dossier, f)), chemin: path.join(dossier, f) })),
+);
+
+for (const { fichier, chemin } of aTraiter) {
   const avant = fs.readFileSync(chemin, "utf8");
   const { entete, corps } = decouper(avant);
 
