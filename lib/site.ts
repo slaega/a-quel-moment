@@ -7,18 +7,16 @@ export const site = {
   // le site, elle casse silencieusement tous les aperçus au partage.
   url: "https://a-quel-moment.slaega.com",
   description:
-    "Une série de textes courts qui partent d'un fait réel et se ferment sur une question : à quel moment avons-nous trouvé ça normal ? — ou, de plus en plus : à quel moment allons-nous encore trouver ça normal ?",
+    "Une série de textes courts qui partent d'un fait réel et se ferment sur une question : à quel moment avons-nous trouvé ça normal ?",
   /*
-   * Les deux questions de la série.
+   * La question de la série, celle qui lui donne son nom.
    *
-   * Onze textes posent la première, huit la seconde. Les traiter comme une
-   * seule revenait à décrire la série à moitié : l'une regarde ce qu'on a
-   * déjà accepté, l'autre ce qu'on s'apprête à accepter encore. Chaque CAS
-   * porte la sienne (voir lib/cas.ts) ; les pages qui parlent de la série
-   * entière les portent toutes les deux.
+   * Les textes, eux, en emploient deux formes — onze au passé, huit au futur
+   * (« allons-nous encore ») — et chaque CAS porte la sienne, détectée dans
+   * son fichier (voir lib/cas.ts). Ce jeton ne sert donc qu'aux pages qui
+   * parlent de la série entière, où aucune question particulière ne s'impose.
    */
   signature: "À quel moment avons-nous trouvé ça normal ?",
-  signatureProjetee: "À quel moment allons-nous encore trouver ça normal ?",
 } as const;
 
 export const nav = [

@@ -107,24 +107,27 @@ publié ailleurs. Elles alimentent en revanche le `citation` du JSON-LD.
 
 Un témoignage n'a pas de sources, et le bloc ne s'affiche simplement pas.
 
-### Les deux questions de la série
+### Une seule question pour le site, deux dans les textes
 
-La série n'en a pas une, elle en a deux : **onze textes** se ferment au passé
-(« à quel moment avons-nous trouvé ça normal ? »), **huit** au futur
-(« à quel moment allons-nous encore trouver ça normal ? »). L'une regarde ce
-qu'on a déjà accepté, l'autre ce qu'on s'apprête à accepter encore.
+Les textes emploient deux formes : **onze** se ferment au passé (« à quel
+moment avons-nous trouvé ça normal ? »), **huit** au futur (« à quel moment
+allons-nous encore trouver ça normal ? »).
 
-Les traiter comme une seule décrivait la série à moitié — et le site
-l'affirmait noir sur blanc : « la seule question qui reste. Toujours la
-même. » C'était faux.
-
-Les deux sont dans `lib/site.ts` (`signature` et `signatureProjetee`). La
-règle d'affichage :
+Le site, lui, n'en affiche qu'une — celle qui lui donne son nom, dans
+`lib/site.ts` (`signature`). La règle :
 
 - **sur un CAS**, la question est celle du texte, détectée dans le fichier
   (voir ci-dessous) et reprise par le pied de page ;
-- **partout ailleurs** — accueil, archive, pages éditoriales — aucune ne
-  s'impose, donc les deux s'affichent.
+- **partout ailleurs** — accueil, archive, pages éditoriales — c'est la
+  question de la série.
+
+Une conséquence à connaître : l'accueil met en avant le dernier CAS paru avec
+sa propre question. Si ce texte se ferme au futur, les deux formes se
+retrouvent sur la même page — l'une comme signature du site, l'autre comme
+chute d'un texte précis.
+
+Ne jamais écrire que la série pose « toujours la même question » : c'est faux,
+et le site l'a affirmé un temps.
 
 ### La signature
 

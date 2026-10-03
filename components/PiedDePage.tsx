@@ -23,24 +23,11 @@ export default function PiedDePage({
       <div className="gouttiere mx-auto max-w-page py-14 md:py-20">
         {/*
           Sur la page d'un CAS, la question est celle du texte qu'on vient de
-          lire. Ailleurs — accueil, archive, pages éditoriales — aucune ne
-          s'impose : le pied porte alors les deux formes de la série, parce
-          qu'en afficher une seule la décrirait à moitié.
+          lire. Ailleurs, c'est celle qui donne son nom à la série.
         */}
-        {signature ? (
-          <p className="max-w-[22ch] font-serif text-question leading-(--text-question--line-height) text-encre italic sm:max-w-[28ch]">
-            {signature}
-          </p>
-        ) : (
-          <div className="flex max-w-[30ch] flex-col gap-4 sm:max-w-[34ch]">
-            <p className="font-serif text-question leading-(--text-question--line-height) text-encre italic">
-              {site.signature}
-            </p>
-            <p className="font-serif text-question leading-(--text-question--line-height) text-encre/60 italic">
-              {site.signatureProjetee}
-            </p>
-          </div>
-        )}
+        <p className="max-w-[22ch] font-serif text-question leading-(--text-question--line-height) text-encre italic sm:max-w-[28ch]">
+          {signature ?? site.signature}
+        </p>
 
         <div className="mt-12 flex flex-col gap-8 border-t border-trait pt-8 sm:flex-row sm:items-start sm:justify-between md:mt-16">
           <nav aria-label="Navigation de pied de page">
