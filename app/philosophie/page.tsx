@@ -42,7 +42,10 @@ export default function Philosophie() {
         <EnteteDePage
           surtitre="Le manifeste"
           titre={cas.titre}
-          chapo={cas.extrait ?? undefined}
+          // cas.chapo, pas cas.extrait : l'extrait du 014 est la première
+          // phrase de son texte. En chapô, elle se lisait deux fois à trois
+          // lignes d'intervalle. Voir lib/cas.ts.
+          chapo={cas.chapo ?? undefined}
         />
 
         <article className="md:border-l-2 md:border-rouge md:pl-12">
