@@ -62,7 +62,17 @@ const LOGO = chargerLogo();
  * Numéros restés sans texte, et qui le resteront. Sans cette liste, le relevé
  * les réclamerait à chaque build jusqu'à ce qu'on cesse de le lire.
  */
-const SANS_SUITE = [11, 12];
+const SANS_SUITE = [12];
+
+/**
+ * Numéros dont la date ne suit pas le numéro, et c'est voulu.
+ *
+ * Le 011 avait été annoncé sans suite, puis écrit après le 022. Sa place dans
+ * la série reste la onzième ; sa date de parution est celle du jour où il a
+ * été publié. Sans cette liste, le relevé crierait à l'erreur de saisie à
+ * chaque build.
+ */
+const HORS_ORDRE = [11];
 
 const polices = [
   {
@@ -358,6 +368,9 @@ function inventaire(entrees) {
 
   // Une date antérieure à celle d'un CAS plus ancien se lit comme une erreur
   // de saisie : l'archive est classée par numéro, les dates doivent suivre.
+  //
+  // Sauf pour les numéros ci-dessous, réservés puis écrits bien plus tard :
+  // leur date est postérieure à celle de leurs cadets, et c'est exact.
   const sansDate = tries.filter((e) => !e.date).map((e) => String(e.numero).padStart(3, "0"));
   if (sansDate.length > 0) {
     console.log(`  Sans date : ${sansDate.join(", ")}`);
@@ -372,7 +385,9 @@ function inventaire(entrees) {
     console.warn(`  Sans question de clôture : ${sansQuestion.join(", ")}`);
   }
 
-  const dates = tries.filter((e) => e.date);
+  // Les numéros hors ordre sortent de la chaîne plutôt que d'être excusés :
+  // sans ça, c'est leur cadet qu'on accuserait de reculer.
+  const dates = tries.filter((e) => e.date && !HORS_ORDRE.includes(e.numero));
   const reculs = dates
     .slice(1)
     .filter((e, i) => e.date < dates[i].date)
