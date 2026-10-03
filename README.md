@@ -107,27 +107,24 @@ publié ailleurs. Elles alimentent en revanche le `citation` du JSON-LD.
 
 Un témoignage n'a pas de sources, et le bloc ne s'affiche simplement pas.
 
-### Une seule question pour le site, deux dans les textes
+### La question, identique partout
 
-Les textes emploient deux formes : **onze** se ferment au passé (« à quel
-moment avons-nous trouvé ça normal ? »), **huit** au futur (« à quel moment
-allons-nous encore trouver ça normal ? »).
+Les vingt et un textes se ferment sur la même phrase :
 
-Le site, lui, n'en affiche qu'une — celle qui lui donne son nom, dans
-`lib/site.ts` (`signature`). La règle :
+> À quel moment avons-nous trouvé ça normal ?
 
-- **sur un CAS**, la question est celle du texte, détectée dans le fichier
-  (voir ci-dessous) et reprise par le pied de page ;
-- **partout ailleurs** — accueil, archive, pages éditoriales — c'est la
-  question de la série.
+Ça n'a pas toujours été le cas — neuf textes demandaient « à quel moment
+allons-nous encore trouver ça normal ? », et le CAS 002 posait une question à
+lui seul. Tout a été ramené à une forme unique.
 
-Une conséquence à connaître : l'accueil met en avant le dernier CAS paru avec
-sa propre question. Si ce texte se ferme au futur, les deux formes se
-retrouvent sur la même page — l'une comme signature du site, l'autre comme
-chute d'un texte précis.
+Elle reste **écrite à la fin de chaque fichier** plutôt qu'ajoutée au rendu :
+c'est elle qu'on copie avec le texte, et c'est elle qui part sur les réseaux.
+`lib/site.ts` en garde une copie (`signature`) pour les pages qui parlent de
+la série entière, où aucun texte particulier ne s'impose.
 
-Ne jamais écrire que la série pose « toujours la même question » : c'est faux,
-et le site l'a affirmé un temps.
+La détection reste volontairement large (voir ci-dessous) : si un texte
+reformule un jour sa question, le pied de page suivra ce texte au lieu de le
+contredire.
 
 ### La signature
 

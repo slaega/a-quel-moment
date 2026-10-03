@@ -9,12 +9,11 @@ export const site = {
   description:
     "Une série de textes courts qui partent d'un fait réel et se ferment sur une question : à quel moment avons-nous trouvé ça normal ?",
   /*
-   * La question de la série, celle qui lui donne son nom.
+   * La question de la série. Les vingt et un textes la posent à l'identique.
    *
-   * Les textes, eux, en emploient deux formes — onze au passé, huit au futur
-   * (« allons-nous encore ») — et chaque CAS porte la sienne, détectée dans
-   * son fichier (voir lib/cas.ts). Ce jeton ne sert donc qu'aux pages qui
-   * parlent de la série entière, où aucune question particulière ne s'impose.
+   * Elle reste écrite à la fin de chaque fichier plutôt que d'être ajoutée au
+   * rendu : c'est elle qu'on copie avec le texte, et c'est elle qui part sur
+   * les réseaux. Ce jeton sert aux pages qui parlent de la série entière.
    */
   signature: "À quel moment avons-nous trouvé ça normal ?",
 } as const;

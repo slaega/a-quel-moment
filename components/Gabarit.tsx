@@ -4,11 +4,14 @@ import { getLogo } from "@/lib/logo";
 /**
  * Le corps d'une page, et son pied.
  *
- * Le pied de page reprend la question de clôture. Or elle n'est pas la même
- * partout : certains CAS demandent « avons-nous trouvé ça normal ? », d'autres
- * « allons-nous encore trouver ça normal ? ». Laisser la mise en page racine
- * l'afficher reviendrait à contredire l'article juste au-dessus — elle ne sait
- * pas quel texte est lu.
+ * Le pied de page reprend la question de clôture du texte lu, pas une
+ * question générique.
+ *
+ * Les vingt et un CAS la posent aujourd'hui à l'identique, si bien que la
+ * distinction ne se voit plus. Elle reste pourtant nécessaire : la question
+ * est lue dans chaque fichier (voir lib/cas.ts), et le jour où un texte la
+ * reformule, le pied suivra le texte au lieu de le contredire. La mise en
+ * page racine, elle, ne sait pas quel texte est lu.
  *
  * Chaque page passe donc la sienne, et le pied vit ici plutôt que dans
  * app/layout.tsx.
